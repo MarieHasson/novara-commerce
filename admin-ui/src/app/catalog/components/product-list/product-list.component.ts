@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject, combineLatest, Observable, Subject } from 'rxjs';
+import { combineLatest, Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { DataService } from '../../../data/providers/data.service';
+import { GetProductList_products_items } from '../../../data/types/gql-generated-types';
 
 @Component({
     selector: 'vdr-products-list',
@@ -11,7 +12,7 @@ import { DataService } from '../../../data/providers/data.service';
     styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-    products$: Observable<any[]>;
+    products$: Observable<GetProductList_products_items[]>;
     totalItems$: Observable<number>;
     itemsPerPage$: Observable<number>;
     currentPage$: Observable<number>;
