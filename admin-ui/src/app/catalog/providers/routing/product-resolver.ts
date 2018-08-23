@@ -6,20 +6,20 @@ import { filter, map, take } from 'rxjs/operators';
 import { notNullOrUndefined } from '../../../../../../shared/shared-utils';
 import { getDefaultLanguage } from '../../../common/utilities/get-default-language';
 import { DataService } from '../../../data/providers/data.service';
-import { GetProductWithVariants_product } from '../../../data/types/gql-generated-types';
+import { ProductWithVariants } from '../../../data/types/gql-generated-types';
 
 /**
  * Resolves the id from the path into a Customer entity.
  */
 
 @Injectable()
-export class ProductResolver implements Resolve<Observable<GetProductWithVariants_product>> {
+export class ProductResolver implements Resolve<Observable<ProductWithVariants>> {
     constructor(private dataService: DataService) {}
 
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot,
-    ): Observable<Observable<GetProductWithVariants_product>> {
+    ): Observable<Observable<ProductWithVariants>> {
         const id = route.paramMap.get('id');
 
         if (id === 'create') {
