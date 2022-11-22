@@ -24,7 +24,7 @@ import {
         [displayType]="instance.getDisplayType(entry)"
         [iconShape]="instance.getIconShape && instance.getIconShape(entry)"
         [createdAt]="entry.createdAt"
-        [name]="instance.getName(entry)"
+        [name]="instance.getName && instance.getName(entry)"
         [featured]="instance.isFeatured(entry)"
         [collapsed]="!expanded && !instance.isFeatured(entry)"
         (expandClick)="expandClick.emit()"
