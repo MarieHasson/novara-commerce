@@ -22,7 +22,5 @@ export default defineConfig({
         // See https://github.com/vitest-dev/vitest/issues/708#issuecomment-1118628479
         // Vite plugin
         swc.vite(),
-        // Rollup plugin
-        swc.rollup() as any,
     ],
 });
