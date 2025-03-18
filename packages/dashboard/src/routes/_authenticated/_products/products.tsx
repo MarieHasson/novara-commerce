@@ -5,6 +5,7 @@ import { productListDocument } from './products.graphql.js';
 import { PageActionBar } from '@/framework/layout-engine/page-layout.js';
 import { PlusIcon } from 'lucide-react';
 import { PermissionGuard } from '@/components/shared/permission-guard.js';
+import { addCustomFields } from '@/framework/document-introspection/add-custom-fields.js';
 
 export const Route = createFileRoute('/_authenticated/_products/products')({
     component: ProductListPage,
@@ -32,7 +33,7 @@ export function ProductListPage() {
                     name: { contains: searchTerm },
                 };
             }}
-            listQuery={productListDocument}
+            listQuery={addCustomFields(productListDocument)}
             route={Route}
         >
             <PageActionBar>
