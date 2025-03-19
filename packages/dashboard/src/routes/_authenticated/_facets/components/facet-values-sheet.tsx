@@ -1,6 +1,7 @@
 import {
     Sheet,
     SheetContent,
+    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger
@@ -25,8 +26,15 @@ export function FacetValuesSheet({ facetName, facetId }: FacetValuesSheetProps) 
                     <SheetTitle>
                         <Trans>Facet values for {facetName}</Trans>
                     </SheetTitle>
-                        <FacetValuesTable facetId={facetId} />
+                    <SheetDescription>
+                        <Trans>
+                            These are the facet values for the <strong>{facetName}</strong> facet.
+                        </Trans>
+                    </SheetDescription>
                 </SheetHeader>
+                <div className="px-4">
+                    <FacetValuesTable facetId={facetId} />
+                </div>
             </SheetContent>
         </Sheet>
     );
