@@ -1,7 +1,7 @@
 import { api } from '@/graphql/api.js';
 import { graphql } from '@/graphql/graphql.js';
 import { useLingui } from '@lingui/react/macro';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -42,7 +42,7 @@ const deleteOrderNoteDocument = graphql(`
     }
 `);
 
-export function useOrderHistory(orderId: string) {
+export function useOrderHistory({ orderId, pageSize = 10 }: { orderId: string; pageSize?: number }) {
     const [isLoading, setIsLoading] = useState(false);
     const { i18n } = useLingui();
 
@@ -52,15 +52,26 @@ export function useOrderHistory(orderId: string) {
         isLoading: isLoadingQuery,
         error,
         refetch,
-    } = useQuery({
-        queryFn: () =>
+        fetchNextPage,
+        hasNextPage,
+    } = useInfiniteQuery({
+        queryFn: ({ pageParam = 0 }) =>
             api.query(orderHistoryDocument, {
                 id: orderId,
                 options: {
                     sort: { createdAt: 'DESC' },
+                    skip: pageParam * pageSize,
+                    take: pageSize,
                 },
             }),
         queryKey: ['OrderHistory', orderId],
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, _pages, lastPageParam) => {
+            const totalItems = lastPage.order?.history?.totalItems ?? 0;
+            const currentMaxItem = (lastPageParam + 1) * pageSize;
+            const nextPage = lastPageParam + 1;
+            return currentMaxItem < totalItems ? nextPage : undefined;
+        },
     });
 
     // Add note mutation
@@ -123,14 +134,18 @@ export function useOrderHistory(orderId: string) {
         });
     };
 
+    const historyEntries = data?.pages.flatMap(page => page.order?.history?.items).filter(x => x != null);
+
     return {
-        historyEntries: data?.order?.history?.items || [],
-        order: data?.order,
+        historyEntries,
+        order: data?.pages[0]?.order,
         loading: isLoadingQuery || isLoading,
         error,
         addNote,
         updateNote,
         deleteNote,
         refetch,
+        fetchNextPage,
+        hasNextPage,
     };
 }
