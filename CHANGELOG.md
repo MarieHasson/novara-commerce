@@ -1,3 +1,11 @@
+## <small>2.3.4 (2026-04-13)</small>
+
+
+#### Fixes
+
+* **core** Fix SQL injection via languageCode query parameter ([713ddd8](Users/micha/Development/vendure/vendure/commits/713ddd8))
+* **core** Sanitize search term for Postgres tsquery syntax ([7961554](Users/micha/Development/vendure/vendure/commits/7961554))
+
 ## <small>2.3.3 (2024-10-15)</small>
 
 

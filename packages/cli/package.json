@@ -1,6 +1,6 @@
 {
     "name": "@vendure/cli",
-    "version": "2.3.3",
+    "version": "2.3.4",
     "description": "A modern, headless ecommerce framework",
     "repository": {
         "type": "git",
@@ -46,7 +46,7 @@
         "tsconfig-paths": "^4.2.0"
     },
     "devDependencies": {
-        "@vendure/core": "^2.3.3",
+        "@vendure/core": "^2.3.4",
         "typescript": "5.3.3"
     }
 }
