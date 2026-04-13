@@ -158,7 +158,9 @@ export class PostgresSearchStrategy implements SearchStrategy {
         const termLogicalAnd = term
             ? term
                   .trim()
+                  .replace(/['":\\!|&()]/g, ' ')
                   .split(/\s+/g)
+                  .filter(t => t.length > 0)
                   .map(t => `'${t}':*`)
                   .join(' & ')
             : '';
