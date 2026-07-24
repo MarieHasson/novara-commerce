@@ -459,6 +459,7 @@ test.describe('Orders', () => {
             ).toBeVisible({ timeout: 10_000 });
         });
 
+        // #5027 — Dialog for new payment has Transaction ID set as optional
         test('should transition order state after adding payment', async ({ page }) => {
             test.setTimeout(60_000);
 
