@@ -650,7 +650,7 @@
           "title": "Localization",
           "slug": "localization",
           "file": "docs/guides/extending-the-dashboard/localization/index.mdx",
-          "lastModified": "2026-02-12T16:47:03+01:00"
+          "lastModified": "2026-07-23T09:49:01+02:00"
         },
         {
           "title": "Deployment",
@@ -2352,7 +2352,7 @@
                   "title": "MoneyStrategy",
                   "slug": "money-strategy",
                   "file": "docs/reference/typescript-api/money/money-strategy.mdx",
-                  "lastModified": "2026-01-28T14:49:21+01:00"
+                  "lastModified": "2026-07-23T09:48:28+02:00"
                 },
                 {
                   "title": "RoundMoney",
@@ -2892,7 +2892,7 @@
                   "title": "AdministratorService",
                   "slug": "administrator-service",
                   "file": "docs/reference/typescript-api/services/administrator-service.mdx",
-                  "lastModified": "2026-06-30T07:18:09+02:00"
+                  "lastModified": "2026-07-23T08:59:41+02:00"
                 },
                 {
                   "title": "AssetService",
