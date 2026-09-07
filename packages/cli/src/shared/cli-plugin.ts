@@ -3,7 +3,7 @@ import {
     CliCommandExtension,
     CliCommandNode,
     CliCommandOption,
-    isCliCommandGroup,
+    hasCliSubcommands,
 } from './cli-command-definition';
 import { describeOption, parseOptionFlags, withSubOptions } from './cli-command-options';
 
@@ -28,9 +28,9 @@ export interface CliPlugin {
      */
     id: string;
     /**
-     * Commands to register. Each entry is either a command with an action, or a
-     * group of subcommands. A top-level name that a built-in or an earlier
-     * plugin already provides is rejected unless the command sets
+     * Commands to register. Each entry is a command with an action, a group of
+     * subcommands, or a command that has both. A top-level name that a built-in
+     * or an earlier plugin already provides is rejected unless the command sets
      * `replaces: true`.
      */
     commands: CliCommandNode[];
@@ -171,7 +171,7 @@ function assertNode(
     const ownOptions = node.options ?? [];
     assertUniqueOptions(pluginId, ownOptions, `options of command "${label}"`);
 
-    if (!isCliCommandGroup(node)) {
+    if (!hasCliSubcommands(node)) {
         assertMatchesInheritedShape(pluginId, label, ownOptions, inheritedOptions);
         if (typeof node.action !== 'function') {
             throw new TypeError(
@@ -182,15 +182,25 @@ function assertNode(
     }
 
     assertDoesNotShadow(pluginId, label, ownOptions, inheritedOptions);
-    if (typeof (node as Partial<CliCommandDefinition>).action === 'function') {
-        throw new Error(
-            `CLI plugin "${pluginId}" command "${label}" declares both subcommands and an action. ` +
-                `A command group has no action of its own: move it into a subcommand.`,
+    const action = (node as Partial<CliCommandDefinition>).action;
+    if (action !== undefined && typeof action !== 'function') {
+        throw new TypeError(
+            `CLI plugin "${pluginId}" command "${label}" declares an action that is not a function. ` +
+                `Give it one, or remove it so that "${label}" only groups the commands below it.`,
         );
     }
     if (node.subcommands.length === 0) {
         throw new Error(
-            `CLI plugin "${pluginId}" command group "${label}" must provide at least one subcommand`,
+            `CLI plugin "${pluginId}" command "${label}" declares "subcommands" but provides none. ` +
+                `Give it at least one subcommand, or drop the array.`,
+        );
+    }
+    if ((node as Partial<CliCommandDefinition>).arguments?.length) {
+        throw new Error(
+            `CLI plugin "${pluginId}" command "${label}" declares both positional arguments and ` +
+                `subcommands. The first word after "${label}" would be ambiguous, since it could name ` +
+                `a subcommand or fill an argument. Take an option instead, or move the arguments into ` +
+                `a subcommand.`,
         );
     }
     assertNodes(pluginId, node.subcommands, commandPath, [...inheritedOptions, ...ownOptions]);
@@ -236,10 +246,10 @@ function assertSubOptionDepth(pluginId: string, options: CliCommandOption[], con
 }
 
 /**
- * A command may repeat a flag one of its groups shares — the host copies the
- * value onto it — but only if both agree on whether a value follows the flag.
- * Otherwise the group consumes the flag and hands the command a value its own
- * declaration says it will never see.
+ * A command with no subcommands may repeat a flag one of its ancestors shares —
+ * the host copies the value onto it — but only if both agree on whether a value
+ * follows the flag. Otherwise the ancestor consumes the flag and hands the
+ * command a value its own declaration says it will never see.
  */
 function assertMatchesInheritedShape(
     pluginId: string,
@@ -269,8 +279,9 @@ function assertMatchesInheritedShape(
 }
 
 /**
- * A group's options are shared with everything below it, so two levels sharing
- * one flag would leave the value's owner ambiguous. A leaf may repeat a shared
+ * A node with subcommands shares its options with everything below it (see
+ * {@link hasCliSubcommands}), so two levels sharing one flag would leave the
+ * value's owner ambiguous. A command with no subcommands may repeat a shared
  * flag: the host copies the value onto it, so both readings agree.
  */
 function assertDoesNotShadow(
