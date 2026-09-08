@@ -95,14 +95,11 @@ describe('runPluginConfigurations()', () => {
     // the entity is registered with this server (via the plugin's `entities`), not merely present
     // in the global metadata.
     it('seeds customFields for a plugin-registered entity', async () => {
-        const storage = getMetadataArgsStorage();
         class Oss408PluginEntity {}
-        storage.embeddeds.push({
-            target: Oss408PluginEntity,
-            propertyName: 'customFields',
-            prefix: undefined,
-            type: () => Oss408PluginEntity,
-        } as any);
+        const cleanup = registerCustomFieldEntityMetadata({
+            base: Oss408PluginEntity,
+            baseHasCustomFields: true,
+        });
 
         @VendurePlugin({ entities: [Oss408PluginEntity] })
         class TestPlugin {}
@@ -112,7 +109,7 @@ describe('runPluginConfigurations()', () => {
             await runPluginConfigurations(config);
             expect(config.customFields.Oss408PluginEntity).toEqual([]);
         } finally {
-            storage.embeddeds.pop();
+            cleanup();
         }
     });
 
