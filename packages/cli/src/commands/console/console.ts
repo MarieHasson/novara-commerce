@@ -4,6 +4,17 @@ import { ChildProcess, spawn } from 'node:child_process';
 import { CliCommandExit } from '../../shared/cli-command-exit';
 import { isNonInteractiveEnvironment, withInteractiveTimeout } from '../../utilities/utils';
 
+import {
+    CLI_TOKEN_PATH,
+    ConsoleSession,
+    LoopbackCallback,
+    authorizationCodeGrant,
+    cliAuthSearchParams,
+    createLoginState,
+    createPkceChallenge,
+    parseConsoleSession,
+    startLoopbackCallback,
+} from './cli-auth';
 import { ConsoleLinkContext, ConsoleLinkOutcome, RegisteredConsoleLinkHook } from './console-link-hook';
 import {
     DEFAULT_CONSOLE_API_URL,
@@ -26,10 +37,21 @@ import {
 import { nonEmptyString, objectValue, uuid } from './project-link-validation';
 
 const PROJECT_LINKS_PATH = '/v1/project-links';
+const CLI_AUTH_CAPABILITY = 'cli-auth';
 const POLL_INTERVAL_MS = 2_000;
 const REQUEST_TIMEOUT_MS = 10_000;
 const MAX_RESPONSE_BYTES = 64 * 1024;
 const MAX_RETRY_DELAY_MS = 2_000;
+/**
+ * How long the callback is still accepted after the poll has already returned
+ * the manifest.
+ *
+ * Approval mints the code and returns the redirect in one transaction, so the
+ * browser's navigation and the next poll run on unrelated clocks. Closing the
+ * moment the poll wins would lose a session that was on its way, and hand
+ * somebody who did everything right the report meant for a remote approval.
+ */
+export const CALLBACK_GRACE_MS = 2_500;
 
 export interface ConsoleCommandOptions {
     allowCustomConsole?: boolean;
@@ -55,6 +77,7 @@ export interface ConsoleCommandDependencies {
     reporter: ConsoleReporter;
     signal?: AbortSignal;
     sleep: (milliseconds: number, signal: AbortSignal) => Promise<void>;
+    startLoopbackCallback: typeof startLoopbackCallback;
 }
 
 interface ConsoleEndpoints {
@@ -66,6 +89,15 @@ interface ProjectLinkRequest {
     id: string;
     expiresAt: number;
     pollingSecret: string;
+    verificationUrl: string;
+    /** What a decision on this link can also settle. Empty on an older Console. */
+    supports: string[];
+}
+
+/** A command line login waiting on its callback, alongside a Project Link. */
+interface ConsoleLogin extends LoopbackCallback {
+    verifier: string;
+    /** The verification URL carrying the login request. */
     verificationUrl: string;
 }
 
@@ -122,6 +154,7 @@ function createDefaultDependencies(): ConsoleCommandDependencies {
         },
         reporter: defaultReporter,
         sleep: abortableSleep,
+        startLoopbackCallback,
     };
 }
 
@@ -266,29 +299,211 @@ async function link(
         return endpointApproval === 'cancelled' ? 0 : 1;
     }
     const request = await createProjectLink(endpoints, dependencies, signal);
-    dependencies.reporter.info('Approve the Project link in your browser.');
+    let login = await startConsoleLogin(request, endpoints, dependencies);
     try {
-        await dependencies.openUrl(request.verificationUrl);
-    } catch {
-        dependencies.reporter.warn('Could not open the browser automatically. Open this URL to continue:');
-        dependencies.reporter.url(request.verificationUrl);
+        dependencies.reporter.info('Approve the Project link in your browser.');
+        try {
+            await dependencies.openUrl(login?.verificationUrl ?? request.verificationUrl);
+        } catch {
+            if (login) {
+                // The callback address is on this machine, so a browser
+                // somewhere else can never reach it. Ask for the link alone
+                // rather than advertise a callback nothing will call, and say
+                // now what that costs rather than after the approval.
+                login.close();
+                login = undefined;
+                dependencies.reporter.warn(noSessionFromThisLink());
+            }
+            dependencies.reporter.warn(
+                'Could not open the browser automatically. Open this URL to continue:',
+            );
+            dependencies.reporter.url(request.verificationUrl);
+        }
+
+        const manifest = await waitForApproval(request, endpoints, dependencies, signal);
+        throwIfAborted(signal);
+        // Record the approved link before the optional session exchange.
+        const manifestPath = await writeProjectLinkManifestAtomic(projectRoot, manifest);
+        state.outcome = 'linked';
+        state.manifestPath = manifestPath;
+        dependencies.reporter.success(`Linked ${manifest.project.name} to ${manifest.account.name}.`);
+        dependencies.reporter.info(`Wrote ${manifestPath}`);
+        reportProjectLinkGitignore(projectRoot, dependencies.reporter);
+
+        const session = login
+            ? await completeConsoleLogin(login, endpoints, dependencies, signal)
+            : undefined;
+
+        return runConsoleLinkHooks(
+            { projectRoot, manifest, manifestPath, endpoints, outcome: 'linked', session },
+            options,
+            dependencies,
+            signal,
+        );
+    } finally {
+        login?.close();
+    }
+}
+
+function noSessionFromThisLink(): string {
+    return (
+        'This link will not obtain a Console session. Run vendure console link again on this ' +
+        'machine to run the plugin setup again, where a plugin that needs a session can sign in.'
+    );
+}
+
+/**
+ * Starts a command line login alongside the Project Link, when both sides
+ * allow one.
+ *
+ * A plugin has to want one, because an unused token is still a live token. The
+ * origins have to be an official Console, since approving a custom endpoint
+ * approves creating a Project Link and never receiving a credential. The
+ * Console has to say it settles a login, because one that does not redirects
+ * nowhere and would leave the listener waiting.
+ *
+ * None of these stop the link, and neither does failing to bind the callback.
+ */
+async function startConsoleLogin(
+    request: ProjectLinkRequest,
+    endpoints: ConsoleEndpoints,
+    dependencies: ConsoleCommandDependencies,
+): Promise<ConsoleLogin | undefined> {
+    if (!dependencies.hooks.some(hook => hook.requiresSession)) {
+        return undefined;
+    }
+    if (officialConsoleEnvironment(endpoints) === undefined) {
+        dependencies.reporter.warn(
+            'This link uses endpoints that are not an official Vendure Console, so it obtains no Console session.',
+        );
+        return undefined;
+    }
+    if (!request.supports.includes(CLI_AUTH_CAPABILITY)) {
+        // Said out loud, because the alternative is a link that quietly obtains
+        // no session and a plugin that later cannot say why.
+        dependencies.reporter.warn(
+            'This Console does not settle a command line login with a Project Link approval, so ' +
+                'this link obtains no Console session.',
+        );
+        return undefined;
+    }
+    if (shellIsRemote(dependencies.env)) {
+        // Not a failure and not something a rerun changes, so it does not get
+        // the "run it again" advice: the callback address only means anything
+        // on the machine that bound it, and that is not where the browser is.
+        dependencies.reporter.warn(
+            'This looks like a remote shell, so a browser cannot return an approval to this ' +
+                'machine. The link is made without a Console session, and a plugin that needs ' +
+                'one signs in itself.',
+        );
+        return undefined;
     }
 
-    const manifest = await waitForApproval(request, endpoints, dependencies, signal);
-    throwIfAborted(signal);
-    const manifestPath = await writeProjectLinkManifestAtomic(projectRoot, manifest);
-    state.outcome = 'linked';
-    state.manifestPath = manifestPath;
-    dependencies.reporter.success(`Linked ${manifest.project.name} to ${manifest.account.name}.`);
-    dependencies.reporter.info(`Wrote ${manifestPath}`);
-    reportProjectLinkGitignore(projectRoot, dependencies.reporter);
+    const state = createLoginState();
+    let callback;
+    try {
+        callback = await dependencies.startLoopbackCallback(state);
+    } catch (error) {
+        // A port this process cannot bind is a reason to skip the login, not a
+        // reason to fail a link that has nothing to do with it.
+        dependencies.reporter.warn(
+            `Could not listen for a Console sign-in: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
+        dependencies.reporter.warn(noSessionFromThisLink());
+        return undefined;
+    }
 
-    return runConsoleLinkHooks(
-        { projectRoot, manifest, manifestPath, endpoints, outcome: 'linked' },
-        options,
-        dependencies,
-        signal,
-    );
+    const { verifier, challenge } = createPkceChallenge();
+    const url = new URL(request.verificationUrl);
+    const searchParams = cliAuthSearchParams({ redirectUri: callback.redirectUri, state, challenge });
+    const reservedName = Object.keys(searchParams).find(name => url.searchParams.has(name));
+    if (reservedName) {
+        callback.close();
+        dependencies.reporter.warn(
+            `Console returned a verification URL with the reserved authentication parameter "${reservedName}", so this link obtains no Console session.`,
+        );
+        return undefined;
+    }
+    for (const [name, value] of Object.entries(searchParams)) {
+        url.searchParams.append(name, value);
+    }
+    return { ...callback, verifier, verificationUrl: url.toString() };
+}
+
+/**
+ * Whether this shell is attached from another machine.
+ *
+ * An absent `DISPLAY` does not imply a remote browser. VS Code Remote,
+ * devcontainers and WSL can open a local browser without it.
+ */
+function shellIsRemote(env: NodeJS.ProcessEnv): boolean {
+    return Boolean(env.SSH_CONNECTION || env.SSH_TTY);
+}
+
+/**
+ * Exchanges the authorization code, once the link itself is settled.
+ *
+ * The poll owns the link and this owns only the session, so nothing here fails
+ * the command. A refusal, a browser that approved on another machine, or an
+ * exchange that does not complete all end the same way: the link stands, no
+ * session was obtained, and the report says so.
+ */
+async function completeConsoleLogin(
+    login: ConsoleLogin,
+    endpoints: ConsoleEndpoints,
+    dependencies: ConsoleCommandDependencies,
+    signal: AbortSignal,
+): Promise<ConsoleSession | undefined> {
+    const graceController = new AbortController();
+    const abortGrace = () => graceController.abort();
+    signal.addEventListener('abort', abortGrace, { once: true });
+    try {
+        const code = await Promise.race([
+            login.code(),
+            dependencies.sleep(CALLBACK_GRACE_MS, graceController.signal).then(() => undefined),
+        ]);
+        throwIfAborted(signal);
+        if (!code) {
+            dependencies.reporter.warn(`The link is in place. ${noSessionFromThisLink()}`);
+            return undefined;
+        }
+        // Sampled before the round trip, so the expiry is not overstated by it.
+        const issuedAt = dependencies.now();
+        const value = await requestJson(
+            `${endpoints.apiUrl}${CLI_TOKEN_PATH}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                    authorizationCodeGrant({
+                        code,
+                        verifier: login.verifier,
+                        redirectUri: login.redirectUri,
+                    }),
+                ),
+            },
+            dependencies,
+            signal,
+        );
+        return parseConsoleSession(value, issuedAt);
+    } catch (error) {
+        if (error instanceof CommandInterruptedError) {
+            throw error;
+        }
+        dependencies.reporter.warn(
+            `The Console session could not be obtained: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
+        dependencies.reporter.warn(`The link is in place. ${noSessionFromThisLink()}`);
+        return undefined;
+    } finally {
+        signal.removeEventListener('abort', abortGrace);
+        graceController.abort();
+        login.close();
+    }
 }
 
 /** Reuses the manifest, reapplies its `.gitignore` rules, and reruns plugin setup. */
@@ -366,6 +581,7 @@ interface ConsoleLinkHookInputs {
     manifestPath: string;
     endpoints: ConsoleEndpoints;
     outcome: ConsoleLinkOutcome;
+    session?: ConsoleSession;
 }
 
 /** Runs plugin hooks in registration order and stops after the first failure. */
@@ -375,9 +591,16 @@ async function runConsoleLinkHooks(
     dependencies: ConsoleCommandDependencies,
     signal: AbortSignal,
 ): Promise<number> {
-    for (const { pluginId, hook } of dependencies.hooks) {
+    for (const { pluginId, hook, requiresSession } of dependencies.hooks) {
         try {
-            await hook(createConsoleLinkContext(inputs, options, dependencies, signal));
+            await hook(
+                createConsoleLinkContext(
+                    { ...inputs, session: requiresSession ? inputs.session : undefined },
+                    options,
+                    dependencies,
+                    signal,
+                ),
+            );
         } catch (error) {
             // Ctrl-C during a hook is an interrupt whatever the hook threw, so
             // it is reported by the one handler that knows the exit code.
@@ -427,6 +650,7 @@ function createConsoleLinkContext(
             official: officialConsoleEnvironment(inputs.endpoints),
         },
         outcome: inputs.outcome,
+        session: inputs.session ? structuredClone(inputs.session) : undefined,
         signal,
         reporter: dependencies.reporter,
         confirm: message => confirmForHook(message, isNonInteractive, dependencies.prompt),
@@ -638,7 +862,10 @@ async function createProjectLink(
     if (verificationUrl.includes(pollingSecret)) {
         throw new Error('Console returned an unsafe verification URL.');
     }
-    return { id, expiresAt, pollingSecret, verificationUrl };
+    const supports = Array.isArray(object.supports)
+        ? object.supports.filter((entry): entry is string => typeof entry === 'string')
+        : [];
+    return { id, expiresAt, pollingSecret, verificationUrl, supports };
 }
 
 async function waitForApproval(

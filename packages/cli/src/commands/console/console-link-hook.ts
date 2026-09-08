@@ -1,3 +1,4 @@
+import { ConsoleSession } from './cli-auth';
 import { ConsoleOriginEnvironment } from './console-origins';
 import { ConsoleReporter } from './console-reporter';
 import { ProjectLinkManifest } from './project-link-manifest';
@@ -29,6 +30,8 @@ export interface ConsoleLinkContext {
     endpoints: ConsoleLinkEndpoints;
     /** Whether this run created the link or reused the manifest on disk. */
     outcome: ConsoleLinkOutcome;
+    /** The Console CLI Session, when this hook requested one and the login succeeded. */
+    session?: ConsoleSession;
     /** Aborts on SIGINT or SIGTERM. */
     signal: AbortSignal;
     reporter: ConsoleReporter;
@@ -48,10 +51,20 @@ export interface ConsoleLinkContext {
  */
 export type ConsoleLinkHook = (context: ConsoleLinkContext) => Promise<void>;
 
+/** A hook that explicitly requests a Console session. @since 3.8.0 */
+export interface ConsoleLinkHookWithSession {
+    hook: ConsoleLinkHook;
+    requiresSession: true;
+}
+
+/** A hook registration, optionally with an explicit session request. @since 3.8.0 */
+export type ConsoleLinkHookRegistration = ConsoleLinkHook | ConsoleLinkHookWithSession;
+
 /**
  * A hook together with the plugin that registered it, so a failure can name it.
  */
 export interface RegisteredConsoleLinkHook {
     pluginId: string;
     hook: ConsoleLinkHook;
+    requiresSession?: boolean;
 }
