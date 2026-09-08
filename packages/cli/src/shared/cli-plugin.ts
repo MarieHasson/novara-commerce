@@ -1,3 +1,5 @@
+import type { ConsoleLinkHook } from '../commands/console/console-link-hook';
+
 import {
     CliCommandDefinition,
     CliCommandExtension,
@@ -52,7 +54,70 @@ export interface CliPlugin {
      * @since 3.8.0
      */
     extendCommands?: CliCommandExtension[];
+    /**
+     * Runs after `vendure console link` has written the Project Link Manifest,
+     * for a plugin that has its own setup to do once a project is linked.
+     *
+     * This is not a way to take the command over. `vendure console link` stays
+     * the one implementation of linking, so every project links the same way
+     * whether or not a plugin is installed. Replacing the `console` command
+     * instead would fork the protocol.
+     *
+     * @since 3.8.0
+     */
+    afterConsoleLink?: ConsoleLinkHook;
 }
+
+interface CliPluginExtensionEntry {
+    extensionPoint: string;
+    extension: unknown;
+}
+
+export function getCliPluginExtensionEntries(plugin: CliPlugin): CliPluginExtensionEntry[] {
+    return plugin.afterConsoleLink
+        ? [{ extensionPoint: 'afterConsoleLink', extension: plugin.afterConsoleLink }]
+        : [];
+}
+
+/**
+ * The plugin capabilities this build of the CLI understands.
+ *
+ * Entries name capabilities, not only keys of {@link CliPlugin}. `subcommands`
+ * is the ability to nest commands, which a plugin declares inside `commands`
+ * rather than through a key of its own.
+ *
+ * A plugin that resolves an older `@vendure/cli` than it was written against is
+ * not told so. {@link assertCliPlugin} ignores keys it does not know, so a
+ * plugin declaring `extendCommands` or `afterConsoleLink` loads cleanly on a
+ * build that has neither, and then quietly decorates nothing and runs no hook.
+ * A silent no-op is worse than a refusal, and this is how a plugin refuses:
+ *
+ * @example
+ * ```ts
+ * import * as cli from '@vendure/cli';
+ *
+ * // Older builds export no such constant, so `undefined` is itself the answer.
+ * const supported = cli.CLI_PLUGIN_EXTENSION_POINTS ?? [];
+ * if (!supported.includes('afterConsoleLink')) {
+ *     throw new Error(
+ *         'This @vendure/cli is too old to run afterConsoleLink hooks. Upgrade it, ' +
+ *             'or the credentials this plugin sets up after linking are never written.',
+ *     );
+ * }
+ * ```
+ *
+ * Entries are only ever added, never removed or renamed, so a check written
+ * against one release keeps working.
+ *
+ * @since 3.8.0
+ */
+export const CLI_PLUGIN_EXTENSION_POINTS: readonly string[] = Object.freeze([
+    'commands',
+    'rootOptions',
+    'subcommands',
+    'extendCommands',
+    'afterConsoleLink',
+]);
 
 export function assertCliPlugin(value: unknown): asserts value is CliPlugin {
     if (!value || typeof value !== 'object') {
@@ -77,6 +142,10 @@ export function assertCliPlugin(value: unknown): asserts value is CliPlugin {
         throw new TypeError(`CLI plugin "${plugin.id}" extendCommands must be an array`);
     }
     assertExtensions(plugin.id, extensions, rootOptions);
+
+    if (plugin.afterConsoleLink !== undefined && typeof plugin.afterConsoleLink !== 'function') {
+        throw new TypeError(`CLI plugin "${plugin.id}" afterConsoleLink must be a function`);
+    }
 }
 
 /**

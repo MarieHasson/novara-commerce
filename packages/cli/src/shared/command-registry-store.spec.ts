@@ -4,6 +4,7 @@ import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { builtinCommands } from '../commands/builtins';
+
 import {
     CliCommandDefinition,
     CliCommandGroupDefinition,
@@ -759,6 +760,99 @@ describe('resolveCliPlugins()', () => {
         });
         expect(discovered.map(plugin => plugin.packageName)).toEqual(['@example/a', '@example/b']);
         expect(discovered.every(plugin => plugin.status === 'not-enabled')).toBe(true);
+    });
+
+    // A plugin applied twice contributes its afterConsoleLink hook twice, and a
+    // plugin with no commands has nothing to collide with on the second pass.
+    it('loads a plugin listed twice only once', () => {
+        const fixture = makeTempProject({
+            project: {
+                name: 'demo',
+                dependencies: { '@example/a': '1.0.0' },
+                vendure: { cli: { plugins: ['@example/a', '@example/a'] } },
+            },
+            plugins: [
+                {
+                    name: '@example/a',
+                    packageJson: {
+                        name: '@example/a',
+                        vendure: { cliPlugin: './cli-plugin.js' },
+                    },
+                    entrySource: `
+                        module.exports = {
+                            id: '@example/a',
+                            commands: [],
+                            afterConsoleLink: async () => undefined,
+                        };
+                    `,
+                },
+            ],
+        });
+
+        const { loaded, failures } = resolveCliPlugins({
+            cwd: fixture.root,
+            projectPackageJson: fs.readJsonSync(path.join(fixture.root, 'package.json')) as PackageJsonLike,
+            resolvePackage: fixture.resolvePackage,
+        });
+
+        expect(failures).toEqual([]);
+        expect(loaded.map(plugin => plugin.packageName)).toEqual(['@example/a']);
+
+        const registry = new CommandRegistry();
+        for (const entry of loaded) {
+            registry.applyPlugin(entry.plugin);
+        }
+        expect(registry.getPluginExtensions('afterConsoleLink')).toHaveLength(1);
+    });
+
+    // The allowlist is not the only way an id reaches the registry twice, and
+    // `id` is author-chosen, so two packages can collide on it.
+    it('refuses a second plugin under an id that is already registered', () => {
+        const registry = new CommandRegistry();
+        registry.applyPlugin(
+            defineCliPlugin({
+                id: '@example/a',
+                commands: [{ name: 'first', description: 'First', action: async () => 0 }],
+                afterConsoleLink: async () => undefined,
+            }),
+        );
+
+        expect(() =>
+            registry.applyPlugin(
+                defineCliPlugin({
+                    id: '@example/a',
+                    commands: [{ name: 'second', description: 'Second', action: async () => 0 }],
+                    afterConsoleLink: async () => undefined,
+                }),
+            ),
+        ).toThrow(/already registered under the id/);
+        // Rejected whole, like every other collision: no second hook, and the
+        // command it would have added is not half-applied.
+        expect(registry.getPluginExtensions('afterConsoleLink')).toHaveLength(1);
+        expect(registry.has('second')).toBe(false);
+        expect(registry.has('first')).toBe(true);
+    });
+
+    // The id rule is about the id, not about hooks. It held in one combination
+    // of four when it only fired alongside a hook.
+    it('refuses a duplicate id even when neither plugin registers a hook', () => {
+        const registry = new CommandRegistry();
+        registry.applyPlugin(
+            defineCliPlugin({
+                id: '@example/a',
+                commands: [{ name: 'first', description: 'First', action: async () => 0 }],
+            }),
+        );
+
+        expect(() =>
+            registry.applyPlugin(
+                defineCliPlugin({
+                    id: '@example/a',
+                    commands: [{ name: 'second', description: 'Second', action: async () => 0 }],
+                }),
+            ),
+        ).toThrow(/already registered under the id/);
+        expect(registry.has('second')).toBe(false);
     });
 
     it('loads allowlisted plugins in declared order', () => {

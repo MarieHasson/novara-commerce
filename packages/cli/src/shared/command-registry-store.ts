@@ -12,7 +12,8 @@ import {
     isRunnableCliCommand,
 } from './cli-command-definition';
 import { describeOption, ParsedCliOption, parseOptionFlags, withSubOptions } from './cli-command-options';
-import { CliPlugin, normalizeCommandPath } from './cli-plugin';
+import { CliPlugin, getCliPluginExtensionEntries, normalizeCommandPath } from './cli-plugin';
+import { RegisteredCliPluginExtension } from './cli-plugin-extension';
 
 /**
  * Why a flag cannot be shared by a command that has subcommands and by
@@ -73,6 +74,9 @@ interface RegisteredOption {
 interface RegistryState {
     commands: Map<string, RegisteredCommand>;
     rootOptions: Map<string, RegisteredOption>;
+    /** Ids of the plugins applied so far. One plugin, one id. */
+    pluginIds: Set<string>;
+    pluginExtensions: Map<string, RegisteredCliPluginExtension[]>;
 }
 
 /**
@@ -95,7 +99,12 @@ export class CliPluginRegistrationError extends Error {
  * activation order.
  */
 export class CommandRegistry {
-    private state: RegistryState = { commands: new Map(), rootOptions: new Map() };
+    private state: RegistryState = {
+        commands: new Map(),
+        rootOptions: new Map(),
+        pluginIds: new Set(),
+        pluginExtensions: new Map(),
+    };
 
     /**
      * Registers the built-in commands. Plugins go through {@link applyPlugin},
@@ -124,9 +133,24 @@ export class CommandRegistry {
         const draft: RegistryState = {
             commands: new Map(this.state.commands),
             rootOptions: new Map(this.state.rootOptions),
+            pluginIds: new Set(this.state.pluginIds),
+            pluginExtensions: new Map(
+                Array.from(this.state.pluginExtensions, ([extensionPoint, entries]) => [
+                    extensionPoint,
+                    [...entries],
+                ]),
+            ),
         };
         const conflicts: string[] = [];
         const notices: string[] = [];
+
+        // Checked for every plugin, not only one contributing a hook. The id is
+        // what a conflict message names and what a hook is recorded against, so
+        // two plugins sharing one is ambiguous everywhere, not just here.
+        if (draft.pluginIds.has(plugin.id)) {
+            conflicts.push(`Another CLI plugin is already registered under the id "${plugin.id}".`);
+        }
+        draft.pluginIds.add(plugin.id);
 
         for (const option of plugin.rootOptions ?? []) {
             this.draftRootOption(draft, option, plugin.id, conflicts, false);
@@ -139,6 +163,11 @@ export class CommandRegistry {
         }
         for (const extension of plugin.extendCommands ?? []) {
             draftExtension(draft, extension, plugin.id, conflicts, notices);
+        }
+        for (const { extensionPoint, extension } of getCliPluginExtensionEntries(plugin)) {
+            const entries = draft.pluginExtensions.get(extensionPoint) ?? [];
+            entries.push({ pluginId: plugin.id, extension });
+            draft.pluginExtensions.set(extensionPoint, entries);
         }
 
         if (conflicts.length > 0) {
@@ -184,6 +213,12 @@ export class CommandRegistry {
      */
     getExtendedBy(name: string): string[] {
         return [...(this.state.commands.get(name)?.extendedBy ?? [])];
+    }
+
+    getPluginExtensions<T = unknown>(extensionPoint: string): ReadonlyArray<RegisteredCliPluginExtension<T>> {
+        return [...(this.state.pluginExtensions.get(extensionPoint) ?? [])] as Array<
+            RegisteredCliPluginExtension<T>
+        >;
     }
 
     private draftRootOption(

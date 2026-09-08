@@ -4,6 +4,14 @@ import { ChildProcess, spawn } from 'node:child_process';
 import { CliCommandExit } from '../../shared/cli-command-exit';
 import { isNonInteractiveEnvironment, withInteractiveTimeout } from '../../utilities/utils';
 
+import { ConsoleLinkContext, ConsoleLinkOutcome, RegisteredConsoleLinkHook } from './console-link-hook';
+import {
+    DEFAULT_CONSOLE_API_URL,
+    DEFAULT_CONSOLE_URL,
+    assertOfficialConsoleOriginPair,
+    officialConsoleEnvironment,
+} from './console-origins';
+import { ConsoleReporter } from './console-reporter';
 import { ensureProjectLinkGitignore } from './project-link-gitignore';
 import {
     ManifestReadResult,
@@ -17,8 +25,6 @@ import {
 } from './project-link-manifest';
 import { nonEmptyString, objectValue, uuid } from './project-link-validation';
 
-const DEFAULT_CONSOLE_URL = 'https://console.vendure.io';
-const DEFAULT_CONSOLE_API_URL = 'https://api.vendure.io';
 const PROJECT_LINKS_PATH = '/v1/project-links';
 const POLL_INTERVAL_MS = 2_000;
 const REQUEST_TIMEOUT_MS = 10_000;
@@ -29,20 +35,19 @@ export interface ConsoleCommandOptions {
     allowCustomConsole?: boolean;
     project?: string;
     force?: boolean;
-}
-
-export interface ConsoleReporter {
-    error(message: string): void;
-    info(message: string): void;
-    success(message: string): void;
-    warn(message: string): void;
-    url(value: string): void;
+    /** Answers every confirmation owned by the CLI. */
+    yes?: boolean;
 }
 
 export interface ConsoleCommandDependencies {
     cwd: string;
     env: NodeJS.ProcessEnv;
     fetch: typeof globalThis.fetch;
+    /**
+     * Plugin hooks to run once a link has been written. Defaults to the ones
+     * the host collected from the loaded plugins.
+     */
+    hooks: readonly RegisteredConsoleLinkHook[];
     isNonInteractive: () => boolean;
     now: () => number;
     openUrl: (url: string) => Promise<void>;
@@ -100,6 +105,7 @@ function createDefaultDependencies(): ConsoleCommandDependencies {
         cwd: process.cwd(),
         env: process.env,
         fetch: globalThis.fetch,
+        hooks: [],
         isNonInteractive: () => isNonInteractiveEnvironment(),
         now: () => Date.now(),
         openUrl: openUrlInBrowser,
@@ -145,14 +151,20 @@ export async function consoleCommand(
         externalSignal?.addEventListener('abort', onExternalAbort, { once: true });
     }
 
+    const state: ConsoleCommandState = {};
     try {
-        return await runConsoleCommand(action, options, resolvedDependencies, abortController.signal);
+        return await runConsoleCommand(action, options, resolvedDependencies, abortController.signal, state);
     } catch (error) {
         if (interruptedExitCode !== undefined || error instanceof CommandInterruptedError) {
             // A process signal wins so SIGTERM retains exit code 143. Prompt cancellation and external aborts use 130.
             const exitCode = interruptedExitCode ?? 130;
             resolvedDependencies.reporter.warn(
-                'Console command interrupted. No Project Link Manifest was changed.',
+                // Once the manifest is written the link is done and cannot be
+                // taken back, so saying nothing changed would be untrue. An
+                // interrupt after that point stopped a hook, not the link.
+                state.manifestPath && state.outcome
+                    ? `Console command interrupted. ${linkUnfinished(state.outcome, state.manifestPath)}`
+                    : 'Console command interrupted. No Project Link Manifest was changed.',
             );
             return exitCode;
         }
@@ -168,11 +180,22 @@ export async function consoleCommand(
     }
 }
 
+/**
+ * What the run has already done, for messages that would otherwise overstate
+ * how much an interrupt took back.
+ */
+interface ConsoleCommandState {
+    /** Set once the Project Link Manifest is on disk, written or reused. */
+    manifestPath?: string;
+    outcome?: ConsoleLinkOutcome;
+}
+
 async function runConsoleCommand(
     action: string | undefined,
     options: ConsoleCommandOptions,
     dependencies: ConsoleCommandDependencies,
     signal: AbortSignal,
+    state: ConsoleCommandState,
 ): Promise<number> {
     const normalizedAction = action?.trim().toLowerCase();
     if (!normalizedAction || !['link', 'status', 'unlink'].includes(normalizedAction)) {
@@ -192,7 +215,7 @@ async function runConsoleCommand(
     if (normalizedAction === 'unlink') {
         return unlink(projectRoot, options, dependencies);
     }
-    return link(projectRoot, options, dependencies, signal);
+    return link(projectRoot, options, dependencies, signal, state);
 }
 
 export function resolveConsoleEndpoints(env: NodeJS.ProcessEnv): ConsoleEndpoints {
@@ -205,9 +228,7 @@ export function resolveConsoleEndpoints(env: NodeJS.ProcessEnv): ConsoleEndpoint
     }
     const consoleUrl = baseUrl(consoleOverride ?? DEFAULT_CONSOLE_URL, 'VENDURE_CONSOLE_LINK_URL');
     const apiUrl = baseUrl(apiOverride ?? DEFAULT_CONSOLE_API_URL, 'VENDURE_CONSOLE_LINK_API_URL');
-    if ((consoleUrl === DEFAULT_CONSOLE_URL) !== (apiUrl === DEFAULT_CONSOLE_API_URL)) {
-        throw new Error('The production Console and API origins must be used together.');
-    }
+    assertOfficialConsoleOriginPair({ consoleUrl, apiUrl });
     return { consoleUrl, apiUrl };
 }
 
@@ -216,9 +237,23 @@ async function link(
     options: ConsoleCommandOptions,
     dependencies: ConsoleCommandDependencies,
     signal: AbortSignal,
+    state: ConsoleCommandState,
 ): Promise<number> {
     const endpoints = resolveConsoleEndpoints(dependencies.env);
     const existing = readProjectLinkManifest(projectRoot);
+    if (existing.kind === 'valid' && !options.force) {
+        // A repeated link reuses the manifest and reruns plugin setup.
+        return repair(
+            projectRoot,
+            existing.manifest,
+            existing.path,
+            endpoints,
+            options,
+            dependencies,
+            signal,
+            state,
+        );
+    }
     if (existing.kind !== 'missing') {
         const confirmed = await confirmManifestChange('replace', existing, options, dependencies);
         if (confirmed !== 'confirmed') {
@@ -242,10 +277,193 @@ async function link(
     const manifest = await waitForApproval(request, endpoints, dependencies, signal);
     throwIfAborted(signal);
     const manifestPath = await writeProjectLinkManifestAtomic(projectRoot, manifest);
+    state.outcome = 'linked';
+    state.manifestPath = manifestPath;
     dependencies.reporter.success(`Linked ${manifest.project.name} to ${manifest.account.name}.`);
     dependencies.reporter.info(`Wrote ${manifestPath}`);
     reportProjectLinkGitignore(projectRoot, dependencies.reporter);
+
+    return runConsoleLinkHooks(
+        { projectRoot, manifest, manifestPath, endpoints, outcome: 'linked' },
+        options,
+        dependencies,
+        signal,
+    );
+}
+
+/** Reuses the manifest, reapplies its `.gitignore` rules, and reruns plugin setup. */
+async function repair(
+    projectRoot: string,
+    manifest: ProjectLinkManifest,
+    manifestPath: string,
+    endpoints: ConsoleEndpoints,
+    options: ConsoleCommandOptions,
+    dependencies: ConsoleCommandDependencies,
+    signal: AbortSignal,
+    state: ConsoleCommandState,
+): Promise<number> {
+    const endpointApproval = await confirmCustomConsoleEndpoints(endpoints, options, dependencies);
+    if (endpointApproval !== 'confirmed') {
+        return endpointApproval === 'cancelled' ? 0 : 1;
+    }
+    dependencies.reporter.success(`Already linked to ${manifest.project.name} in ${manifest.account.name}.`);
+    dependencies.reporter.info(
+        `Kept ${manifestPath}. Run vendure console link --force to link this project to a different Console Project.`,
+    );
+    reportProjectLinkGitignore(projectRoot, dependencies.reporter);
+    if (!(await confirmRepair(manifest, options, dependencies))) {
+        return 0;
+    }
+    state.outcome = 'repaired';
+    state.manifestPath = manifestPath;
+
+    return runConsoleLinkHooks(
+        { projectRoot, manifest, manifestPath, endpoints, outcome: 'repaired' },
+        options,
+        dependencies,
+        signal,
+    );
+}
+
+/**
+ * Whether to run plugin setup against a manifest this run did not write.
+ *
+ * Only asked when a plugin would actually do something, because with no hooks
+ * registered a repair reports the link and changes nothing. Non-interactive
+ * runs proceed: the backfill this command exists to provide has to work in CI,
+ * where the manifest is part of the checked-out source the operator chose to
+ * run and there is nobody to ask. `--yes` is the answer given in advance, for
+ * repeating a repair in a project whose manifest the developer already trusts.
+ *
+ * `--force` is not that answer. It links to a different Project, so it never
+ * reaches here.
+ */
+async function confirmRepair(
+    manifest: ProjectLinkManifest,
+    options: ConsoleCommandOptions,
+    dependencies: ConsoleCommandDependencies,
+): Promise<boolean> {
+    if (options.yes || dependencies.hooks.length === 0 || dependencies.isNonInteractive()) {
+        return true;
+    }
+    const result = await dependencies.prompt(
+        `Run plugin setup for ${manifest.project.name} in ${manifest.account.name}?`,
+    );
+    if (result === undefined) {
+        throw new CommandInterruptedError();
+    }
+    if (result !== true) {
+        dependencies.reporter.info('No plugin setup was run. The Project Link Manifest is unchanged.');
+        return false;
+    }
+    return true;
+}
+
+/** What the command resolved, before it is shaped into a per-hook context. */
+interface ConsoleLinkHookInputs {
+    projectRoot: string;
+    manifest: ProjectLinkManifest;
+    manifestPath: string;
+    endpoints: ConsoleEndpoints;
+    outcome: ConsoleLinkOutcome;
+}
+
+/** Runs plugin hooks in registration order and stops after the first failure. */
+async function runConsoleLinkHooks(
+    inputs: ConsoleLinkHookInputs,
+    options: ConsoleCommandOptions,
+    dependencies: ConsoleCommandDependencies,
+    signal: AbortSignal,
+): Promise<number> {
+    for (const { pluginId, hook } of dependencies.hooks) {
+        try {
+            await hook(createConsoleLinkContext(inputs, options, dependencies, signal));
+        } catch (error) {
+            // Ctrl-C during a hook is an interrupt whatever the hook threw, so
+            // it is reported by the one handler that knows the exit code.
+            if (signal.aborted || error instanceof CommandInterruptedError) {
+                throw new CommandInterruptedError();
+            }
+            // The host owns this one, and it carries the exit code with it.
+            // Reported whatever the code, because a hook that stops the run at
+            // zero still stops every hook after it, and the exit code alone
+            // does not tell the reader that some setup never ran.
+            if (error instanceof CliCommandExit) {
+                const stopped = `The ${pluginId} plugin stopped the run after linking.`;
+                // The level follows the code the process will actually exit
+                // with, so a log that reads as a failure matches one.
+                if (error.exitCode === 0) {
+                    dependencies.reporter.warn(stopped);
+                } else {
+                    dependencies.reporter.error(stopped);
+                }
+                dependencies.reporter.warn(linkUnfinished(inputs.outcome, inputs.manifestPath));
+                throw error;
+            }
+            const detail = error instanceof Error ? error.message : String(error);
+            dependencies.reporter.error(`The ${pluginId} plugin failed after linking: ${detail}`);
+            dependencies.reporter.warn(linkUnfinished(inputs.outcome, inputs.manifestPath));
+            return 1;
+        }
+    }
     return 0;
+}
+
+/** Builds an isolated context for one hook. */
+function createConsoleLinkContext(
+    inputs: ConsoleLinkHookInputs,
+    options: ConsoleCommandOptions,
+    dependencies: ConsoleCommandDependencies,
+    signal: AbortSignal,
+): ConsoleLinkContext {
+    const isNonInteractive = dependencies.isNonInteractive();
+    return {
+        projectRoot: inputs.projectRoot,
+        manifest: structuredClone(inputs.manifest),
+        manifestPath: inputs.manifestPath,
+        endpoints: {
+            consoleUrl: inputs.endpoints.consoleUrl,
+            apiUrl: inputs.endpoints.apiUrl,
+            official: officialConsoleEnvironment(inputs.endpoints),
+        },
+        outcome: inputs.outcome,
+        signal,
+        reporter: dependencies.reporter,
+        confirm: message => confirmForHook(message, isNonInteractive, dependencies.prompt),
+        isNonInteractive,
+        force: options.force === true,
+    };
+}
+
+/**
+ * Asks the hook's yes/no question, or refuses when there is nobody to answer.
+ *
+ * Without this the question goes into a pipe and the command waits for a reply
+ * that cannot come. `isNonInteractive` is on the context so that a hook takes
+ * the other path before it reaches here; this is what happens when one does not.
+ */
+function confirmForHook(
+    message: string,
+    isNonInteractive: boolean,
+    prompt: ConsoleCommandDependencies['prompt'],
+): Promise<boolean | undefined> {
+    if (isNonInteractive) {
+        return Promise.reject(
+            new Error(
+                'Cannot ask for confirmation in a non-interactive environment. ' +
+                    'Check context.isNonInteractive before calling context.confirm.',
+            ),
+        );
+    }
+    return prompt(message);
+}
+
+function linkUnfinished(outcome: ConsoleLinkOutcome, manifestPath: string): string {
+    const survived =
+        outcome === 'linked'
+            ? `The link succeeded and ${manifestPath} is in place.`
+            : `The existing link at ${manifestPath} was not changed.`;
+    return `${survived} The setup that runs after linking did not finish.`;
 }
 
 async function confirmCustomConsoleEndpoints(
@@ -253,7 +471,7 @@ async function confirmCustomConsoleEndpoints(
     options: ConsoleCommandOptions,
     dependencies: ConsoleCommandDependencies,
 ): Promise<'confirmed' | 'cancelled' | 'required'> {
-    if (!usesCustomRemoteEndpoints(endpoints) || options.allowCustomConsole) {
+    if (!usesCustomRemoteEndpoints(endpoints) || options.allowCustomConsole || options.yes) {
         return 'confirmed';
     }
     if (dependencies.isNonInteractive()) {
@@ -358,7 +576,7 @@ async function confirmManifestChange(
     options: ConsoleCommandOptions,
     dependencies: ConsoleCommandDependencies,
 ): Promise<'confirmed' | 'cancelled' | 'required'> {
-    if (options.force) {
+    if (options.force || options.yes) {
         return 'confirmed';
     }
     if (dependencies.isNonInteractive()) {
@@ -560,8 +778,8 @@ async function requestJson(
     }
 }
 
-function isTransientHttpStatus(status: number): boolean {
-    return status >= 500 || status === 408 || status === 429;
+function isTransientHttpStatus(statusCode: number): boolean {
+    return statusCode >= 500 || statusCode === 408 || statusCode === 429;
 }
 
 async function readJsonBody(response: Response, signal: AbortSignal): Promise<unknown> {
@@ -659,8 +877,9 @@ function isLoopbackHostname(hostname: string): boolean {
     return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
 }
 
+/** Whether these origins are a remote Console that Vendure does not operate. */
 function usesCustomRemoteEndpoints(endpoints: ConsoleEndpoints): boolean {
-    if (endpoints.consoleUrl === DEFAULT_CONSOLE_URL && endpoints.apiUrl === DEFAULT_CONSOLE_API_URL) {
+    if (officialConsoleEnvironment(endpoints) !== undefined) {
         return false;
     }
     return ![endpoints.consoleUrl, endpoints.apiUrl].every(value =>
