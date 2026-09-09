@@ -1,3 +1,5 @@
+import { Type } from '@vendure/common/lib/shared-types';
+import { getMetadataArgsStorage } from 'typeorm';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { runPluginConfigurations } from './bootstrap';
@@ -9,7 +11,73 @@ import { RuntimeVendureConfig } from './config/vendure-config';
 import './entity/entities';
 import { registerCustomEntityFields } from './entity/register-custom-entity-fields';
 import { VendurePlugin } from './plugin/vendure-plugin';
-import { registerCustomFieldEntityMetadata } from './testing/custom-field-metadata-test-utils';
+
+/**
+ * Registers custom-field-related TypeORM metadata directly in the process-global metadata storage,
+ * so specs can exercise the relation-based translation-entity detection in
+ * `getEntityNamesWithCustomFields`. Declaring throwaway `@Entity` classes instead would pollute
+ * the metadata for every other test in the process.
+ *
+ * Set `baseHasCustomFields` to push a `customFields` embedded on the `base`. Pass a
+ * `translationTarget` to also push a `customFields` embedded on that target and a `translations`
+ * relation from `base` to it. That relation is the signal `getEntityNamesWithCustomFields` uses to
+ * exclude translation entities.
+ *
+ * `relationTarget` is the relation's target reference. It accepts the three shapes TypeORM allows:
+ * a constructor closure, a bare string name, or a closure returning a string. Omit it for a bare
+ * relation with no target.
+ *
+ * Returns a cleanup fn that removes exactly what it pushed, matched by reference, so that
+ * interleaved registrations across tests unwind cleanly regardless of order.
+ */
+function registerCustomFieldEntityMetadata(options: {
+    base: Type<any> | { name: string };
+    baseHasCustomFields?: boolean;
+    translationTarget?: Type<any> | { name: string };
+    relationTarget?: unknown;
+}): () => void {
+    const storage = getMetadataArgsStorage();
+    const pushedEmbeddeds: unknown[] = [];
+    const pushedRelations: unknown[] = [];
+
+    const pushEmbedded = (target: Type<any> | { name: string }) => {
+        const embedded = { target, propertyName: 'customFields', prefix: undefined, type: () => Object };
+        storage.embeddeds.push(embedded as any);
+        pushedEmbeddeds.push(embedded);
+    };
+
+    if (options.baseHasCustomFields) {
+        pushEmbedded(options.base);
+    }
+    if (options.translationTarget) {
+        pushEmbedded(options.translationTarget);
+        const relation = {
+            target: options.base,
+            propertyName: 'translations',
+            relationType: 'one-to-many',
+            type: options.relationTarget,
+            isLazy: false,
+            options: {},
+        };
+        storage.relations.push(relation as any);
+        pushedRelations.push(relation);
+    }
+
+    return () => {
+        for (const embedded of pushedEmbeddeds) {
+            const index = storage.embeddeds.indexOf(embedded as any);
+            if (index !== -1) {
+                storage.embeddeds.splice(index, 1);
+            }
+        }
+        for (const relation of pushedRelations) {
+            const index = storage.relations.indexOf(relation as any);
+            if (index !== -1) {
+                storage.relations.splice(index, 1);
+            }
+        }
+    };
+}
 
 /**
  * Registers a `translations` relation and a matching `customFields` embedded on the translation
@@ -65,6 +133,41 @@ describe('runPluginConfigurations()', () => {
         await runPluginConfigurations(config);
         expect(config.customFields.ProductTranslation).toBeUndefined();
         expect(config.customFields.CollectionTranslation).toBeUndefined();
+    });
+
+    // OSS-654: detection is relation-based, so it excludes only the target of a `translations`
+    // relation. Nothing points such a relation at this entity, so it is seeded like any other,
+    // even though its name ends in "Translation" and it has a `languageCode` column. The
+    // name + column heuristic this replaced wrongly excluded it.
+    it('seeds an entity that only looks like a translation entity by name + languageCode', async () => {
+        class Oss654OrphanTranslation {}
+        const cleanup = registerCustomFieldEntityMetadata({
+            base: Oss654OrphanTranslation,
+            baseHasCustomFields: true,
+        });
+        const storage = getMetadataArgsStorage();
+        const languageCodeColumn = {
+            target: Oss654OrphanTranslation,
+            propertyName: 'languageCode',
+            mode: 'regular',
+            options: {},
+        };
+        storage.columns.push(languageCodeColumn as any);
+
+        @VendurePlugin({ entities: [Oss654OrphanTranslation] })
+        class TestPlugin {}
+
+        try {
+            const config = makeConfig({ plugins: [TestPlugin] });
+            await runPluginConfigurations(config);
+            expect(config.customFields.Oss654OrphanTranslation).toEqual([]);
+        } finally {
+            const index = storage.columns.indexOf(languageCodeColumn as any);
+            if (index !== -1) {
+                storage.columns.splice(index, 1);
+            }
+            cleanup();
+        }
     });
 
     // OSS-653: seeding must be scoped to the entities registered with THIS server, not the global

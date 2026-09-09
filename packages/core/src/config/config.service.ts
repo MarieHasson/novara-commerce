@@ -2,8 +2,6 @@ import { DynamicModule, Injectable, Type } from '@nestjs/common';
 import { LanguageCode } from '@vendure/common/lib/generated-types';
 import { DataSourceOptions } from 'typeorm';
 
-import { getEntityNamesWithCustomFields } from '../entity/register-custom-entity-fields';
-
 import { getConfig } from './config-helpers';
 import { CustomFields } from './custom-field/custom-field-types';
 import { EntityIdStrategy } from './entity/entity-id-strategy';
@@ -30,7 +28,6 @@ import {
 @Injectable()
 export class ConfigService implements VendureConfig {
     private activeConfig: RuntimeVendureConfig;
-    private allCustomFieldsConfig: Required<CustomFields> | undefined;
 
     constructor() {
         this.activeConfig = getConfig();
@@ -101,10 +98,10 @@ export class ConfigService implements VendureConfig {
     }
 
     get customFields(): Required<CustomFields> {
-        if (!this.allCustomFieldsConfig) {
-            this.allCustomFieldsConfig = this.getCustomFieldsForAllEntities();
-        }
-        return this.allCustomFieldsConfig;
+        // Every entity that supports custom fields already has an entry here: `runPluginConfigurations`
+        // seeds one for each of them during `preBootstrapConfig`, which completes before the Nest app,
+        // and so before any `ConfigService`, exists.
+        return this.activeConfig.customFields;
     }
 
     get plugins(): Array<DynamicModule | Type<any>> {
@@ -129,33 +126,6 @@ export class ConfigService implements VendureConfig {
 
     get settingsStoreFields(): SettingsStoreFields {
         return this.activeConfig.settingsStoreFields ?? {};
-    }
-
-    private getCustomFieldsForAllEntities(): Required<CustomFields> {
-        const definedCustomFields = this.activeConfig.customFields;
-
-        // The `customFields` config only includes the built-in entities, so any (plugin) entity
-        // that declares a `customFields` embedded but is not explicitly configured must be added
-        // here. Translation entities are excluded by `getEntityNamesWithCustomFields`, which is
-        // also used by the bootstrap-time auto-init in `runPluginConfigurations`, so the two
-        // cannot classify an entity differently.
-        //
-        // The two call sites source their *entity list* differently: the auto-init passes
-        // `getAllEntities(config)`, whereas this getter reads `dbConnectionOptions.entities`. That is
-        // safe because `preBootstrapConfig` populates `dbConnectionOptions.entities` before any
-        // `ConfigService` exists, so the list is complete by the time this getter runs. Importing
-        // `getAllEntities` from `bootstrap.ts` to unify the source would create a module cycle, so
-        // nothing checks that ordering at runtime. A `ConfigService` constructed before
-        // `preBootstrapConfig` has run sees an incomplete entity list, and nothing raises an error.
-        const entities = Array.isArray(this.dbConnectionOptions.entities)
-            ? this.dbConnectionOptions.entities.filter((e): e is Type<any> => typeof e === 'function')
-            : [];
-        for (const entityName of getEntityNamesWithCustomFields(entities)) {
-            if (!definedCustomFields[entityName]) {
-                definedCustomFields[entityName] = [];
-            }
-        }
-        return definedCustomFields;
     }
 
     /**
