@@ -1110,7 +1110,7 @@
                   "title": "RolePermissionResolver",
                   "slug": "role-permission-resolver",
                   "file": "docs/reference/typescript-api/auth/role-permission-resolver.mdx",
-                  "lastModified": "2026-09-09T08:40:56Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "SessionCacheStrategy",
@@ -1282,7 +1282,7 @@
                   "title": "Permission",
                   "slug": "permission",
                   "file": "docs/reference/typescript-api/common/permission.mdx",
-                  "lastModified": "2026-09-10T15:41:07Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "PriceCalculationResult",
@@ -1842,7 +1842,7 @@
                   "title": "RoleAssignment",
                   "slug": "role-assignment",
                   "file": "docs/reference/typescript-api/entities/role-assignment.mdx",
-                  "lastModified": "2026-09-09T08:40:56Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "Seller",
@@ -2332,7 +2332,7 @@
                   "title": "MigrateRoleAssignmentData",
                   "slug": "migrate-role-assignment-data",
                   "file": "docs/reference/typescript-api/migration/migrate-role-assignment-data.mdx",
-                  "lastModified": "2026-09-09T09:50:34Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "MigrationOptions",
@@ -2922,7 +2922,7 @@
                   "title": "AdministratorService",
                   "slug": "administrator-service",
                   "file": "docs/reference/typescript-api/services/administrator-service.mdx",
-                  "lastModified": "2026-09-10T15:41:07Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "AssetService",
@@ -2940,7 +2940,7 @@
                   "title": "ChannelService",
                   "slug": "channel-service",
                   "file": "docs/reference/typescript-api/services/channel-service.mdx",
-                  "lastModified": "2026-09-09T08:40:56Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "CollectionService",
@@ -3078,7 +3078,7 @@
                   "title": "RoleAssignmentService",
                   "slug": "role-assignment-service",
                   "file": "docs/reference/typescript-api/services/role-assignment-service.mdx",
-                  "lastModified": "2026-09-10T15:41:07Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "RoleService",
@@ -3796,7 +3796,7 @@
                   "title": "Mutations",
                   "slug": "mutations",
                   "file": "docs/reference/graphql-api/admin/mutations.mdx",
-                  "lastModified": "2026-09-10T15:41:07Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 },
                 {
                   "title": "Queries",
@@ -3808,7 +3808,7 @@
                   "title": "Types",
                   "slug": "object-types",
                   "file": "docs/reference/graphql-api/admin/object-types.mdx",
-                  "lastModified": "2026-09-10T15:41:07Z"
+                  "lastModified": "2026-09-14T07:29:57Z"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
