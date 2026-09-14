@@ -146,14 +146,16 @@ describe('Channels', () => {
         expect(secondChannelData!.permissions.sort()).toEqual(nonOwnerPermissions);
     });
 
-    it('materializes superadmin role assignments on new channel', async () => {
+    it('writes no superadmin role assignment for the new channel', async () => {
         const { roleAssignments } = await adminClient.query(getRoleAssignmentsDocument);
 
+        // The SuperAdmin role is stored as a single row on the default channel, which
+        // stands for every channel; access to the new channel is derived at check time.
         const superAdminChannelTokens = roleAssignments.items
             .filter(assignment => assignment.role.code === SUPER_ADMIN_ROLE_CODE)
             .map(assignment => assignment.channel.token);
 
-        expect(superAdminChannelTokens.sort()).toEqual([E2E_DEFAULT_CHANNEL_TOKEN, SECOND_CHANNEL_TOKEN]);
+        expect(superAdminChannelTokens).toEqual([E2E_DEFAULT_CHANNEL_TOKEN]);
     });
 
     it('customer permissions derive from channel membership', async () => {

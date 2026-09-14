@@ -418,7 +418,7 @@ describe('Role resolver', () => {
 
         // System roles are not editable through the API, so the gate does not apply to
         // reading them: they are visible on every channel. The SuperAdmin role is the
-        // strongest case since it is materialized on all channels.
+        // strongest case since its single default-channel row stands for every channel.
         it('limited admin can view system roles regardless of channel assignments', async () => {
             const superAdminRole = defaultRoles.find(r => r.code === SUPER_ADMIN_ROLE_CODE)!;
             const result = await adminClient.query(getRoleDocument, { id: superAdminRole.id });

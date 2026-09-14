@@ -24,6 +24,7 @@ import {
     createRoleDocument,
     deleteAdministratorDocument,
     getActiveAdministratorDocument,
+    MeDocument,
     removeRolesFromUserDocument,
     updateAdministratorDocument,
 } from './graphql/shared-definitions';
@@ -33,7 +34,7 @@ import { assertThrowsWithMessage } from './utils/assert-throws-with-message';
  * Coverage for the RoleAssignment (user, role, channel) permission model: the
  * channel-isolation property, the assign / remove mutations and their single grant rule
  * (RoleService.canGrant: the actor holds every permission of the Role on that Channel),
- * the filtered assignment reads, the SuperAdmin expansion, and the event contract.
+ * the filtered assignment reads, the SuperAdmin anchor row, and the event contract.
  */
 describe('RoleAssignment', () => {
     const { server, adminClient } = createTestEnvironment(testConfig());
@@ -341,16 +342,16 @@ describe('RoleAssignment', () => {
     });
 
     // The SuperAdmin Role has no channel scope: the RolePermissionResolver grants all
-    // permissions on every Channel from a single row, so the stored rows are kept in step
-    // with that access.
-    describe('SuperAdmin expansion', () => {
+    // permissions on every Channel from a single row, so it is stored as exactly one row on
+    // the default channel, whichever channel the grant or removal names.
+    describe('SuperAdmin anchor row', () => {
         let secondSuperAdmin: FragmentOf<typeof administratorFragment>;
 
         beforeAll(async () => {
             await asSuperAdminOnDefaultChannel();
         });
 
-        it('granting SuperAdmin on one channel grants it on every channel', async () => {
+        it('granting SuperAdmin on a non-default channel stores one row on the default channel', async () => {
             const { createAdministrator } = await adminClient.query(createAdministratorDocument, {
                 input: {
                     firstName: 'Second',
@@ -363,12 +364,34 @@ describe('RoleAssignment', () => {
             secondSuperAdmin = createAdministrator;
 
             const assignments = await getUserRoleAssignments(secondSuperAdmin.id);
-            expect(assignments.sort(byRoleCodeAndChannel)).toEqual(
-                [
-                    { roleCode: SUPER_ADMIN_ROLE_CODE, channelId: DEFAULT_CHANNEL_ID },
-                    { roleCode: SUPER_ADMIN_ROLE_CODE, channelId: secondChannel.id },
-                ].sort(byRoleCodeAndChannel),
+            expect(assignments).toEqual([{ roleCode: SUPER_ADMIN_ROLE_CODE, channelId: DEFAULT_CHANNEL_ID }]);
+        });
+
+        it('the new SuperAdmin holds every permission on every channel', async () => {
+            adminClient.setChannelToken(secondChannel.token);
+            await adminClient.asUserWithCredentials(secondSuperAdmin.emailAddress, 'test');
+            const { me } = await adminClient.query(MeDocument);
+            const secondChannelPermissions = me?.channels.find(c => c.token === secondChannel.token)?.permissions;
+
+            expect(me?.channels.map(c => c.token).sort()).toEqual(
+                [E2E_DEFAULT_CHANNEL_TOKEN, secondChannel.token].sort(),
             );
+            expect(secondChannelPermissions).toContain(Permission.SuperAdmin);
+            expect(secondChannelPermissions).toContain(Permission.DeleteChannel);
+        });
+
+        it('granting SuperAdmin again on another channel changes nothing', async () => {
+            await asSuperAdminOnDefaultChannel();
+            const { assignRolesToUser } = await adminClient.query(assignRolesToUserDocument, {
+                input: {
+                    userId: secondSuperAdmin.user.id,
+                    assignments: [{ roleId: superAdminRoleId, channelId: secondChannel.id }],
+                },
+            });
+
+            expect(toRoleCodeAndChannel(assignRolesToUser.roleAssignments)).toEqual([
+                { roleCode: SUPER_ADMIN_ROLE_CODE, channelId: DEFAULT_CHANNEL_ID },
+            ]);
         });
 
         it('a non-SuperAdmin cannot grant the SuperAdmin role', async () => {
@@ -383,7 +406,7 @@ describe('RoleAssignment', () => {
             }, 'Active user does not have sufficient permissions')();
         });
 
-        it('removing SuperAdmin on one channel removes it on every channel', async () => {
+        it('removing SuperAdmin on a non-default channel removes the default-channel row', async () => {
             await asSuperAdminOnDefaultChannel();
             const { removeRolesFromUser } = await adminClient.query(removeRolesFromUserDocument, {
                 input: {
@@ -564,20 +587,25 @@ describe('RoleAssignment', () => {
             );
             expect(outcomes.some(o => !o.accepted)).toBe(true);
 
-            // The SuperAdmin holds every permission everywhere, so the whole matrix is visible.
+            // The SuperAdmin holds every permission everywhere, so every stored row is visible.
+            // The SuperAdmin pairs of the matrix collapse into the single default-channel row.
             await asSuperAdminOnDefaultChannel();
             const { roleAssignments: superAdminView } = await adminClient.query(roleAssignmentsOfUserDocument, {
                 userId: subject.user.id,
             });
-            expect(superAdminView.totalItems).toBe(matrix.length);
+            const storedRowCount = matrix.filter(
+                pair => pair.roleId !== superAdminRoleId || pair.channelId === DEFAULT_CHANNEL_ID,
+            ).length;
+            expect(storedRowCount).toBe(matrix.length - 1);
+            expect(superAdminView.totalItems).toBe(storedRowCount);
         });
     });
 
     // OSS-751 — the role-change event contract of the assignment model. RoleAssignmentEvent
     // (channel-scoped, keyed on the User) is emitted by every actor-made assignment write and
     // is the only role-change event: the legacy RoleChangeEvent was removed in v4.0.0.
-    // AdministratorEvent also fires for the administrator mutations. System-mandated rows
-    // (the SuperAdmin rows materialized on Channel creation) are not reported.
+    // AdministratorEvent also fires for the administrator mutations. Channel creation writes
+    // no assignment rows and so reports nothing.
     describe('event contract', () => {
         interface RecordedEvent {
             kind: 'RoleAssignmentEvent' | 'AdministratorEvent';
@@ -816,7 +844,7 @@ describe('RoleAssignment', () => {
             expect(after.totalItems).toBe(0);
         });
 
-        it('the SuperAdmin rows materialized on channel creation are not reported', async () => {
+        it('creating a channel writes no assignments and emits no RoleAssignmentEvent', async () => {
             const { createChannel } = await adminClient.query(createChannelDocument, {
                 input: {
                     code: 'event-channel',
@@ -832,6 +860,34 @@ describe('RoleAssignment', () => {
 
             const events = await collectEvents();
             expect(events).toEqual([]);
+            const { roleAssignments } = await adminClient.query(roleAssignmentsOfUserDocument, {
+                userId: legacyAdmin.user.id,
+            });
+            expect(roleAssignments.items.some(a => a.channelId === createChannel.id)).toBe(false);
+        });
+
+        it('a SuperAdmin grant and removal on a non-default channel each report the single default-channel pair', async () => {
+            await adminClient.query(assignRolesToUserDocument, {
+                input: {
+                    userId: legacyAdmin.user.id,
+                    assignments: [{ roleId: superAdminRoleId, channelId: secondChannel.id }],
+                },
+            });
+
+            const assigned = await collectEvents();
+            expect(kindsOf(assigned)).toEqual(['RoleAssignmentEvent:assigned']);
+            expect(assigned[0].assignments).toEqual([{ roleId: superAdminRoleId, channelId: DEFAULT_CHANNEL_ID }]);
+
+            await adminClient.query(removeRolesFromUserDocument, {
+                input: {
+                    userId: legacyAdmin.user.id,
+                    assignments: [{ roleId: superAdminRoleId, channelId: secondChannel.id }],
+                },
+            });
+
+            const removed = await collectEvents();
+            expect(kindsOf(removed)).toEqual(['RoleAssignmentEvent:removed']);
+            expect(removed[0].assignments).toEqual([{ roleId: superAdminRoleId, channelId: DEFAULT_CHANNEL_ID }]);
         });
 
         it('deleteAdministrator removes the assignments and emits RoleAssignmentEvent removed, then AdministratorEvent deleted', async () => {
