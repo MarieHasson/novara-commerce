@@ -1,3 +1,4 @@
+// @vitest-environment jsdom
 import {
     defineDashboardExtension,
     executeDashboardExtensionCallbacks,
@@ -5,7 +6,9 @@ import {
 import { addDisplayComponent } from '@/vdb/framework/extension-api/display-component-extensions.js';
 import { PageBlockContext } from '@/vdb/framework/layout-engine/page-block-provider.js';
 import { PageContext } from '@/vdb/framework/layout-engine/page-provider.js';
-import { CellContext, flexRender } from '@tanstack/react-table';
+import { CellContext, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { act, useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
@@ -204,5 +207,95 @@ describe('useGeneratedColumns additionalColumns', () => {
                 additionalColumns,
             ),
         ).toBe('<span>additional-column-cell</span>');
+    });
+
+    // #5346 — an additional column without a cell must pick up a display component registered later
+    it('applies a display component registered after an additional column without a cell was generated', () => {
+        const pageId = 'test-page-additional-column-late-registration';
+        const column = generateColumn(pageId, 'skuLabel', {
+            skuLabel: { accessorFn: (row: any) => row.sku },
+        } as any);
+        const skuLabelContext = { ...cellContext, renderValue: () => 'SKU-1' } as unknown as CellContext<
+            any,
+            any
+        >;
+        expect(renderToStaticMarkup(<>{flexRender(column.cell, skuLabelContext)}</>)).toBe('SKU-1');
+
+        addDisplayComponent({
+            pageId,
+            blockId: BLOCK_ID,
+            field: 'skuLabel',
+            component: () => <span>late-registered</span>,
+        });
+
+        expect(renderToStaticMarkup(<>{flexRender(column.cell, skuLabelContext)}</>)).toBe(
+            '<span>late-registered</span>',
+        );
+    });
+});
+
+describe('useGeneratedColumns mounted table', () => {
+    (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+
+    // #5346 — render-time lookup must not remount a stable cell when columns regenerate (see #4064)
+    it('does not remount a stable custom cell when the columns are regenerated', () => {
+        let mounts = 0;
+        function StatefulCell() {
+            useEffect(() => {
+                mounts++;
+            }, []);
+            return <span>stateful</span>;
+        }
+
+        function Table() {
+            // A new customizeColumns object on every render forces the column memo to recompute.
+            const { columns } = useGeneratedColumns({
+                fields,
+                customizeColumns: { price: { cell: StatefulCell } } as any,
+                includeSelectionColumn: false,
+                includeActionsColumn: false,
+            });
+            const table = useReactTable({
+                data: [{ sku: 'SKU-1', price: PRICE }],
+                columns: columns as any,
+                getCoreRowModel: getCoreRowModel(),
+            });
+            return (
+                <>
+                    {table
+                        .getRowModel()
+                        .rows.flatMap(row =>
+                            row
+                                .getVisibleCells()
+                                .map(cell => (
+                                    <span key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </span>
+                                )),
+                        )}
+                </>
+            );
+        }
+
+        const container = document.createElement('div');
+        const root = createRoot(container);
+        const render = () =>
+            act(() =>
+                root.render(
+                    <PageContext.Provider value={{ pageId: 'test-page-stable-cell' }}>
+                        <PageBlockContext.Provider value={{ blockId: BLOCK_ID, column: 'main' }}>
+                            <Table />
+                        </PageBlockContext.Provider>
+                    </PageContext.Provider>,
+                ),
+            );
+
+        render();
+        render();
+        render();
+
+        expect(container.textContent).toContain('stateful');
+        expect(mounts).toBe(1);
+        act(() => root.unmount());
     });
 });
