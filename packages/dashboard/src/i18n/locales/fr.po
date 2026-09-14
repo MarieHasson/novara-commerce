@@ -512,7 +512,7 @@ msgstr "Prix brut : <0/>"
 msgid "Go to next page"
 msgstr "Aller à la page suivante"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:210
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:241
 msgid "Add role"
 msgstr "Ajouter un rôle"
 
@@ -2034,8 +2034,8 @@ msgstr "Sélectionner une langue"
 msgid "Log out"
 msgstr "Se déconnecter"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:195
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:119
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:226
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:138
 msgid "Remove role"
 msgstr "Retirer le rôle"
 
@@ -2532,8 +2532,8 @@ msgstr "Supprimer la colonne"
 msgid "Assign existing"
 msgstr "Assigner un existant"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:159
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:91
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:165
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:104
 msgid "Role"
 msgstr "Rôle"
 
@@ -2732,7 +2732,7 @@ msgstr "Ajouter des valeurs de facette"
 msgid "after"
 msgstr "après"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:94
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:107
 #: src/lib/components/shared/assign-to-channel-dialog.tsx:103
 msgid "Channel"
 msgstr "Canal"
@@ -3428,7 +3428,7 @@ msgstr "Mettre à jour le contenu ou la visibilité de la note"
 msgid "Latest Orders Widget"
 msgstr "Widget Dernières Commandes"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:92
 msgid "Failed to remove role"
 msgstr ""
 
@@ -3465,7 +3465,7 @@ msgstr "n'est pas égal à"
 msgid "Settle payment"
 msgstr "Régler le paiement"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:162
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:168
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:38
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:23
@@ -3512,7 +3512,7 @@ msgstr "Articles remboursés"
 #~ msgid "Assign options to existing variant"
 #~ msgstr "Assigner des options à la variante existante"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:75
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:88
 msgid "Role removed"
 msgstr ""
 
@@ -4582,6 +4582,12 @@ msgstr "Catégorie de taxe mise à jour avec succès"
 msgid "Move"
 msgstr "Déplacer"
 
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:208
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:126
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:175
+msgid "All channels"
+msgstr ""
+
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:195
 msgid "Edit or delete existing tags"
 msgstr "Modifier ou supprimer les étiquettes existantes"
@@ -5123,7 +5129,7 @@ msgstr "Exécution..."
 msgid "Add option group to product"
 msgstr "Ajouter un groupe d'options au produit"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:66
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
 msgid "Failed to assign role"
 msgstr ""
 
@@ -5136,7 +5142,7 @@ msgstr "Aperçu de {0}"
 msgid "Successfully updated seller"
 msgstr "Vendeur mis à jour avec succès"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:179
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:194
 msgid "Assign role"
 msgstr ""
 
@@ -5687,7 +5693,7 @@ msgstr "ID de remboursement"
 msgid "Order custom fields updated"
 msgstr "Champs personnalisés de la commande mis à jour"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:60
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:73
 msgid "Role assigned"
 msgstr ""
 
@@ -6078,8 +6084,8 @@ msgstr "Option"
 msgid "Order process"
 msgstr "Processus de commande"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:204
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:103
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:235
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:116
 msgid "No roles assigned"
 msgstr "Aucun rôle attribué"
 

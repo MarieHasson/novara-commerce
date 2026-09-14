@@ -484,7 +484,7 @@ msgstr "Yalpi narx: <0/>"
 msgid "Go to next page"
 msgstr "Keyingi sahifaga o'tish"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:210
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:241
 msgid "Add role"
 msgstr "Rol qo'shish"
 
@@ -1967,8 +1967,8 @@ msgstr "Tilni tanlang"
 msgid "Log out"
 msgstr "Chiqish"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:195
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:119
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:226
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:138
 msgid "Remove role"
 msgstr "Rolni olib tashlash"
 
@@ -2465,8 +2465,8 @@ msgstr "Ustunni oʻchirish"
 msgid "Assign existing"
 msgstr "Mavjudini biriktirish"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:159
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:91
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:165
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:104
 msgid "Role"
 msgstr "Rol"
 
@@ -2653,7 +2653,7 @@ msgstr "Faset qiymatlarini qoʻshish"
 msgid "after"
 msgstr "keyin"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:94
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:107
 #: src/lib/components/shared/assign-to-channel-dialog.tsx:103
 msgid "Channel"
 msgstr "Kanal"
@@ -3336,7 +3336,7 @@ msgstr "Eslatma mazmuni yoki ko'rinishini yangilang"
 msgid "Latest Orders Widget"
 msgstr "So'nggi buyurtmalar vidjeti"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:92
 msgid "Failed to remove role"
 msgstr ""
 
@@ -3365,7 +3365,7 @@ msgstr "quyidagiga teng emas"
 msgid "Settle payment"
 msgstr "To'lovni yakunlash"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:162
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:168
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:38
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:23
@@ -3408,7 +3408,7 @@ msgstr "Teglarni boshqarish"
 msgid "Items refunded"
 msgstr "Elementlar qaytarildi"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:75
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:88
 msgid "Role removed"
 msgstr ""
 
@@ -4426,6 +4426,12 @@ msgstr "Soliq toifasi yangilandi"
 msgid "Move"
 msgstr "Ko'chirish"
 
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:208
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:126
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:175
+msgid "All channels"
+msgstr ""
+
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:195
 msgid "Edit or delete existing tags"
 msgstr "Mavjud teglarni tahrirlash yoki o'chirish"
@@ -4943,7 +4949,7 @@ msgstr "Bajarilmoqda..."
 msgid "Add option group to product"
 msgstr "Mahsulotga optsiya guruhi qo'shish"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:66
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
 msgid "Failed to assign role"
 msgstr ""
 
@@ -4956,7 +4962,7 @@ msgstr ""
 msgid "Successfully updated seller"
 msgstr "Sotuvchi muvaffaqiyatli yangilandi"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:179
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:194
 msgid "Assign role"
 msgstr ""
 
@@ -5487,7 +5493,7 @@ msgstr "Pul qaytarish ID"
 msgid "Order custom fields updated"
 msgstr "Buyurtmaning maxsus maydonlari yangilandi"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:60
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:73
 msgid "Role assigned"
 msgstr ""
 
@@ -5866,8 +5872,8 @@ msgstr "Optsiya"
 msgid "Order process"
 msgstr "Buyurtma jarayoni"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:204
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:103
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:235
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:116
 msgid "No roles assigned"
 msgstr "Rollar tayinlanmagan"
 

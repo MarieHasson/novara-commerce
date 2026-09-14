@@ -512,7 +512,7 @@ msgstr "总价：<0/>"
 msgid "Go to next page"
 msgstr "转到下一页"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:210
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:241
 msgid "Add role"
 msgstr "添加角色"
 
@@ -2034,8 +2034,8 @@ msgstr "选择一种语言"
 msgid "Log out"
 msgstr "退出"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:195
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:119
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:226
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:138
 msgid "Remove role"
 msgstr "移除角色"
 
@@ -2532,8 +2532,8 @@ msgstr "删除列"
 msgid "Assign existing"
 msgstr "分配现有"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:159
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:91
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:165
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:104
 msgid "Role"
 msgstr "角色"
 
@@ -2732,7 +2732,7 @@ msgstr "添加属性值"
 msgid "after"
 msgstr "之后"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:94
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:107
 #: src/lib/components/shared/assign-to-channel-dialog.tsx:103
 msgid "Channel"
 msgstr "渠道"
@@ -3428,7 +3428,7 @@ msgstr "更新备注内容或可见性"
 msgid "Latest Orders Widget"
 msgstr "最新订单小部件"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:92
 msgid "Failed to remove role"
 msgstr ""
 
@@ -3465,7 +3465,7 @@ msgstr "不等于"
 msgid "Settle payment"
 msgstr "完成支付"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:162
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:168
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:38
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:23
@@ -3512,7 +3512,7 @@ msgstr "已退款商品"
 #~ msgid "Assign options to existing variant"
 #~ msgstr "将选项分配给现有变体"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:75
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:88
 msgid "Role removed"
 msgstr ""
 
@@ -4582,6 +4582,12 @@ msgstr "已成功更新税务类别"
 msgid "Move"
 msgstr "移动"
 
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:208
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:126
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:175
+msgid "All channels"
+msgstr ""
+
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:195
 msgid "Edit or delete existing tags"
 msgstr "编辑或删除现有标签"
@@ -5123,7 +5129,7 @@ msgstr "正在履行..."
 msgid "Add option group to product"
 msgstr "将选项组添加到商品"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:66
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
 msgid "Failed to assign role"
 msgstr ""
 
@@ -5136,7 +5142,7 @@ msgstr "{0} 的预览"
 msgid "Successfully updated seller"
 msgstr "已成功更新卖家"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:179
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:194
 msgid "Assign role"
 msgstr ""
 
@@ -5687,7 +5693,7 @@ msgstr "退款 ID"
 msgid "Order custom fields updated"
 msgstr "订单自定义字段已更新"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:60
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:73
 msgid "Role assigned"
 msgstr ""
 
@@ -6078,8 +6084,8 @@ msgstr "选项"
 msgid "Order process"
 msgstr "订单流程"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:204
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:103
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:235
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:116
 msgid "No roles assigned"
 msgstr "未分配角色"
 

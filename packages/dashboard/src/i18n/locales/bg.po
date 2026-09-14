@@ -518,7 +518,7 @@ msgstr "Цена бруто: <0/>"
 msgid "Go to next page"
 msgstr "Към следващата страница"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:210
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:241
 msgid "Add role"
 msgstr "Добавяне на роля"
 
@@ -2052,8 +2052,8 @@ msgstr "Изберете език"
 msgid "Log out"
 msgstr "Изход"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:195
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:119
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:226
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:138
 msgid "Remove role"
 msgstr "Премахване на ролята"
 
@@ -2550,8 +2550,8 @@ msgstr "Изтриване на колона"
 msgid "Assign existing"
 msgstr "Присвояване на съществуващ"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:159
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:91
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:165
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:104
 msgid "Role"
 msgstr "Роля"
 
@@ -2749,7 +2749,7 @@ msgstr "Добавете стойности на аспекти"
 msgid "after"
 msgstr "след"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:94
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:107
 #: src/lib/components/shared/assign-to-channel-dialog.tsx:103
 msgid "Channel"
 msgstr "Канал"
@@ -3448,7 +3448,7 @@ msgstr "Актуализирайте съдържанието или видим�
 msgid "Latest Orders Widget"
 msgstr "Уиджет за най-нови поръчки"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:92
 msgid "Failed to remove role"
 msgstr ""
 
@@ -3485,7 +3485,7 @@ msgstr "не е равно на"
 msgid "Settle payment"
 msgstr "Приклюи плащане"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:162
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:168
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:38
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:23
@@ -3532,7 +3532,7 @@ msgstr "Възстановени артикули"
 #~ msgid "Assign options to existing variant"
 #~ msgstr "Присвояване на опции към съществуващ вариант"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:75
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:88
 msgid "Role removed"
 msgstr ""
 
@@ -4608,6 +4608,12 @@ msgstr "Успешно актуализирана данъчна категор�
 msgid "Move"
 msgstr "Премести"
 
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:208
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:126
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:175
+msgid "All channels"
+msgstr ""
+
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:195
 msgid "Edit or delete existing tags"
 msgstr "Редактирайте или изтрийте съществуващи тагове"
@@ -5152,7 +5158,7 @@ msgstr "Изпълнение..."
 msgid "Add option group to product"
 msgstr "Добавете група опции към продукта"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:66
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
 msgid "Failed to assign role"
 msgstr ""
 
@@ -5165,7 +5171,7 @@ msgstr "Преглед на {0}"
 msgid "Successfully updated seller"
 msgstr "Успешно актуализиран продавач"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:179
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:194
 msgid "Assign role"
 msgstr ""
 
@@ -5719,7 +5725,7 @@ msgstr "ID за възстановяване"
 msgid "Order custom fields updated"
 msgstr "Персонализираните полета на поръчката са актуализирани"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:60
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:73
 msgid "Role assigned"
 msgstr ""
 
@@ -6115,8 +6121,8 @@ msgstr "Опция"
 msgid "Order process"
 msgstr "Процес на поръчката"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:204
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:103
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:235
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:116
 msgid "No roles assigned"
 msgstr "Няма зададени роли"
 

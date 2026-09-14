@@ -512,7 +512,7 @@ msgstr "السعر الإجمالي: <0/>"
 msgid "Go to next page"
 msgstr "الانتقال إلى الصفحة التالية"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:210
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:241
 msgid "Add role"
 msgstr "إضافة دور"
 
@@ -2034,8 +2034,8 @@ msgstr "حدد لغة"
 msgid "Log out"
 msgstr "تسجيل الخروج"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:195
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:119
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:226
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:138
 msgid "Remove role"
 msgstr "إزالة الدور"
 
@@ -2532,8 +2532,8 @@ msgstr "حذف العمود"
 msgid "Assign existing"
 msgstr "تعيين موجود"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:159
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:91
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:165
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:104
 msgid "Role"
 msgstr "الدور"
 
@@ -2732,7 +2732,7 @@ msgstr "إضافة قيم الخصائص"
 msgid "after"
 msgstr "بعد"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:94
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:107
 #: src/lib/components/shared/assign-to-channel-dialog.tsx:103
 msgid "Channel"
 msgstr "القناة"
@@ -3428,7 +3428,7 @@ msgstr "تحديث محتوى الملاحظة أو رؤيتها"
 msgid "Latest Orders Widget"
 msgstr "أداة أحدث الطلبات"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:92
 msgid "Failed to remove role"
 msgstr ""
 
@@ -3465,7 +3465,7 @@ msgstr "لا يساوي"
 msgid "Settle payment"
 msgstr "تسوية الدفع"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:162
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:168
 #: src/app/routes/_authenticated/_channels/channels_.$id.tsx:38
 #: src/app/routes/_authenticated/_channels/channels.tsx:15
 #: src/app/routes/_authenticated/_channels/channels.tsx:23
@@ -3512,7 +3512,7 @@ msgstr "العناصر المستردة"
 #~ msgid "Assign options to existing variant"
 #~ msgstr "تعيين خيارات إلى الشكل الموجود"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:75
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:88
 msgid "Role removed"
 msgstr ""
 
@@ -4582,6 +4582,12 @@ msgstr "تم تحديث الفئة الضريبية بنجاح"
 msgid "Move"
 msgstr "نقل"
 
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:208
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:126
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:175
+msgid "All channels"
+msgstr ""
+
 #: src/app/routes/_authenticated/_assets/components/manage-tags-dialog.tsx:195
 msgid "Edit or delete existing tags"
 msgstr "تحرير أو حذف العلامات الموجودة"
@@ -5123,7 +5129,7 @@ msgstr "جارٍ التنفيذ..."
 msgid "Add option group to product"
 msgstr "إضافة مجموعة خيارات إلى المنتج"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:66
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:79
 msgid "Failed to assign role"
 msgstr ""
 
@@ -5136,7 +5142,7 @@ msgstr "معاينة {0}"
 msgid "Successfully updated seller"
 msgstr "تم تحديث البائع بنجاح"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:179
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:194
 msgid "Assign role"
 msgstr ""
 
@@ -5687,7 +5693,7 @@ msgstr "معرف الاسترداد"
 msgid "Order custom fields updated"
 msgstr "تم تحديث الحقول المخصصة للطلب"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:60
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:73
 msgid "Role assigned"
 msgstr ""
 
@@ -6078,8 +6084,8 @@ msgstr "الخيار"
 msgid "Order process"
 msgstr "عملية الطلب"
 
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:204
-#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:103
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-editor.tsx:235
+#: src/app/routes/_authenticated/_administrators/components/role-assignments-table.tsx:116
 msgid "No roles assigned"
 msgstr "لا توجد أدوار معيّنة"
 
