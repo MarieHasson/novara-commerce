@@ -52,6 +52,7 @@ export const apiKeyDetailDocument = graphql(`
                         id
                         code
                         description
+                        permissions
                     }
                     channel {
                         id

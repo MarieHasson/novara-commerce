@@ -7,6 +7,8 @@ import { api } from '@/vdb/graphql/api.js';
 import { useChannel } from '@/vdb/hooks/use-channel.js';
 import { useGrantableRoles } from '@/vdb/hooks/use-grantable-roles.js';
 import { usePermissions } from '@/vdb/hooks/use-permissions.js';
+import { useRoles } from '@/vdb/hooks/use-roles.js';
+import { isSuperAdminRole } from '@/vdb/utils/is-super-admin-role.js';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Plus, Trash2 } from 'lucide-react';
@@ -18,7 +20,7 @@ import { assignRolesToUserDocument, removeRolesFromUserDocument } from '../admin
 export interface RoleAssignmentRow {
     roleId: string;
     channelId: string;
-    role: { code: string; description?: string | null };
+    role: { code: string; description?: string | null; permissions: readonly string[] };
     channel: { code: string };
 }
 
@@ -37,11 +39,15 @@ export interface RoleAssignmentsTableProps {
  * shown is one the active user may remove, since the server filters `User.roleAssignments`
  * through the same rule that guards the write (`RoleService.canGrant`), so there is nothing
  * to lock or preserve. Pairs outside the active user's reach are simply not listed.
+ *
+ * The SuperAdmin Role is stored as a single assignment on the default Channel which stands
+ * for every Channel, so its row reads "All channels" and its assign row offers no Channel.
  */
 export function RoleAssignmentsTable({ userId, assignments }: Readonly<RoleAssignmentsTableProps>) {
     const { t } = useLingui();
     const { activeChannel } = useChannel();
     const { hasPermissions } = usePermissions();
+    const { roles } = useRoles();
     const { nonGrantableRoleIds, grantableChannelIds } = useGrantableRoles();
     const queryClient = useQueryClient();
     // The assign / remove mutations are guarded by UpdateAdministrator on the server,
@@ -51,6 +57,13 @@ export function RoleAssignmentsTable({ userId, assignments }: Readonly<RoleAssig
     const [pickedChannelIds, setPickedChannelIds] = useState<string[] | undefined>();
     // Start on the active channel, so the common single-channel case is just "pick a role".
     const newChannelIds = pickedChannelIds ?? (activeChannel ? [activeChannel.id] : []);
+    const newRoleIsSuperAdmin = isSuperAdminRole(roles.find(role => role.id === newRoleId));
+    // A SuperAdmin grant names no Channel: one pair on the active channel is enough, the
+    // server stores it as the single default-channel row whichever Channel it names.
+    const newAssignments =
+        newRoleIsSuperAdmin && activeChannel
+            ? [{ roleId: newRoleId, channelId: activeChannel.id }]
+            : newChannelIds.map(channelId => ({ roleId: newRoleId, channelId }));
 
     const refetchDetail = () => queryClient.invalidateQueries({ queryKey: ['DetailPage'] });
 
@@ -108,7 +121,13 @@ export function RoleAssignmentsTable({ userId, assignments }: Readonly<RoleAssig
                         <TableRow key={`${assignment.roleId}|${assignment.channelId}`}>
                             <TableCell>{assignment.role.description || assignment.role.code}</TableCell>
                             <TableCell>
-                                <ChannelCodeLabel code={assignment.channel.code} />
+                                {isSuperAdminRole(assignment.role) ? (
+                                    <span className="text-muted-foreground">
+                                        <Trans>All channels</Trans>
+                                    </span>
+                                ) : (
+                                    <ChannelCodeLabel code={assignment.channel.code} />
+                                )}
                             </TableCell>
                             {canEdit && (
                                 <TableCell>
@@ -151,29 +170,25 @@ export function RoleAssignmentsTable({ userId, assignments }: Readonly<RoleAssig
                         />
                     </div>
                     <div className="flex-[2]">
-                        <ChannelSelector
-                            multiple={true}
-                            value={newChannelIds}
-                            onChange={setPickedChannelIds}
-                            includeIds={grantableChannelIds(newRoleId || undefined)}
-                            ownChannelsOnly
-                        />
+                        {newRoleIsSuperAdmin ? (
+                            <div className="flex h-9 items-center text-sm text-muted-foreground">
+                                <Trans>All channels</Trans>
+                            </div>
+                        ) : (
+                            <ChannelSelector
+                                multiple={true}
+                                value={newChannelIds}
+                                onChange={setPickedChannelIds}
+                                includeIds={grantableChannelIds(newRoleId || undefined)}
+                                ownChannelsOnly
+                            />
+                        )}
                     </div>
                     <Button
                         type="button"
                         variant="outline"
-                        disabled={!newRoleId || newChannelIds.length === 0 || assigning}
-                        onClick={() =>
-                            assignRoles({
-                                input: {
-                                    userId,
-                                    assignments: newChannelIds.map(channelId => ({
-                                        roleId: newRoleId,
-                                        channelId,
-                                    })),
-                                },
-                            })
-                        }
+                        disabled={!newRoleId || newAssignments.length === 0 || assigning}
+                        onClick={() => assignRoles({ input: { userId, assignments: newAssignments } })}
                     >
                         <Plus className="h-4 w-4" />
                         <Trans>Assign role</Trans>

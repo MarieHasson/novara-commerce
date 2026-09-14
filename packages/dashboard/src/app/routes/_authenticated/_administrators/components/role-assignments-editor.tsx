@@ -3,6 +3,8 @@ import { RoleSelector } from '@/vdb/components/shared/role-selector.js';
 import { Button } from '@/vdb/components/ui/button.js';
 import { useChannel } from '@/vdb/hooks/use-channel.js';
 import { useGrantableRoles } from '@/vdb/hooks/use-grantable-roles.js';
+import { useRoles } from '@/vdb/hooks/use-roles.js';
+import { isSuperAdminRole } from '@/vdb/utils/is-super-admin-role.js';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Plus, Trash2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -95,10 +97,14 @@ function pairsAreEqual(a: RoleAssignmentPair[], b: RoleAssignmentPair[]): boolea
  * server enforces the same rule on save, this just keeps a combination that cannot be saved
  * from being picked. Once the User exists, assignments are edited through
  * `RoleAssignmentsTable`, one mutation per change.
+ *
+ * The SuperAdmin Role has no channel scope (the server stores it as a single assignment on
+ * the default Channel), so its row reads "All channels" and offers no Channel to pick.
  */
 export function RoleAssignmentsEditor({ value, onChange }: Readonly<RoleAssignmentsEditorProps>) {
     const { activeChannel } = useChannel();
     const { t } = useLingui();
+    const { roles } = useRoles();
     const { nonGrantableRoleIds, grantableChannelIds } = useGrantableRoles();
     const [rows, setRows] = useState<EditorRow[]>(() =>
         groupPairsIntoRows(completeRoleAssignmentPairs(value)),
@@ -170,7 +176,26 @@ export function RoleAssignmentsEditor({ value, onChange }: Readonly<RoleAssignme
                         <RoleSelector
                             multiple={false}
                             value={row.roleId}
-                            onChange={roleId => emit(rows.map(r => (r === row ? { ...r, roleId } : r)))}
+                            onChange={roleId =>
+                                emit(
+                                    rows.map(r =>
+                                        r === row
+                                            ? {
+                                                  ...r,
+                                                  roleId,
+                                                  // A SuperAdmin row offers no Channel to pick, so give it
+                                                  // one to make the pair complete
+                                                  channelIds:
+                                                      r.channelIds.length === 0 &&
+                                                      activeChannel &&
+                                                      isSuperAdminRole(roles.find(role => role.id === roleId))
+                                                          ? [activeChannel.id]
+                                                          : r.channelIds,
+                                              }
+                                            : r,
+                                    ),
+                                )
+                            }
                             excludeIds={[
                                 ...rows.filter(r => r !== row && r.roleId).map(r => r.roleId),
                                 ...nonGrantableRoleIds(row.channelIds),
@@ -178,15 +203,21 @@ export function RoleAssignmentsEditor({ value, onChange }: Readonly<RoleAssignme
                         />
                     </div>
                     <div className="flex-[2]">
-                        <ChannelSelector
-                            multiple={true}
-                            value={row.channelIds}
-                            onChange={channelIds =>
-                                emit(rows.map(r => (r === row ? { ...r, channelIds } : r)))
-                            }
-                            includeIds={grantableChannelIds(row.roleId || undefined)}
-                            ownChannelsOnly
-                        />
+                        {isSuperAdminRole(roles.find(role => role.id === row.roleId)) ? (
+                            <div className="flex h-9 items-center text-sm text-muted-foreground">
+                                <Trans>All channels</Trans>
+                            </div>
+                        ) : (
+                            <ChannelSelector
+                                multiple={true}
+                                value={row.channelIds}
+                                onChange={channelIds =>
+                                    emit(rows.map(r => (r === row ? { ...r, channelIds } : r)))
+                                }
+                                includeIds={grantableChannelIds(row.roleId || undefined)}
+                                ownChannelsOnly
+                            />
+                        )}
                     </div>
                     <Button
                         type="button"

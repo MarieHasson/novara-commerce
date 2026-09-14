@@ -52,6 +52,7 @@ export const administratorDetailDocument = graphql(
                             id
                             code
                             description
+                            permissions
                         }
                         channel {
                             id
