@@ -45,6 +45,18 @@ function renderColumnCell(
     columnId: string,
     additionalColumns?: AdditionalColumns<any>,
 ): string {
+    return renderCell(generateColumn(pageId, columnId, additionalColumns));
+}
+
+function renderCell(column: { cell?: any }): string {
+    return renderToStaticMarkup(<>{flexRender(column.cell, cellContext)}</>);
+}
+
+function generateColumn(
+    pageId: string,
+    columnId: string,
+    additionalColumns?: AdditionalColumns<any>,
+): { id?: string; cell?: any } {
     const captured: { columns?: Array<{ id?: string; cell?: any }> } = {};
 
     function Harness() {
@@ -71,7 +83,7 @@ function renderColumnCell(
     if (!column?.cell) {
         throw new Error(`Column "${columnId}" was not generated`);
     }
-    return renderToStaticMarkup(<>{flexRender(column.cell, cellContext)}</>);
+    return column;
 }
 
 describe('useGeneratedColumns display component precedence', () => {
@@ -139,6 +151,24 @@ describe('useGeneratedColumns display component precedence', () => {
         executeDashboardExtensionCallbacks();
 
         expect(renderColumnCell(pageId, 'price')).toBe('<span>via-extension-api</span>');
+    });
+
+    // #5346 — a column generated before a display component registers must not keep the unregistered renderer
+    it('applies a display component registered after the column was generated', () => {
+        const pageId = 'test-page-late-registration';
+
+        // Generated while nothing is registered, then reused as a memoised column would be.
+        const column = generateColumn(pageId, 'price');
+        expect(renderCell(column)).toBe('<span>core-money-cell</span>');
+
+        addDisplayComponent({
+            pageId,
+            blockId: BLOCK_ID,
+            field: 'price',
+            component: () => <span>late-registered</span>,
+        });
+
+        expect(renderCell(column)).toBe('<span>late-registered</span>');
     });
 });
 
