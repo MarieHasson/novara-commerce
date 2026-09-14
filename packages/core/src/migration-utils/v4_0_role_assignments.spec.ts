@@ -60,8 +60,9 @@ describe('migrateRoleAssignmentData()', () => {
              (2, '__customer_role__', 'Customer', 'Authenticated'),
              (3, 'sales', 'Sales', 'Authenticated,ReadOrder')`,
         );
-        // Channel 3 is deliberately missing from role_channels_channel for the SuperAdmin
-        // role, simulating a channel created programmatically via ChannelService.create()
+        // The SuperAdmin role is recorded on channels 1 and 2 (the legacy createChannel
+        // mutation auto-assigned it); channel 3 was created programmatically and is missing.
+        // Neither matters: the migration writes the SuperAdmin holder one default-channel row.
         await queryRunner.query(
             `INSERT INTO "channel" ("id", "code") VALUES
              (1, '__default_channel__'), (2, 'second'), (3, 'programmatic')`,
@@ -98,12 +99,10 @@ describe('migrateRoleAssignmentData()', () => {
 
         const insertedCount = await migrateRoleAssignmentData(queryRunner);
 
-        expect(insertedCount).toBe(5);
+        expect(insertedCount).toBe(3);
         expect(await getAssignments()).toEqual([
+            // the SuperAdmin holder gets a single row on the default channel
             { userId: 1, roleId: 1, channelId: 1 },
-            { userId: 1, roleId: 1, channelId: 2 },
-            // channel 3 comes from the SuperAdmin fan-out to all channels
-            { userId: 1, roleId: 1, channelId: 3 },
             { userId: 2, roleId: 3, channelId: 2 },
             { userId: 4, roleId: 3, channelId: 2 },
         ]);
@@ -116,9 +115,9 @@ describe('migrateRoleAssignmentData()', () => {
         const firstRun = await migrateRoleAssignmentData(queryRunner);
         const secondRun = await migrateRoleAssignmentData(queryRunner);
 
-        expect(firstRun).toBe(5);
+        expect(firstRun).toBe(3);
         expect(secondRun).toBe(0);
-        expect((await getAssignments()).length).toBe(5);
+        expect((await getAssignments()).length).toBe(3);
         const roleEditorRoles: Array<{ id: number }> = await queryRunner.query(
             `SELECT "id" FROM "role" WHERE "code" = '__role_editor_role__'`,
         );
@@ -160,7 +159,7 @@ describe('migrateRoleAssignmentData()', () => {
 
         const insertedCount = await migrateRoleAssignmentData(queryRunner);
 
-        expect(insertedCount).toBe(4);
+        expect(insertedCount).toBe(2);
         expect((await getAssignments()).filter(a => a.userId === 2)).toEqual([
             { userId: 2, roleId: 3, channelId: 2 },
         ]);
@@ -172,12 +171,12 @@ describe('migrateRoleAssignmentData()', () => {
 
         const insertedCount = await migrateRoleAssignmentData(queryRunner);
 
-        expect(insertedCount).toBe(5);
+        expect(insertedCount).toBe(3);
         const rows: Array<{ id: string }> = await queryRunner.query(`SELECT "id" FROM "role_assignment"`);
         for (const row of rows) {
             expect(row.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
         }
-        expect(new Set(rows.map(row => row.id)).size).toBe(5);
+        expect(new Set(rows.map(row => row.id)).size).toBe(3);
     });
 
     it('creates the RoleEditor role without granting it to anyone', async () => {

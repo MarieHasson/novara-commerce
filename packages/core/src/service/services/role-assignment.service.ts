@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SUPER_ADMIN_ROLE_CODE } from '@vendure/common/lib/shared-constants';
+import { DEFAULT_CHANNEL_CODE } from '@vendure/common/lib/shared-constants';
 import { ID, PaginatedList } from '@vendure/common/lib/shared-types';
 import { unique } from '@vendure/common/lib/unique';
 import { In, IsNull } from 'typeorm';
@@ -51,8 +51,11 @@ export interface RoleChannelPair {
  * the assignments they may change. Beneath them sit the unauthorized row primitives
  * {@link createAssignments}, {@link deleteAssignments} and {@link removeAllAssignmentsForUser},
  * for writes which have no actor to check against. Every one of these publishes a
- * {@link RoleAssignmentEvent} for the pairs it actually changed. The system-mandated writes
- * ({@link assignSuperAdminRoleHoldersToChannel}, {@link assignRoleOnAllChannels}) stay silent.
+ * {@link RoleAssignmentEvent} for the pairs it actually changed.
+ *
+ * The SuperAdmin Role is stored as a single row on the default Channel (see
+ * {@link RoleAssignment}). {@link assign} and {@link remove} rewrite a SuperAdmin pair on any
+ * Channel to that row, so there is never more than one SuperAdmin row per User.
  *
  * All writes go through entity-based repository operations so that {@link SessionService}'s
  * entity subscriber observes them and evicts the affected User's cached sessions — permission
@@ -210,9 +213,9 @@ export class RoleAssignmentService {
      * Grants the User each of the given `(roleId, channelId)` pairs. The active user must be
      * permitted to grant every pair ({@link RoleService.canGrant}), pairs the User already
      * holds included; those are then left as-is and not reported, so a write which changes
-     * nothing publishes nothing. Granting the SuperAdmin Role on any Channel grants it on
-     * every Channel: the {@link RolePermissionResolver} derives SuperAdmin access on all
-     * Channels from a single row, and the stored rows must match that access.
+     * nothing publishes nothing. A SuperAdmin pair on any Channel is stored as the single
+     * default-channel row (see {@link RoleAssignment}): the {@link RolePermissionResolver}
+     * derives SuperAdmin access on every Channel from that one row.
      *
      * Publishes an `assigned` {@link RoleAssignmentEvent} for the pairs actually added, and
      * returns the User's assignments after the write.
@@ -222,17 +225,10 @@ export class RoleAssignmentService {
      * @since 4.0.0
      */
     async assign(ctx: RequestContext, userId: ID, pairs: RoleChannelPair[]): Promise<RoleAssignment[]> {
-        const superAdminRole = await this.roleService.getSuperAdminRole(ctx);
         const allChannels = await this.connection.getRepository(ctx, Channel).find();
-        let target = this.dedupePairs(pairs);
-        if (target.some(pair => idsAreEqual(pair.roleId, superAdminRole.id))) {
-            target = this.dedupePairs([
-                ...target,
-                ...allChannels.map(channel => ({ roleId: superAdminRole.id, channelId: channel.id })),
-            ]);
-        }
+        const target = await this.anchorSuperAdminPairs(ctx, pairs, allChannels);
         await this.roleService.assertActiveUserCanGrantRoles(ctx, target);
-        for (const channelId of unique(target.map(pair => pair.channelId))) {
+        for (const channelId of unique(pairs.map(pair => pair.channelId))) {
             if (!allChannels.some(channel => idsAreEqual(channel.id, channelId))) {
                 throw new EntityNotFoundError('Channel', channelId);
             }
@@ -247,9 +243,9 @@ export class RoleAssignmentService {
      * same as for {@link assign}: the active user must be permitted to grant every pair
      * ({@link RoleService.canGrant}), so what an actor may take away is exactly what they
      * could hand out. Pairs the User does not hold pass the same check and are then left
-     * as-is and not reported. Removing the SuperAdmin Role on any Channel removes it on
-     * every Channel, mirroring the expansion on assign. The sole SuperAdmin cannot have the
-     * SuperAdmin Role taken away.
+     * as-is and not reported. A SuperAdmin pair on any Channel addresses the single
+     * default-channel row, mirroring {@link assign}, so removing SuperAdmin on any Channel
+     * removes it everywhere. The sole SuperAdmin cannot have the SuperAdmin Role taken away.
      *
      * Publishes a `removed` {@link RoleAssignmentEvent} for the pairs actually removed, and
      * returns the User's assignments after the write.
@@ -261,18 +257,9 @@ export class RoleAssignmentService {
      */
     async remove(ctx: RequestContext, userId: ID, pairs: RoleChannelPair[]): Promise<RoleAssignment[]> {
         const superAdminRole = await this.roleService.getSuperAdminRole(ctx);
-        let target = this.dedupePairs(pairs);
-        const removesSuperAdmin = target.some(pair => idsAreEqual(pair.roleId, superAdminRole.id));
-        if (removesSuperAdmin) {
-            const existing = await this.getAssignmentsForUser(ctx, userId);
-            target = this.dedupePairs([
-                ...target,
-                ...existing
-                    .filter(assignment => idsAreEqual(assignment.roleId, superAdminRole.id))
-                    .map(assignment => ({ roleId: assignment.roleId, channelId: assignment.channelId })),
-            ]);
-        }
+        const target = await this.anchorSuperAdminPairs(ctx, pairs);
         await this.roleService.assertActiveUserCanGrantRoles(ctx, target);
+        const removesSuperAdmin = target.some(pair => idsAreEqual(pair.roleId, superAdminRole.id));
         if (removesSuperAdmin && (await this.isSoleSuperAdminHolder(ctx, userId))) {
             throw new InternalServerError('error.superadmin-must-have-superadmin-role');
         }
@@ -322,7 +309,7 @@ export class RoleAssignmentService {
      * not already hold, and publishes one `assigned` {@link RoleAssignmentEvent} for the pairs
      * added. Nothing is published when nothing changes.
      *
-     * Performs no authorization and no SuperAdmin expansion: this is the row primitive beneath
+     * Performs no authorization and no SuperAdmin anchoring: this is the row primitive beneath
      * {@link assign}, for writes which have no actor to check against, such as granting a User
      * created by an authentication strategy the Roles that strategy resolved. Actor-made
      * changes go through {@link assign}.
@@ -352,7 +339,7 @@ export class RoleAssignmentService {
      * publishes one `removed` {@link RoleAssignmentEvent} for the pairs removed. Pairs the User
      * does not hold are ignored, and nothing is published when nothing changes.
      *
-     * Performs no authorization, no SuperAdmin expansion and no sole-SuperAdmin guard: this is
+     * Performs no authorization, no SuperAdmin anchoring and no sole-SuperAdmin guard: this is
      * the row primitive beneath {@link remove}. Actor-made changes go through {@link remove}.
      *
      * @throws {EntityNotFoundError} if the User does not exist
@@ -419,61 +406,30 @@ export class RoleAssignmentService {
     }
 
     /**
-     * @description
-     * Materializes a RoleAssignment on the given Channel for every User currently holding
-     * the SuperAdmin Role on any Channel. Called on Channel creation: SuperAdmin *access*
-     * to the new Channel is already granted at check time by the
-     * {@link RolePermissionResolver}, so these rows are not what grants it — they keep
-     * assignment reads (dashboard, plugins) consistent with what SuperAdmins can do.
-     *
-     * @since 4.0.0
+     * The SuperAdmin Role is held everywhere or not at all, so it is stored as exactly one
+     * row per User, on the default Channel (see {@link RoleAssignment}). Rewrites every
+     * SuperAdmin pair to that row, so that assign and remove on any Channel address it.
      */
-    async assignSuperAdminRoleHoldersToChannel(ctx: RequestContext, channelId: ID): Promise<void> {
-        const superAdminRole = await this.connection
-            .getRepository(ctx, Role)
-            .findOne({ where: { code: SUPER_ADMIN_ROLE_CODE } });
-        if (!superAdminRole) {
-            // During bootstrap a Channel can be created before the SuperAdmin role exists.
-            return;
+    private async anchorSuperAdminPairs(
+        ctx: RequestContext,
+        pairs: RoleChannelPair[],
+        channels?: Channel[],
+    ): Promise<RoleChannelPair[]> {
+        const superAdminRole = await this.roleService.getSuperAdminRole(ctx);
+        if (!pairs.some(pair => idsAreEqual(pair.roleId, superAdminRole.id))) {
+            return this.dedupePairs(pairs);
         }
-        const repository = this.connection.getRepository(ctx, RoleAssignment);
-        const holderRows = await repository
-            .createQueryBuilder('assignment')
-            .select('DISTINCT assignment.userId', 'userId')
-            .where('assignment.roleId = :roleId', { roleId: superAdminRole.id })
-            .getRawMany<{ userId: ID }>();
-        const existing = await repository.find({ where: { roleId: superAdminRole.id, channelId } });
-        const toAdd = holderRows
-            .map(row => row.userId)
-            .filter(userId => !existing.some(assignment => idsAreEqual(assignment.userId, userId)));
-        if (toAdd.length) {
-            await repository.save(
-                toAdd.map(userId => new RoleAssignment({ userId, roleId: superAdminRole.id, channelId })),
-            );
+        const allChannels = channels ?? (await this.connection.getRepository(ctx, Channel).find());
+        const defaultChannel = allChannels.find(channel => channel.code === DEFAULT_CHANNEL_CODE);
+        if (!defaultChannel) {
+            throw new InternalServerError('error.default-channel-not-found');
         }
-    }
-
-    /**
-     * @description
-     * Assigns the Role to the User on every existing Channel. The counterpart of
-     * {@link assignSuperAdminRoleHoldersToChannel}, used when a new SuperAdmin user is
-     * seeded on an instance which already has Channels beyond the default one (e.g. after
-     * `superadminCredentials.identifier` is changed in the config). Idempotent: Channels
-     * on which the assignment already exists are left as-is.
-     *
-     * @since 4.0.0
-     */
-    async assignRoleOnAllChannels(ctx: RequestContext, userId: ID, roleId: ID): Promise<void> {
-        const channels = await this.connection.getRepository(ctx, Channel).find();
-        const repository = this.connection.getRepository(ctx, RoleAssignment);
-        const existing = await repository.find({ where: { userId, roleId } });
-        const toAdd = channels.filter(
-            channel => !existing.some(assignment => idsAreEqual(assignment.channelId, channel.id)),
+        return this.dedupePairs(
+            pairs.map(pair =>
+                idsAreEqual(pair.roleId, superAdminRole.id)
+                    ? { roleId: pair.roleId, channelId: defaultChannel.id }
+                    : pair,
+            ),
         );
-        if (toAdd.length) {
-            await repository.save(
-                toAdd.map(channel => new RoleAssignment({ userId, roleId, channelId: channel.id })),
-            );
-        }
     }
 }

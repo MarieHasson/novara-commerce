@@ -3,6 +3,7 @@
 // migration helper and will not be needed after all users have upgraded past v4.0.
 import {
     CUSTOMER_ROLE_CODE,
+    DEFAULT_CHANNEL_CODE,
     ROLE_EDITOR_ROLE_CODE,
     ROLE_EDITOR_ROLE_DESCRIPTION,
     SUPER_ADMIN_ROLE_CODE,
@@ -28,10 +29,10 @@ import { QueryRunner } from 'typeorm';
  *   repository write, be aware that this customization has no v4 equivalent: the row and
  *   its permissions array are gone after migrating, and customers hold exactly
  *   `Authenticated` on their member Channels.
- * - **SuperAdmin role**: holders receive a row on *every* Channel, not just the Channels
- *   recorded in `role_channels_channel`. Channels created programmatically via
- *   `ChannelService.create()` never had the SuperAdmin role auto-assigned (only the
- *   `createChannel` mutation did that), so the join-table data can be incomplete.
+ * - **SuperAdmin role**: holders receive exactly one row, on the default Channel, whatever
+ *   `role_channels_channel` records for the role. In v4 the SuperAdmin Role is held on every
+ *   Channel or not at all: access is derived at check time from that single row, which
+ *   stands for all Channels (see `RoleAssignment`).
  *
  * The RoleEditor system role (which bundles the Role CRUD permissions) is created if
  * absent. It is not granted to anyone: an Administrator who held `CreateRole`, `ReadRole`,
@@ -111,14 +112,15 @@ export async function migrateRoleAssignmentData(queryRunner: QueryRunner): Promi
     const countBefore = await countRows();
 
     // 1. Write out the cross product of user_roles_role and role_channels_channel for all
-    // Roles except the Customer role, whose permissions are derived from channel membership.
+    // Roles except the Customer role, whose permissions are derived from channel membership,
+    // and the SuperAdmin role, which step 2 writes as a single default-channel row.
     await queryRunner.query(
         `INSERT INTO ${esc('role_assignment')} (${idInsert.columns}${esc('userId')}, ${esc('roleId')}, ${esc('channelId')})
          SELECT ${idInsert.select}ur.${esc('userId')}, ur.${esc('roleId')}, rc.${esc('channelId')}
          FROM ${esc('user_roles_role')} ur
          INNER JOIN ${esc('role_channels_channel')} rc ON rc.${esc('roleId')} = ur.${esc('roleId')}
          INNER JOIN ${esc('role')} r ON r.${esc('id')} = ur.${esc('roleId')}
-         WHERE r.${esc('code')} <> '${CUSTOMER_ROLE_CODE}'
+         WHERE r.${esc('code')} NOT IN ('${CUSTOMER_ROLE_CODE}', '${SUPER_ADMIN_ROLE_CODE}')
          AND NOT EXISTS (
              SELECT 1 FROM ${esc('role_assignment')} ra
              WHERE ra.${esc('userId')} = ur.${esc('userId')}
@@ -127,14 +129,14 @@ export async function migrateRoleAssignmentData(queryRunner: QueryRunner): Promi
          )`,
     );
 
-    // 2. Fan SuperAdmin role holders out to every Channel, covering Channels which are
-    // missing from role_channels_channel because they were created programmatically.
+    // 2. Write one row on the default Channel per SuperAdmin role holder. The row stands for
+    // every Channel: SuperAdmin access is derived from it at check time.
     await queryRunner.query(
         `INSERT INTO ${esc('role_assignment')} (${idInsert.columns}${esc('userId')}, ${esc('roleId')}, ${esc('channelId')})
          SELECT ${idInsert.select}ur.${esc('userId')}, ur.${esc('roleId')}, c.${esc('id')}
          FROM ${esc('user_roles_role')} ur
          INNER JOIN ${esc('role')} r ON r.${esc('id')} = ur.${esc('roleId')}
-         CROSS JOIN ${esc('channel')} c
+         INNER JOIN ${esc('channel')} c ON c.${esc('code')} = '${DEFAULT_CHANNEL_CODE}'
          WHERE r.${esc('code')} = '${SUPER_ADMIN_ROLE_CODE}'
          AND NOT EXISTS (
              SELECT 1 FROM ${esc('role_assignment')} ra

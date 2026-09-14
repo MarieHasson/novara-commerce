@@ -2947,7 +2947,8 @@ export type Mutation = {
   /**
    * Grants the User each of the given `(roleId, channelId)` pairs. The active user must hold
    * every permission of each Role on its Channel. Pairs the User already holds are left as-is.
-   * Granting the SuperAdmin Role on any Channel grants it on every Channel.
+   * The SuperAdmin Role is held on every Channel or not at all, so a SuperAdmin pair on any
+   * Channel is stored as a single assignment on the default Channel.
    */
   assignRolesToUser: User;
   /** Assigns ShippingMethods to the specified Channel */
@@ -3165,8 +3166,9 @@ export type Mutation = {
   /**
    * Revokes each of the given `(roleId, channelId)` pairs from the User, under the same rule
    * as `assignRolesToUser`: the active user must hold every permission of each Role on its
-   * Channel. Pairs the User does not hold are left as-is. Removing the SuperAdmin Role on any
-   * Channel removes it on every Channel; the sole SuperAdmin cannot lose it.
+   * Channel. Pairs the User does not hold are left as-is. A SuperAdmin pair on any Channel
+   * removes the single default-channel SuperAdmin assignment, and with it SuperAdmin access on
+   * every Channel; the sole SuperAdmin cannot lose it.
    */
   removeRolesFromUser: User;
   /** Remove all settled jobs in the given queues older than the given date. Returns the number of jobs deleted. */
@@ -6149,6 +6151,8 @@ export type Role = Node & {
 /**
  * A RoleAssignment grants a User the permissions of a Role on a specific Channel.
  * A Role is a channel-agnostic template; the RoleAssignment supplies the channel scope.
+ * The SuperAdmin Role is the exception: it is stored as a single assignment on the default
+ * Channel, which stands for every Channel.
  */
 export type RoleAssignment = Node & {
   __typename?: 'RoleAssignment';

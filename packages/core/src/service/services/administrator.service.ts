@@ -27,6 +27,7 @@ import { RequestContextService } from '../helpers/request-context/request-contex
 import { checkSuperadminCredentials } from '../helpers/utils/check-superadmin-credentials';
 import { patchEntity } from '../helpers/utils/patch-entity';
 
+import { ChannelService } from './channel.service';
 import { RoleAssignmentService, RoleChannelPair } from './role-assignment.service';
 import { RoleService } from './role.service';
 import { UserService } from './user.service';
@@ -48,6 +49,7 @@ export class AdministratorService {
         private userService: UserService,
         private roleService: RoleService,
         private roleAssignmentService: RoleAssignmentService,
+        private channelService: ChannelService,
         private customFieldRelationService: CustomFieldRelationService,
         private eventBus: EventBus,
         private requestContextService: RequestContextService,
@@ -306,16 +308,13 @@ export class AdministratorService {
                 superadminCredentials.password,
             );
             await this.connection.getRepository(ctx, Administrator).save(administrator);
-            // Effective permissions are derived at check time from the SuperAdmin permission,
-            // so these rows are not what grants access — assigning on every Channel keeps
-            // assignment reads consistent with that access when the user is seeded on an
-            // instance which already has Channels beyond the default one (e.g. after
-            // superadminCredentials.identifier is changed in the config).
-            await this.roleAssignmentService.assignRoleOnAllChannels(
-                ctx,
-                administrator.user.id,
-                superAdminRole.id,
-            );
+            // The SuperAdmin Role is stored as one row on the default Channel (see
+            // RoleAssignment); effective permissions on every Channel are derived from it at
+            // check time by the RolePermissionResolver.
+            const defaultChannel = await this.channelService.getDefaultChannel(ctx);
+            await this.roleAssignmentService.createAssignments(ctx, administrator.user.id, [
+                { roleId: superAdminRole.id, channelId: defaultChannel.id },
+            ]);
         } else {
             const superAdministrator = await this.connection.rawConnection
                 .getRepository(Administrator)

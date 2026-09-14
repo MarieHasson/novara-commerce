@@ -15,6 +15,13 @@ import { User } from '../user/user.entity';
  * moment the Role is granted to a User. This allows a single Role definition to be
  * shared across many Users, each scoped to their own Channels.
  *
+ * The SuperAdmin Role is the one exception to the channel scope: it is held on every
+ * Channel or not at all, so it is stored as a single row on the default Channel, which
+ * stands for all Channels. SuperAdmin access is derived at check time by the
+ * {@link RolePermissionResolver} and never depends on which Channel that row names;
+ * {@link RoleAssignmentService.assign} and {@link RoleAssignmentService.remove} rewrite a
+ * SuperAdmin pair on any Channel to the default-channel row.
+ *
  * @docsCategory entities
  */
 @Entity()
