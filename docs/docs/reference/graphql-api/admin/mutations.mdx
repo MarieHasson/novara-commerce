@@ -371,7 +371,8 @@ type Mutation {
 {`"""
 Grants the User each of the given \`(roleId, channelId)\` pairs. The active user must hold
 every permission of each Role on its Channel. Pairs the User already holds are left as-is.
-Granting the SuperAdmin Role on any Channel grants it on every Channel.
+The SuperAdmin Role is held on every Channel or not at all, so a SuperAdmin pair on any
+Channel is stored as a single assignment on the default Channel.
 """
 type Mutation {
   assignRolesToUser(input: AssignRolesToUserInput!): User!
@@ -2279,8 +2280,9 @@ type Mutation {
 {`"""
 Revokes each of the given \`(roleId, channelId)\` pairs from the User, under the same rule
 as \`assignRolesToUser\`: the active user must hold every permission of each Role on its
-Channel. Pairs the User does not hold are left as-is. Removing the SuperAdmin Role on any
-Channel removes it on every Channel; the sole SuperAdmin cannot lose it.
+Channel. Pairs the User does not hold are left as-is. A SuperAdmin pair on any Channel
+removes the single default-channel SuperAdmin assignment, and with it SuperAdmin access on
+every Channel; the sole SuperAdmin cannot lose it.
 """
 type Mutation {
   removeRolesFromUser(input: RemoveRolesFromUserInput!): User!

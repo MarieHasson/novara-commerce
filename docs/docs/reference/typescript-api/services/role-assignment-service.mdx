@@ -33,7 +33,7 @@ interface RoleChannelPair {
 </div>
 ## RoleAssignmentService
 
-<GenerationInfo sourceFile="packages/core/src/service/services/role-assignment.service.ts" sourceLine="64" packageName="@vendure/core" since="4.0.0" />
+<GenerationInfo sourceFile="packages/core/src/service/services/role-assignment.service.ts" sourceLine="67" packageName="@vendure/core" since="4.0.0" />
 
 Contains methods relating to [RoleAssignment](/reference/typescript-api/entities/role-assignment#roleassignment) entities — the `(user, role, channel)`
 triples which grant a User a Role's permissions on a specific Channel.
@@ -44,8 +44,11 @@ through `RoleService.canGrant`, and the filtered reads (`findAll`,
 the assignments they may change. Beneath them sit the unauthorized row primitives
 `createAssignments`, `deleteAssignments` and `removeAllAssignmentsForUser`,
 for writes which have no actor to check against. Every one of these publishes a
-[RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs it actually changed. The system-mandated writes
-(`assignSuperAdminRoleHoldersToChannel`, `assignRoleOnAllChannels`) stay silent.
+[RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs it actually changed.
+
+The SuperAdmin Role is stored as a single row on the default Channel (see
+[RoleAssignment](/reference/typescript-api/entities/role-assignment#roleassignment)). `assign` and `remove` rewrite a SuperAdmin pair on any
+Channel to that row, so there is never more than one SuperAdmin row per User.
 
 All writes go through entity-based repository operations so that [SessionService](/reference/typescript-api/services/session-service#sessionservice)'s
 entity subscriber observes them and evicts the affected User's cached sessions — permission
@@ -68,8 +71,6 @@ class RoleAssignmentService {
     createAssignments(ctx: RequestContext, userId: ID, pairs: RoleChannelPair[]) => Promise<void>;
     deleteAssignments(ctx: RequestContext, userId: ID, pairs: RoleChannelPair[]) => Promise<void>;
     removeAllAssignmentsForUser(ctx: RequestContext, userId: ID) => Promise<void>;
-    assignSuperAdminRoleHoldersToChannel(ctx: RequestContext, channelId: ID) => Promise<void>;
-    assignRoleOnAllChannels(ctx: RequestContext, userId: ID, roleId: ID) => Promise<void>;
 }
 ```
 
@@ -132,9 +133,9 @@ this.
 Grants the User each of the given `(roleId, channelId)` pairs. The active user must be
 permitted to grant every pair (`RoleService.canGrant`), pairs the User already
 holds included; those are then left as-is and not reported, so a write which changes
-nothing publishes nothing. Granting the SuperAdmin Role on any Channel grants it on
-every Channel: the [RolePermissionResolver](/reference/typescript-api/auth/role-permission-resolver#rolepermissionresolver) derives SuperAdmin access on all
-Channels from a single row, and the stored rows must match that access.
+nothing publishes nothing. A SuperAdmin pair on any Channel is stored as the single
+default-channel row (see [RoleAssignment](/reference/typescript-api/entities/role-assignment#roleassignment)): the [RolePermissionResolver](/reference/typescript-api/auth/role-permission-resolver#rolepermissionresolver)
+derives SuperAdmin access on every Channel from that one row.
 
 Publishes an `assigned` [RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs actually added, and
 returns the User's assignments after the write.
@@ -146,9 +147,9 @@ Revokes each of the given `(roleId, channelId)` pairs from the User. The rule is
 same as for `assign`: the active user must be permitted to grant every pair
 (`RoleService.canGrant`), so what an actor may take away is exactly what they
 could hand out. Pairs the User does not hold pass the same check and are then left
-as-is and not reported. Removing the SuperAdmin Role on any Channel removes it on
-every Channel, mirroring the expansion on assign. The sole SuperAdmin cannot have the
-SuperAdmin Role taken away.
+as-is and not reported. A SuperAdmin pair on any Channel addresses the single
+default-channel row, mirroring `assign`, so removing SuperAdmin on any Channel
+removes it everywhere. The sole SuperAdmin cannot have the SuperAdmin Role taken away.
 
 Publishes a `removed` [RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs actually removed, and
 returns the User's assignments after the write.
@@ -173,7 +174,7 @@ Creates a RoleAssignment for each of the given `(roleId, channelId)` pairs the U
 not already hold, and publishes one `assigned` [RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs
 added. Nothing is published when nothing changes.
 
-Performs no authorization and no SuperAdmin expansion: this is the row primitive beneath
+Performs no authorization and no SuperAdmin anchoring: this is the row primitive beneath
 `assign`, for writes which have no actor to check against, such as granting a User
 created by an authentication strategy the Roles that strategy resolved. Actor-made
 changes go through `assign`.
@@ -185,7 +186,7 @@ Deletes the User's RoleAssignments matching the given `(roleId, channelId)` pair
 publishes one `removed` [RoleAssignmentEvent](/reference/typescript-api/events/event-types#roleassignmentevent) for the pairs removed. Pairs the User
 does not hold are ignored, and nothing is published when nothing changes.
 
-Performs no authorization, no SuperAdmin expansion and no sole-SuperAdmin guard: this is
+Performs no authorization, no SuperAdmin anchoring and no sole-SuperAdmin guard: this is
 the row primitive beneath `remove`. Actor-made changes go through `remove`.
 ### removeAllAssignmentsForUser
 
@@ -199,24 +200,6 @@ Performs no authorization and no sole-SuperAdmin guard: this is the primitive be
 the Administrator and API-Key soft-deletes, which must clear the rows of the deleted
 User. Left in place, those rows would keep counting towards the Channels a Role is
 assigned on (see [RoleService](/reference/typescript-api/services/role-service#roleservice)) and so keep gating the Role for live administrators.
-### assignSuperAdminRoleHoldersToChannel
-
-<MemberInfo kind="method" type={`(ctx: <a href='/reference/typescript-api/request/request-context#requestcontext'>RequestContext</a>, channelId: <a href='/reference/typescript-api/common/id#id'>ID</a>) => Promise<void>`}  since="4.0.0"  />
-
-Materializes a RoleAssignment on the given Channel for every User currently holding
-the SuperAdmin Role on any Channel. Called on Channel creation: SuperAdmin *access*
-to the new Channel is already granted at check time by the
-[RolePermissionResolver](/reference/typescript-api/auth/role-permission-resolver#rolepermissionresolver), so these rows are not what grants it — they keep
-assignment reads (dashboard, plugins) consistent with what SuperAdmins can do.
-### assignRoleOnAllChannels
-
-<MemberInfo kind="method" type={`(ctx: <a href='/reference/typescript-api/request/request-context#requestcontext'>RequestContext</a>, userId: <a href='/reference/typescript-api/common/id#id'>ID</a>, roleId: <a href='/reference/typescript-api/common/id#id'>ID</a>) => Promise<void>`}  since="4.0.0"  />
-
-Assigns the Role to the User on every existing Channel. The counterpart of
-`assignSuperAdminRoleHoldersToChannel`, used when a new SuperAdmin user is
-seeded on an instance which already has Channels beyond the default one (e.g. after
-`superadminCredentials.identifier` is changed in the config). Idempotent: Channels
-on which the assignment already exists are left as-is.
 
 
 </div>

@@ -2,13 +2,13 @@
 title: "AdministratorService"
 generated: true
 ---
-<GenerationInfo sourceFile="packages/core/src/service/services/administrator.service.ts" sourceLine="40" packageName="@vendure/core" />
+<GenerationInfo sourceFile="packages/core/src/service/services/administrator.service.ts" sourceLine="41" packageName="@vendure/core" />
 
 Contains methods relating to [Administrator](/reference/typescript-api/entities/administrator#administrator) entities.
 
 ```ts title="Signature"
 class AdministratorService {
-    constructor(connection: TransactionalConnection, configService: ConfigService, listQueryBuilder: ListQueryBuilder, passwordCipher: PasswordCipher, userService: UserService, roleService: RoleService, roleAssignmentService: RoleAssignmentService, customFieldRelationService: CustomFieldRelationService, eventBus: EventBus, requestContextService: RequestContextService)
+    constructor(connection: TransactionalConnection, configService: ConfigService, listQueryBuilder: ListQueryBuilder, passwordCipher: PasswordCipher, userService: UserService, roleService: RoleService, roleAssignmentService: RoleAssignmentService, channelService: ChannelService, customFieldRelationService: CustomFieldRelationService, eventBus: EventBus, requestContextService: RequestContextService)
     findAll(ctx: RequestContext, options?: ListQueryOptions<Administrator>, relations?: RelationPaths<Administrator>) => Promise<PaginatedList<Administrator>>;
     findOne(ctx: RequestContext, administratorId: ID, relations?: RelationPaths<Administrator>) => Promise<Administrator | undefined>;
     findOneByUserId(ctx: RequestContext, userId: ID, relations?: RelationPaths<Administrator>) => Promise<Administrator | undefined>;
