@@ -1931,7 +1931,29 @@ describe('Product resolver', () => {
                         id: optionlessProductId,
                     });
                     expect(product?.variantList.totalItems).toBe(3);
-                    expect(product?.variantList.items.every(v => v.options.length === 0)).toBe(true);
+                    expect(product?.variantList.items.map(v => v.sku).sort()).toEqual([
+                        'GC10',
+                        'GC20',
+                        'GC50',
+                    ]);
+                    expect(product?.variantList.items.map(v => v.options)).toEqual([[], [], []]);
+                });
+
+                // optionIds is nullable in the schema, so an omitted list arrives as null.
+                it('createProductVariants accepts a null option list', async () => {
+                    const { createProductVariants } = await adminClient.query(createProductVariantsDocument, {
+                        input: [
+                            {
+                                productId: optionlessProductId,
+                                sku: 'GC100',
+                                optionIds: null,
+                                translations: [{ languageCode: LanguageCode.en, name: 'Gift Card 100' }],
+                            },
+                        ],
+                    });
+                    const createdVariant = createProductVariants[0];
+                    variantGuard.assertSuccess(createdVariant);
+                    expect(createdVariant.options).toEqual([]);
                 });
             });
 
@@ -1980,33 +2002,21 @@ describe('Product resolver', () => {
                     firstVariantId = firstVariant.id;
                 });
 
-                it(
-                    'throws if the options are already used by another variant',
-                    assertThrowsWithMessage(async () => {
-                        await adminClient.query(updateProductVariantsDocument, {
-                            input: [
-                                {
-                                    id: firstVariantId,
-                                    optionIds: [optionGroup5.options[1].id],
-                                },
-                            ],
-                        });
-                    }, 'A ProductVariant with the selected options already exists: Tee 2'),
-                );
-
-                it('succeeds when the variant keeps its own options', async () => {
+                // Uniqueness of an option combination is checked when a variant is created, not
+                // when one is updated. Without this, two variants could never swap options, since
+                // whichever moved first would collide with the other.
+                it('allows a variant to take a combination another variant already holds', async () => {
                     const { updateProductVariants } = await adminClient.query(updateProductVariantsDocument, {
                         input: [
                             {
                                 id: firstVariantId,
-                                optionIds: [optionGroup5.options[0].id],
-                                sku: 'TEE1-B',
+                                optionIds: [optionGroup5.options[1].id],
                             },
                         ],
                     });
                     const updatedVariant = updateProductVariants[0];
                     updateVariantGuard.assertSuccess(updatedVariant);
-                    expect(updatedVariant.sku).toBe('TEE1-B');
+                    expect(updatedVariant.options.map(o => o.id)).toEqual([optionGroup5.options[1].id]);
                 });
             });
         });
