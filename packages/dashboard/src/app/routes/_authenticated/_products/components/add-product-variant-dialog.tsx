@@ -166,6 +166,12 @@ export function AddProductVariantDialog({
         mutationFn: api.mutate(createProductVariantsDocument),
         onSuccess: () => {
             toast.success(t`Successfully created product variant`);
+            // Clear the form so the next variant does not inherit this one's values.
+            form.reset();
+            setNameTouched(false);
+            // Reload this dialog's own copy of the product. Without it the duplicate-option
+            // check keeps using the variant list as it was when the page loaded.
+            refetch();
             setOpen(false);
             onSuccess?.();
         },
@@ -220,6 +226,8 @@ export function AddProductVariantDialog({
         },
         [createProductVariantMutation, productData?.product, duplicateVariantError, productId],
     );
+
+    if (!productData?.product) return null;
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>

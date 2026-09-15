@@ -600,8 +600,8 @@ test.describe('Manage variants inline editing', () => {
             await page.getByRole('button', { name: 'Add variant' }).click();
             const dialog = page.getByRole('dialog');
             await expect(dialog).toBeVisible();
-            // No option groups, so the dialog offers no option selects.
-            await expect(dialog.getByText('Product options')).toBeHidden();
+            // No option groups, so the dialog does not render the option selects at all.
+            await expect(dialog.getByText('Product options')).toHaveCount(0);
 
             await dialog.getByLabel('Name', { exact: true }).fill(`Second ${unique}`);
             await dialog.getByLabel('SKU', { exact: true }).fill(secondSku);
@@ -618,6 +618,12 @@ test.describe('Manage variants inline editing', () => {
             // Both variants are now listed.
             await expect(page.getByRole('cell', { name: secondSku })).toBeVisible({ timeout: 10_000 });
             await expect(page.getByRole('cell', { name: firstSku })).toBeVisible();
+
+            // Adding a third variant starts from an empty form, not the second variant's values.
+            await page.getByRole('button', { name: 'Add variant' }).click();
+            await expect(dialog).toBeVisible();
+            await expect(dialog.getByLabel('Name', { exact: true })).toHaveValue('');
+            await expect(dialog.getByLabel('SKU', { exact: true })).toHaveValue('');
         } finally {
             await client.gql(`mutation ($id: ID!) { deleteProduct(id: $id) { result } }`, {
                 id: productId,

@@ -316,6 +316,11 @@ function ProductVariantDetailPage() {
         if (!entity) {
             return;
         }
+        // Only an edit to the options can create a conflict.
+        if (!optionsDirty) {
+            setDuplicateOptionsError(null);
+            return;
+        }
         const resolutions = entity.product.optionGroups.map(group =>
             resolveGroupOption(group, optionTextByGroup[group.id] ?? ''),
         );
@@ -331,20 +336,27 @@ function ProductVariantDetailPage() {
                 ? t`A variant with these options already exists: ${conflict.name} (${conflict.sku})`
                 : null,
         );
-    }, [optionTextByGroup, siblingVariants, entity, t]);
+    }, [optionTextByGroup, optionsDirty, siblingVariants, entity, t]);
 
     // Single save path shared by the Update button and the form's native submit (Enter),
     // so Enter can never persist a state the Update button would refuse. Resolves each
     // option group to an id (creating any new options) after guarding against empty and
     // duplicate combinations.
-    const saveVariant = async (event: React.SyntheticEvent) => {
+    const saveVariant = async (event: React.SubmitEvent<HTMLFormElement>) => {
         event.preventDefault();
         // Creating a new variant has no options block to resolve; submit directly.
         if (creatingNewEntity) {
-            submitHandler(event as unknown as React.FormEvent<HTMLFormElement>);
+            submitHandler(event);
             return;
         }
         if (!entity) {
+            return;
+        }
+        // Nothing to resolve when no option was edited. Leaving `optionIds` out of the
+        // submission stops an unrelated edit, such as a price change, from reassigning
+        // the variant's options.
+        if (!optionsDirty) {
+            submitHandler(event);
             return;
         }
         const resolutions = optionGroups.map(group => ({
@@ -383,7 +395,7 @@ function ProductVariantDetailPage() {
                 }
             }
             form.setValue('optionIds', finalOptionIds, { shouldDirty: true, shouldValidate: true });
-            await submitHandler(event as unknown as React.FormEvent<HTMLFormElement>);
+            await submitHandler(event);
         } finally {
             setIsSavingOptions(false);
         }
@@ -506,7 +518,7 @@ function ProductVariantDetailPage() {
                             disabled={
                                 !(form.formState.isDirty || optionsDirty) ||
                                 !form.formState.isValid ||
-                                anyOptionEmpty ||
+                                (optionsDirty && anyOptionEmpty) ||
                                 !!duplicateOptionsError ||
                                 !!optionCreatePermissionError ||
                                 isPending ||
