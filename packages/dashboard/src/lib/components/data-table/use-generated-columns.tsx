@@ -28,7 +28,7 @@ import {
     Row,
 } from '@tanstack/react-table';
 import { EllipsisIcon, TrashIcon } from 'lucide-react';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, type ReactNode } from 'react';
 import { toast } from '@/vdb/components/ui/sonner.js';
 import {
     AdditionalColumns,
@@ -146,7 +146,13 @@ export function useGeneratedColumns<T extends TypedDocumentNode<any, any>>({
             // A component registered via addDisplayComponent() takes precedence over a
             // core-supplied `cell` function (e.g. the Money cell on price columns). Both
             // paths look the registry up at cell-render time, so a registration made after
-            // the column was generated still applies.
+            // the column was generated applies on the table's next render.
+            //
+            // Only the custom-cell branch gets a cached wrapper. The CellWrapper arrow below
+            // is a fresh function on every memo run, and flexRender() makes that function the
+            // cell's component type, so those cells remount whenever the memo recomputes.
+            // That is long-standing behaviour rather than something introduced here, and
+            // changing it is out of scope for this fix.
             const cellFn =
                 typeof customCell === 'function'
                     ? withDisplayComponentOverride(customCell, displayComponentId)
@@ -190,6 +196,9 @@ export function useGeneratedColumns<T extends TypedDocumentNode<any, any>>({
                 columnHelper.accessor(id as any, {
                     enableColumnFilter: false,
                     ...column,
+                    // Without an id there is nothing to look up, and the column keeps whatever
+                    // `cell` it supplied so that TanStack's own default still applies when it
+                    // supplied none.
                     ...(displayComponentId
                         ? {
                               cell: withDisplayComponentOverride(
@@ -339,10 +348,29 @@ function getRowActions(
     };
 }
 
-type CellRenderer = (cellContext: CellContext<any, any>) => React.ReactNode;
+type CellRenderer = (cellContext: CellContext<any, any>) => ReactNode;
 
-// Matches TanStack Table's default `cell`, used when an additional column supplies none.
+// Copied from @tanstack/table-core 8.21 `_getDefaultColumnDef`, used when an additional
+// column supplies no `cell` of its own.
 const renderDefaultCell: CellRenderer = cellContext => cellContext.renderValue()?.toString?.() ?? null;
+
+/**
+ * The value handed to a display component. A custom field's value is not on the row itself,
+ * so it is read from `row.original.customFields` instead. Both the CellWrapper path and the
+ * withDisplayComponentOverride path resolve it through here, because the point of resolving
+ * the registry at render time is that the two paths agree.
+ */
+function resolveCellValue(
+    cellContext: CellContext<any, any>,
+    isCustomField: boolean | undefined,
+    fieldName: string | undefined,
+): any {
+    const { cell, row } = cellContext;
+    return (
+        cell.getValue() ??
+        (isCustomField ? (row.original as any)?.customFields?.[fieldName as string] : undefined)
+    );
+}
 
 const overrideCellCache = new WeakMap<CellRenderer, Map<string, CellRenderer>>();
 
@@ -365,16 +393,19 @@ function withDisplayComponentOverride(
     const render = (cellContext: CellContext<any, any>, fallback: ColumnDef<any>['cell']) => {
         const RegisteredDisplayComponent = getDisplayComponent(displayComponentId);
         if (RegisteredDisplayComponent) {
-            const { cell: tableCell, row, column } = cellContext;
-            const value =
-                tableCell.getValue() ??
-                ((column.columnDef.meta as { isCustomField?: boolean } | undefined)?.isCustomField
-                    ? (row.original as any)?.customFields?.[column.id]
-                    : undefined);
+            const { column } = cellContext;
+            const value = resolveCellValue(
+                cellContext,
+                (column?.columnDef?.meta as { isCustomField?: boolean } | undefined)?.isCustomField,
+                column?.id,
+            );
             return <RegisteredDisplayComponent value={value} {...cellContext} />;
         }
         return flexRender(fallback, cellContext);
     };
+    // A non-function cell holds no state, so a fresh wrapper each time costs nothing beyond
+    // re-rendering a static node. Caching it would need a sentinel key, as a WeakMap cannot
+    // key on a string.
     if (typeof cell !== 'function') {
         return (cellContext: CellContext<any, any>) => render(cellContext, cell);
     }
@@ -429,10 +460,7 @@ const CellWrapper = memo(function CellWrapper({
     isCustomField: boolean;
     displayComponentId?: string;
 }) {
-    const { cell, row } = cellContext;
-    const cellValue = cell.getValue();
-    const value =
-        cellValue ?? (isCustomField ? (row.original as any)?.customFields?.[fieldInfo.name] : undefined);
+    const value = resolveCellValue(cellContext, isCustomField, fieldInfo.name);
 
     const CustomDisplayComponent = displayComponentId && getDisplayComponent(displayComponentId);
 

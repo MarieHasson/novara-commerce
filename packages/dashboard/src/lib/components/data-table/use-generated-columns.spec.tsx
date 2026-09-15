@@ -1,4 +1,3 @@
-// @vitest-environment jsdom
 import {
     defineDashboardExtension,
     executeDashboardExtensionCallbacks,
@@ -14,6 +13,8 @@ import { describe, expect, it } from 'vitest';
 
 import { AdditionalColumns } from '../shared/paginated-list-data-table.js';
 import { useGeneratedColumns } from './use-generated-columns.js';
+
+(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
 // The display component registry is a module-level Map with no removal API, so an entry
 // registered by one test stays visible to every later test. Each test therefore uses its
@@ -235,8 +236,6 @@ describe('useGeneratedColumns additionalColumns', () => {
 });
 
 describe('useGeneratedColumns mounted table', () => {
-    (globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
-
     // #5346 — render-time lookup must not remount a stable cell when columns regenerate (see #4064)
     it('does not remount a stable custom cell when the columns are regenerated', () => {
         let mounts = 0;
@@ -294,7 +293,83 @@ describe('useGeneratedColumns mounted table', () => {
         render();
         render();
 
-        expect(container.textContent).toContain('stateful');
+        expect(container.textContent).toBe('SKU-1stateful');
+        expect(mounts).toBe(1);
+        act(() => root.unmount());
+    });
+
+    // #5346 — the case an extension author actually hits: a stateful display component is
+    // registered, so the registered branch of the wrapper renders on every pass. The wrapper
+    // is cached per cell and key, so the component must stay mounted across regenerations.
+    it('does not remount a registered stateful display component when the columns are regenerated', () => {
+        const pageId = 'test-page-stable-registered-display';
+        let mounts = 0;
+        function StatefulDisplay() {
+            useEffect(() => {
+                mounts++;
+            }, []);
+            return <span>registered-stateful</span>;
+        }
+        addDisplayComponent({
+            pageId,
+            blockId: BLOCK_ID,
+            field: 'price',
+            component: StatefulDisplay,
+        });
+
+        function StableCell() {
+            return <span>core-money-cell</span>;
+        }
+
+        function Table() {
+            // A new customizeColumns object on every render forces the column memo to recompute,
+            // while `cell` itself stays referentially stable.
+            const { columns } = useGeneratedColumns({
+                fields,
+                customizeColumns: { price: { cell: StableCell } } as any,
+                includeSelectionColumn: false,
+                includeActionsColumn: false,
+            });
+            const table = useReactTable({
+                data: [{ sku: 'SKU-1', price: PRICE }],
+                columns: columns as any,
+                getCoreRowModel: getCoreRowModel(),
+            });
+            return (
+                <>
+                    {table
+                        .getRowModel()
+                        .rows.flatMap(row =>
+                            row
+                                .getVisibleCells()
+                                .map(cell => (
+                                    <span key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </span>
+                                )),
+                        )}
+                </>
+            );
+        }
+
+        const container = document.createElement('div');
+        const root = createRoot(container);
+        const render = () =>
+            act(() =>
+                root.render(
+                    <PageContext.Provider value={{ pageId }}>
+                        <PageBlockContext.Provider value={{ blockId: BLOCK_ID, column: 'main' }}>
+                            <Table />
+                        </PageBlockContext.Provider>
+                    </PageContext.Provider>,
+                ),
+            );
+
+        render();
+        render();
+        render();
+
+        expect(container.textContent).toBe('SKU-1registered-stateful');
         expect(mounts).toBe(1);
         act(() => root.unmount());
     });
