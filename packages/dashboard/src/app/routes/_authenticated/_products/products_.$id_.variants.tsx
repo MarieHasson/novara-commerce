@@ -343,8 +343,9 @@ function ManageProductVariants() {
                         {productData.product.optionGroups.length === 0 ? (
                             <p className="text-sm text-muted-foreground">
                                 <Trans>
-                                    No option groups defined yet. Add option groups to create different
-                                    variants of your product (e.g., Size, Color, Material)
+                                    No option groups defined yet. Add option groups when variants differ by a
+                                    shared property (e.g., Size, Color, Material). Without them, add variants
+                                    one at a time below.
                                 </Trans>
                             </p>
                         ) : (

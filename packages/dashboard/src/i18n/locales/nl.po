@@ -6955,8 +6955,8 @@ msgid "{totalQuantity} item(s) refunded"
 msgstr "{totalQuantity} artikel(en) gerestitueerd"
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx
-msgid "No option groups defined yet. Add option groups to create different variants of your product (e.g., Size, Color, Material)"
-msgstr "Nog geen optiegroepen gedefinieerd. Voeg optiegroepen toe om verschillende varianten van uw product te maken (bijv. Maat, Kleur, Materiaal)"
+msgid "No option groups defined yet. Add option groups when variants differ by a shared property (e.g., Size, Color, Material). Without them, add variants one at a time below."
+msgstr "Nog geen optiegroepen gedefinieerd. Voeg optiegroepen toe wanneer varianten verschillen door een gedeelde eigenschap (bijv. Maat, Kleur, Materiaal). Zonder deze voegt u de varianten hieronder één voor één toe."
 
 #: src/app/routes/_authenticated/_customers/components/customer-history/default-customer-history-components.tsx
 msgid "New email:"

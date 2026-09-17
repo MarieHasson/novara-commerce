@@ -6960,8 +6960,8 @@ msgid "{totalQuantity} item(s) refunded"
 msgstr "{totalQuantity} article(s) remboursé(s)"
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx
-msgid "No option groups defined yet. Add option groups to create different variants of your product (e.g., Size, Color, Material)"
-msgstr "Aucun groupe d'options défini pour l'instant. Ajoutez des groupes d'options pour créer différentes variantes de votre produit (ex. : Taille, Couleur, Matériau)"
+msgid "No option groups defined yet. Add option groups when variants differ by a shared property (e.g., Size, Color, Material). Without them, add variants one at a time below."
+msgstr "Aucun groupe d'options défini pour l'instant. Ajoutez des groupes d'options lorsque les variantes diffèrent par une propriété commune (ex. : Taille, Couleur, Matériau). Sans eux, ajoutez les variantes une par une ci-dessous."
 
 #: src/app/routes/_authenticated/_customers/components/customer-history/default-customer-history-components.tsx
 msgid "New email:"

@@ -6960,8 +6960,8 @@ msgid "{totalQuantity} item(s) refunded"
 msgstr "{totalQuantity} товар(ів) повернено"
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx
-msgid "No option groups defined yet. Add option groups to create different variants of your product (e.g., Size, Color, Material)"
-msgstr "Групи опцій ще не визначено. Додайте групи опцій для створення різних варіантів вашого товару (наприклад, Розмір, Колір, Матеріал)"
+msgid "No option groups defined yet. Add option groups when variants differ by a shared property (e.g., Size, Color, Material). Without them, add variants one at a time below."
+msgstr "Групи опцій ще не визначено. Додавайте групи опцій, коли варіанти відрізняються спільною властивістю (наприклад, Розмір, Колір, Матеріал). Без них додавайте варіанти по одному нижче."
 
 #: src/app/routes/_authenticated/_customers/components/customer-history/default-customer-history-components.tsx
 msgid "New email:"

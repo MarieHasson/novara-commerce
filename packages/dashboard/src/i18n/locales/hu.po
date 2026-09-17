@@ -6943,8 +6943,8 @@ msgid "{totalQuantity} item(s) refunded"
 msgstr "{totalQuantity} tétel visszatérítve"
 
 #: src/app/routes/_authenticated/_products/products_.$id_.variants.tsx
-msgid "No option groups defined yet. Add option groups to create different variants of your product (e.g., Size, Color, Material)"
-msgstr "Még nincsenek opciócsoportok megadva. Adjon hozzá opciócsoportokat a termék különböző változatainak létrehozásához (pl. Méret, Szín, Anyag)"
+msgid "No option groups defined yet. Add option groups when variants differ by a shared property (e.g., Size, Color, Material). Without them, add variants one at a time below."
+msgstr "Még nincsenek opciócsoportok megadva. Adjon hozzá opciócsoportokat, ha a változatok egy közös tulajdonságban különböznek (pl. Méret, Szín, Anyag). Ezek nélkül adja hozzá a változatokat egyenként lent."
 
 #: src/app/routes/_authenticated/_customers/components/customer-history/default-customer-history-components.tsx
 msgid "New email:"
