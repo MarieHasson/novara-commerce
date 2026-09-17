@@ -233,25 +233,22 @@ function ProductVariantDetailPage() {
         if (!trimmed) {
             return { kind: 'empty' };
         }
+        // Text that still reads as the option the variant already holds means that option,
+        // never a different option that happens to share the name.
+        const held = entity?.options.find(o => o.group.id === group.id);
+        if (held && held.name.trim().toLowerCase() === trimmed.toLowerCase()) {
+            return { kind: 'existing', id: held.id };
+        }
         const match = group.options.find(o => o.name.trim().toLowerCase() === trimmed.toLowerCase());
         return match ? { kind: 'existing', id: match.id } : { kind: 'new', name: trimmed };
     };
 
-    // Commits a group's free text. An exact match to an existing option is written straight
-    // into the form's `optionIds` to keep dirty-tracking accurate; a new value leaves
-    // `optionIds` untouched and is resolved to a created option on save. Either way the save
-    // path (button or Enter) re-resolves the text, so it is the single source of truth.
-    const commitGroupText = (group: (typeof optionGroups)[number], text: string) => {
+    // Records a group's free text, the page's only record of the pending selection. Only the
+    // save path writes the form's `optionIds`, and only once its guards pass. The update
+    // mutation sends every field whose value differs from the loaded variant, so an id written
+    // here would reach the server even when those guards found nothing to change.
+    const setGroupText = (group: (typeof optionGroups)[number], text: string) => {
         setOptionTextByGroup(prev => ({ ...prev, [group.id]: text }));
-        const resolution = resolveGroupOption(group, text);
-        if (resolution.kind === 'existing') {
-            const current = form.getValues('optionIds') ?? [];
-            const withoutGroup = current.filter(id => !group.options.some(o => o.id === id));
-            form.setValue('optionIds', [...withoutGroup, resolution.id], {
-                shouldDirty: true,
-                shouldValidate: true,
-            });
-        }
     };
 
     const anyOptionEmpty = optionGroups.some(group => !(optionTextByGroup[group.id] ?? '').trim());
@@ -539,11 +536,11 @@ function ProductVariantDetailPage() {
                                     key={group.id}
                                     group={group}
                                     value={optionTextByGroup[group.id] ?? ''}
-                                    onValueChange={value => commitGroupText(group, value)}
+                                    onValueChange={value => setGroupText(group, value)}
                                     onSelectOption={optionId => {
                                         const option = group.options.find(o => o.id === optionId);
                                         if (option) {
-                                            commitGroupText(group, option.name);
+                                            setGroupText(group, option.name);
                                         }
                                     }}
                                     invalid={
