@@ -1462,7 +1462,7 @@
                   "title": "RuntimeVendureConfig",
                   "slug": "runtime-vendure-config",
                   "file": "docs/reference/typescript-api/configuration/runtime-vendure-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "SecretAccessStrategy",
@@ -1486,7 +1486,7 @@
                   "title": "SystemOptions",
                   "slug": "system-options",
                   "file": "docs/reference/typescript-api/configuration/system-options.mdx",
-                  "lastModified": "2026-09-21T12:11:29+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "TrustProxyOptions",
@@ -1498,7 +1498,7 @@
                   "title": "VendureConfig",
                   "slug": "vendure-config",
                   "file": "docs/reference/typescript-api/configuration/vendure-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
@@ -1512,7 +1512,7 @@
                   "title": "CustomFieldConfig",
                   "slug": "custom-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/custom-field-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "CustomFieldType",
@@ -1524,28 +1524,28 @@
                   "title": "IsLocalizedCustomFieldType",
                   "slug": "is-localized-custom-field-type",
                   "file": "docs/reference/typescript-api/custom-fields/is-localized-custom-field-type.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "StructCustomFieldConfig",
                   "slug": "struct-custom-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/struct-custom-field-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "StructFieldConfig",
                   "slug": "struct-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/struct-field-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "TypedCustomSingleFieldConfig",
                   "slug": "typed-custom-single-field-config",
                   "file": "docs/reference/typescript-api/custom-fields/typed-custom-single-field-config.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 }
               ],
-              "lastModified": "2026-09-21T13:25:05+02:00"
+              "lastModified": "2026-09-21T15:40:19+02:00"
             },
             {
               "title": "Data Access",
@@ -1824,7 +1824,7 @@
                   "title": "Order",
                   "slug": "order",
                   "file": "docs/reference/typescript-api/entities/order.mdx",
-                  "lastModified": "2026-09-21T12:11:29+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "OrderableAsset",
@@ -2404,7 +2404,7 @@
                   "title": "GenerateMigration",
                   "slug": "generate-migration",
                   "file": "docs/reference/typescript-api/migration/generate-migration.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "MigrateAssetTranslationData",
@@ -2422,13 +2422,13 @@
                   "title": "MigrationDiagnostic",
                   "slug": "migration-diagnostic",
                   "file": "docs/reference/typescript-api/migration/migration-diagnostic.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "MigrationOptions",
                   "slug": "migration-options",
                   "file": "docs/reference/typescript-api/migration/migration-options.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "RescaleOrderLinePromotionAdjustments",
@@ -2440,19 +2440,19 @@
                   "title": "RevertLastMigration",
                   "slug": "revert-last-migration",
                   "file": "docs/reference/typescript-api/migration/revert-last-migration.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "RunMigrations",
                   "slug": "run-migrations",
                   "file": "docs/reference/typescript-api/migration/run-migrations.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "RunMigrationsOptions",
                   "slug": "run-migrations-options",
                   "file": "docs/reference/typescript-api/migration/run-migrations-options.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 }
               ],
               "lastModified": "2026-01-28T14:49:21+01:00"
@@ -2754,7 +2754,7 @@
                   "title": "Plugin Utilities",
                   "slug": "plugin-utilities",
                   "file": "docs/reference/typescript-api/plugin/plugin-utilities.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "PluginCommonModule",
@@ -3060,7 +3060,7 @@
                   "title": "CollectionService",
                   "slug": "collection-service",
                   "file": "docs/reference/typescript-api/services/collection-service.mdx",
-                  "lastModified": "2026-09-21T12:11:29+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "CountryService",
@@ -4399,7 +4399,7 @@
                   "title": "ListPage",
                   "slug": "list-page",
                   "file": "docs/reference/dashboard/list-views/list-page.mdx",
-                  "lastModified": "2026-09-21T13:25:05+02:00"
+                  "lastModified": "2026-09-21T15:40:19+02:00"
                 },
                 {
                   "title": "PaginatedListDataTable",
