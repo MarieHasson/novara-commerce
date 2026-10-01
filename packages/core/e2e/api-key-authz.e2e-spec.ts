@@ -1,6 +1,6 @@
 import { Permission } from '@vendure/common/lib/generated-types';
 import { SUPER_ADMIN_USER_IDENTIFIER } from '@vendure/common/lib/shared-constants';
-import { ApiKeyService, RequestContextService, TransactionalConnection, User } from '@vendure/core';
+import { ApiKeyService, RequestContextService, Role, TransactionalConnection, User } from '@vendure/core';
 import { createTestEnvironment } from '@vendure/testing';
 import path from 'path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -304,6 +304,13 @@ describe('API-key authorization (GHSA-37xp-mjp8-6f9x)', () => {
                 .findOneOrFail({ where: { identifier }, relations: { roles: { channels: true } } });
         }
 
+        async function loadRole(code: string): Promise<Role> {
+            return server.app
+                .get(TransactionalConnection)
+                .rawConnection.getRepository(Role)
+                .findOneOrFail({ where: { code } });
+        }
+
         async function ctxAs(user: User) {
             return server.app.get(RequestContextService).create({ apiType: 'admin', user });
         }
@@ -311,6 +318,7 @@ describe('API-key authorization (GHSA-37xp-mjp8-6f9x)', () => {
         it('blocks binding a key to a higher-privileged existing User', async () => {
             const managerUser = await loadUser(manager.emailAddress);
             const superAdminUser = await loadUser(SUPER_ADMIN_USER_IDENTIFIER);
+            const catalogRole = await loadRole('catalog-reader');
             const ctx = await ctxAs(managerUser);
             const apiKeyService = server.app.get(ApiKeyService);
 
@@ -320,7 +328,7 @@ describe('API-key authorization (GHSA-37xp-mjp8-6f9x)', () => {
             await expect(
                 apiKeyService.create(
                     ctx,
-                    { roleIds: [catalogRoleId], translations: [{ languageCode: 'en' as any, name: 'x' }] },
+                    { roleIds: [catalogRole.id], translations: [{ languageCode: 'en' as any, name: 'x' }] },
                     managerUser.id,
                     superAdminUser.id,
                 ),
@@ -329,13 +337,17 @@ describe('API-key authorization (GHSA-37xp-mjp8-6f9x)', () => {
 
         it('allows binding a key to a User whose permissions the caller fully holds', async () => {
             const managerUser = await loadUser(manager.emailAddress);
+            const catalogRole = await loadRole('catalog-reader');
             const ctx = await ctxAs(managerUser);
             const apiKeyService = server.app.get(ApiKeyService);
 
             // Binding to the caller's own User: they hold all of its permissions, so this is legitimate.
             const result = await apiKeyService.create(
                 ctx,
-                { roleIds: [catalogRoleId], translations: [{ languageCode: 'en' as any, name: 'self key' }] },
+                {
+                    roleIds: [catalogRole.id],
+                    translations: [{ languageCode: 'en' as any, name: 'self key' }],
+                },
                 managerUser.id,
                 managerUser.id,
             );
