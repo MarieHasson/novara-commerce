@@ -1,6 +1,36 @@
 ## <small>3.7.4 (2026-10-05)</small>
 
 
+#### Security
+
+This release fixes vulnerabilities which were responsibly disclosed to us via GitHub
+security advisories. Full details of each are in the linked advisory.
+
+* **core** Check the caller's permissions against the API key's roles in `createApiKey`, `updateApiKey`, `rotateApiKey` and `deleteApiKeys`, and scope API key reads to keys the caller may manage ([GHSA-37xp-mjp8-6f9x](https://github.com/vendurehq/vendure/security/advisories/GHSA-37xp-mjp8-6f9x))
+* **core** Fix stock overselling under concurrent checkout by making stock level updates atomic and locking the saleable stock check ([GHSA-8ghm-q833-cmgp](https://github.com/vendurehq/vendure/security/advisories/GHSA-8ghm-q833-cmgp))
+
+##### Behaviour changes from the security fixes
+
+* The API key mutations now throw unless the caller holds every permission of the key's roles. A key
+  the caller may not manage is reported as not found, and is left out of the API key list queries.
+* `DefaultStockLocationStrategy` now caps an allocation at the available stock
+  (`stockOnHand - stockAllocated - outOfStockThreshold`, summed over all stock locations). Previously
+  it allocated the full quantity without reading stock. An Order which loses the race for the last
+  units is now under-allocated rather than oversold, and the new `StockShortfallEvent` is published so
+  a plugin can refund, backorder or notify.
+* Stock checks and allocation now take row locks on the `StockLevel` rows. SQLite and SQL.js have no
+  row locks, so they fall back to an unlocked read and log a warning once per process.
+* `StockMovementService.adjustProductVariantStock()` now runs in its own transaction and computes its
+  change from a locked read. Two concurrent absolute stock updates now store the later value instead of adding both changes
+  together.
+* A subclass of `BaseStockLocationStrategy` which overrides `init()` must call `super.init(injector)`.
+  If it does not, it now gets an error naming the problem instead of a `TypeError`.
+* A custom `StockAllocationStrategy.shouldAllocateStock()` may now be called more than once per
+  transition. It must return the same result for the same arguments and have no side effects.
+* New APIs: `StockShortfallEvent`, `StockLevelService.lockStockLevelsForVariants()`,
+  `StockLevelService.getLockedStockLevelsForVariant()`, `StockLevelLockOptions`, and `ApiKeyService`
+  is now exported.
+
 #### Fixes
 
 * **asset-server-plugin** use forward slashes in asset identifiers on Windows (#5403) ([e46a8f7](https://github.com/vendurehq/vendure/commit/e46a8f7)), closes [#5403](https://github.com/vendurehq/vendure/issues/5403)
