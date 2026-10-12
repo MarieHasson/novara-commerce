@@ -1,10 +1,10 @@
 ---
 title: 'Adding UI Translations'
-metaTitle: "Adding UI Translations to the Vendure Admin UI"
-metaDescription: "Add new languages, create custom translations for UI extensions, and override existing translations in the Vendure Admin UI using Messageformat."
+metaTitle: "Adding UI Translations to the Novara Commerce Admin UI"
+metaDescription: "Add new languages, create custom translations for UI extensions, and override existing translations in the Novara Commerce Admin UI using Messageformat."
 ---
 
-The Vendure Admin UI is fully localizable, allowing you to:
+The Novara Commerce Admin UI is fully localizable, allowing you to:
 
 * create custom translations for your UI extensions
 * override existing translations
@@ -32,7 +32,7 @@ Here is an excerpt from the `en.json` file that ships with the Admin UI:
 }
 ```
 
-The translation tokens are grouped into a single-level deep nested structure. In the Angular code, these are referenced like this: 
+The translation tokens are grouped into a single-level deep nested structure. In the Angular code, these are referenced like this:
 
 ```html
 <label>{{ 'asset.assets-selected-count' | translate:{ count } }}</label>
@@ -46,29 +46,29 @@ The Admin UI ships with built-in support for many languages, but allows you to a
 
 1. **Create your translation file**
 
-     Start by copying the contents of the [English language file](https://github.com/vendurehq/vendure/blob/master/packages/admin-ui/src/lib/static/i18n-messages/en.json) into a new file, `<languageCode>.json`, where `languageCode` is the 2-character [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) for the language. Replace the strings with the translation for the new language.
+     Start by copying the contents of the [English language file](https://github.com/MarieHasson/novara-commerce/blob/master/packages/admin-ui/src/lib/static/i18n-messages/en.json) into a new file, `<languageCode>.json`, where `languageCode` is the 2-character [ISO 639-1 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) for the language. Replace the strings with the translation for the new language.
 2. **Install `@vendure/ui-devkit`**
 
     If not already installed, install the `@vendure/ui-devkit` package, which allows you to create custom builds of the Admin UI.
 3. **Register the translation file**
-  
+
     Here's a minimal directory structure and sample code to add your new translation:
-    
+
     ```text
     /src
     ├─ vendure-config.ts
     └─ translations/
         └─ ms.json
     ```
-    
+
     And the config code to register the translation file:
-    
+
     ```ts title="src.vendure-config.ts"
     import path from 'path';
     import { VendureConfig } from '@vendure/core';
     import { AdminUiPlugin } from '@vendure/admin-ui-plugin';
     import { compileUiExtensions } from '@vendure/ui-devkit/compiler';
-    
+
     export const config: VendureConfig = {
         // ...
         plugins: [

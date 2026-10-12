@@ -318,7 +318,7 @@ describe('Promotions applied to Orders', () => {
             expect(removeCouponCode!.totalWithTax).toBe(6000);
         });
 
-        // https://github.com/vendurehq/vendure/issues/649
+        // https://github.com/MarieHasson/novara-commerce/issues/649
         it('discounts array cleared after coupon code removed', async () => {
             const { activeOrder } = await shopClient.query(getActiveOrderDocument);
 
@@ -470,7 +470,7 @@ describe('Promotions applied to Orders', () => {
                 shopClient.setChannelToken(E2E_DEFAULT_CHANNEL_TOKEN);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1692
+            // https://github.com/MarieHasson/novara-commerce/issues/1692
             it('does not allow a couponCode from another channel', async () => {
                 shopClient.setChannelToken(OTHER_CHANNEL_TOKEN);
                 const { applyCouponCode } = await shopClient.query(applyCouponCodeDocument, {
@@ -696,7 +696,7 @@ describe('Promotions applied to Orders', () => {
             await deletePromotion(promotion.id);
         });
 
-        // https://github.com/vendurehq/vendure/issues/4856
+        // https://github.com/MarieHasson/novara-commerce/issues/4856
         // A read → save round-trip (what the dashboard does on any edit) must not
         // corrupt the customerGroupId. Before the fix, encode re-quoted the id
         // (`'T_1'` → `'"T_1"'`), which then mis-decoded on the way back in and
@@ -858,7 +858,7 @@ describe('Promotions applied to Orders', () => {
                 expect(applyCouponCode.totalWithTax).toBe(4800);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1773
+            // https://github.com/MarieHasson/novara-commerce/issues/1773
             it('decimal percentage', async () => {
                 const decimalPercentageCouponCode = 'DPCC';
                 await createPromotion({
@@ -1350,7 +1350,7 @@ describe('Promotions applied to Orders', () => {
                 expect(applyCouponCode.totalWithTax).toBe(6000);
             });
 
-            // https://github.com/vendurehq/vendure/pull/1150
+            // https://github.com/MarieHasson/novara-commerce/pull/1150
             it('shipping discounts get correctly removed', async () => {
                 shopClient.setChannelToken(TAX_INCLUDED_CHANNEL_TOKEN);
                 const { addItemToOrder } = await shopClient.query(addItemToOrderDocument, {
@@ -1705,7 +1705,7 @@ describe('Promotions applied to Orders', () => {
                 expect(activeOrder!.couponCodes).toEqual([]);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1466
+            // https://github.com/MarieHasson/novara-commerce/issues/1466
             it('cancelled orders do not count against usage limit', async () => {
                 const { cancelOrder } = await adminClient.query(cancelOrderDocument, {
                     input: {
@@ -1875,7 +1875,7 @@ describe('Promotions applied to Orders', () => {
                 expect(applyCouponCode.errorCode).toBe(ErrorCode.COUPON_CODE_LIMIT_ERROR);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1466
+            // https://github.com/MarieHasson/novara-commerce/issues/1466
             it('cancelled orders do not count against usage limit', async () => {
                 const { cancelOrder } = await adminClient.query(cancelOrderDocument, {
                     input: {
@@ -1899,7 +1899,7 @@ describe('Promotions applied to Orders', () => {
             });
         });
 
-        // https://github.com/vendurehq/vendure/pull/4660
+        // https://github.com/MarieHasson/novara-commerce/pull/4660
         describe('concurrent usage (race condition)', () => {
             const RACE_COUPON_CODE = 'RACE_TEST';
             const CONCURRENT_ATTEMPTS = 3;
@@ -2075,7 +2075,7 @@ describe('Promotions applied to Orders', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/4353
+    // https://github.com/MarieHasson/novara-commerce/issues/4353
     describe('usage limit for auto-applied promotions (no coupon code)', () => {
         async function createNewActiveOrder() {
             const { addItemToOrder } = await shopClient.query(addItemToOrderDocument, {
@@ -2305,7 +2305,7 @@ describe('Promotions applied to Orders', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/710
+    // https://github.com/MarieHasson/novara-commerce/issues/710
     it('removes order-level discount made invalid by removing OrderLine', async () => {
         const promotion = await createPromotion({
             enabled: true,
@@ -2347,7 +2347,7 @@ describe('Promotions applied to Orders', () => {
         expect(check2!.discounts.length).toBe(0);
     });
 
-    // https://github.com/vendurehq/vendure/issues/1492
+    // https://github.com/MarieHasson/novara-commerce/issues/1492
     it('correctly handles pro-ration of variants with 0 price', async () => {
         const couponCode = '20%_off_order';
         const promotion = await createPromotion({
@@ -2376,7 +2376,7 @@ describe('Promotions applied to Orders', () => {
         expect(applyCouponCode.totalWithTax).toBe(96);
     });
 
-    // https://github.com/vendurehq/vendure/issues/2385
+    // https://github.com/MarieHasson/novara-commerce/issues/2385
     describe('prevents negative line price', () => {
         const TAX_INCLUDED_CHANNEL_TOKEN_2 = 'tax_included_channel_2';
         const couponCode1 = '100%_off';
@@ -2498,7 +2498,7 @@ describe('Promotions applied to Orders', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/2052
+    // https://github.com/MarieHasson/novara-commerce/issues/2052
     describe('multi-channel usage', () => {
         const SECOND_CHANNEL_TOKEN = 'second_channel_token';
         const THIRD_CHANNEL_TOKEN = 'third_channel_token';

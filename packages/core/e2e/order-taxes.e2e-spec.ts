@@ -220,7 +220,7 @@ describe('Order taxes', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1216
+        // https://github.com/MarieHasson/novara-commerce/issues/1216
         it('re-calculates OrderLine prices when shippingAddress causes activeTaxZone change', async () => {
             const { taxRates } = await adminClient.query(getTaxRateListDocument);
             taxRatesGuard.assertSuccess(taxRates);
@@ -263,7 +263,7 @@ describe('Order taxes', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1216
+        // https://github.com/MarieHasson/novara-commerce/issues/1216
         it('re-calculates OrderLine prices when billingAddress causes activeTaxZone change', async () => {
             await shopClient.query(setBillingAddressDocument, {
                 input: {

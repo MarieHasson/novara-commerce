@@ -1,6 +1,6 @@
 # vendure codemod
 
-Runs an automated code transform over a Vendure project.
+Runs an automated code transform over a Novara Commerce project.
 
 ## Interactive vs non-interactive
 

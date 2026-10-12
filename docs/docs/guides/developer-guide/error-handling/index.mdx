@@ -1,10 +1,10 @@
 ---
 title: "Error Handling"
-metaTitle: "Error Handling in Vendure - Expected vs Unexpected Errors"
-metaDescription: "Handle errors in Vendure GraphQL APIs using ErrorResult union types for expected errors and standard GraphQL error responses for unexpected failures."
+metaTitle: "Error Handling in Novara Commerce - Expected vs Unexpected Errors"
+metaDescription: "Handle errors in Novara Commerce GraphQL APIs using ErrorResult union types for expected errors and standard GraphQL error responses for unexpected failures."
 ---
 
-Errors in Vendure can be divided into two categories:
+Errors in Novara Commerce can be divided into two categories:
 
 * Unexpected errors
 * Expected errors
@@ -112,7 +112,7 @@ export function query(document: string, variables: Record<string, any> = {}) {
 
 ## Expected errors (ErrorResults)
 
-This type of error represents a well-defined result of (typically) a GraphQL mutation which is not considered "successful". For example, when using the `applyCouponCode` mutation, the code may be invalid, or it may have expired. These are examples of "expected" errors and are named in Vendure "ErrorResults". These ErrorResults are encoded into the GraphQL schema itself.
+This type of error represents a well-defined result of (typically) a GraphQL mutation which is not considered "successful". For example, when using the `applyCouponCode` mutation, the code may be invalid, or it may have expired. These are examples of "expected" errors and are named in Novara Commerce "ErrorResults". These ErrorResults are encoded into the GraphQL schema itself.
 
 ErrorResults all implement the `ErrorResult` interface:
 
@@ -225,7 +225,7 @@ Here's how a response would look in both the success and error result cases:
 
 ### Handling ErrorResults in plugin code
 
-If you are writing a plugin which deals with internal Vendure service methods that may return ErrorResults,
+If you are writing a plugin which deals with internal Novara Commerce service methods that may return ErrorResults,
 then you can use the `isGraphQlErrorResult()` function to check whether the result is an ErrorResult:
 
 ```ts

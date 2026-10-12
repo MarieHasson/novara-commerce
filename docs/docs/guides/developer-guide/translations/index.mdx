@@ -1,10 +1,10 @@
 ---
 title: "Translations"
-metaTitle: "Internationalization and Translations in Vendure"
-metaDescription: "Handle multi-language content in Vendure with translatable entities, Admin UI localization, and server-side error message translations."
+metaTitle: "Internationalization and Translations in Novara Commerce"
+metaDescription: "Handle multi-language content in Novara Commerce with translatable entities, Admin UI localization, and server-side error message translations."
 ---
 
-The following items in Vendure can be translated:
+The following items in Novara Commerce can be translated:
 
 - Entities which implement the [`Translatable`](/reference/typescript-api/entities/interfaces/#translatable) interface.
 - Admin UI text labels and messages
@@ -33,7 +33,7 @@ To understand how translatable entities are implemented, let's take a look at a 
 ```ts
 @Entity()
 export class Facet extends VendureEntity implements Translatable {
-    
+
     name: LocaleString; // [!code highlight]
 
     @Column({ unique: true })
@@ -60,7 +60,7 @@ export class FacetTranslation extends VendureEntity implements Translation<Facet
 }
 ```
 
-Thus there is a one-to-many relation between `Facet` and `FacetTranslation`, which allows Vendure to handle multiple translations of the same entity. The `FacetTranslation` entity also implements the `Translation` interface, which requires the `languageCode` field and a reference to the base entity.
+Thus there is a one-to-many relation between `Facet` and `FacetTranslation`, which allows Novara Commerce to handle multiple translations of the same entity. The `FacetTranslation` entity also implements the `Translation` interface, which requires the `languageCode` field and a reference to the base entity.
 
 ### Loading translatable entities
 
@@ -74,7 +74,7 @@ import { LanguageCode, RequestContext, TranslatorService, TransactionalConnectio
 
 @Injectable()
 export class MyService {
-    
+
     constructor(private connection: TransactionalConnection, private translator: TranslatorService) {}
 
     async getFacet(ctx: RequestContext, id: ID): Promise<Facet | undefined> {
@@ -83,7 +83,7 @@ export class MyService {
             return this.translatorService.translate(facet, ctx); // [!code highlight]
         }
     }
-    
+
     async getFacets(ctx: RequestContext): Promise<Facet[]> {
         const facets = await this.connection.getRepository(ctx, Facet).find(); // [!code highlight]
         return Promise.all(facets.map(facet => this.translatorService.translate(facet, ctx))); // [!code highlight]
@@ -100,7 +100,7 @@ Let's say you've implemented some custom server-side functionality as part of a 
 provide these messages in multiple languages.
 
 Using [`addTranslation`](/reference/typescript-api/common/i18n-service/#addtranslation) inside the `onApplicationBootstrap` ([Nestjs lifecycle hooks](https://docs.nestjs.com/fundamentals/lifecycle-events)) of a Plugin is the easiest way to add new translations.
-While Vendure is only using the `error`, `errorResult`, `message` and `configurableOperation` resource keys you are free to use your own.
+While Novara Commerce is only using the `error`, `errorResult`, `message` and `configurableOperation` resource keys you are free to use your own.
 
 ### Translatable Error
 This example shows how to create a custom translatable error
@@ -222,7 +222,7 @@ The two come from different parts of the request. The `languageCode` query param
 
 A client which sends no `Accept-Language` header falls back to `languageCode`.
 
-Vendure tries each language in turn: first the languages from `Accept-Language` in the order the header gives them, then the request's `languageCode`, then the Channel's default language, then English. For each one it looks in the catalogs first and in the inline array second. A catalog entry therefore wins over an inline string for the same language, which is what allows a third-party operation's wording to be overridden. An operation which ships only inline strings still resolves to its own language rather than to an English catalog entry defined elsewhere.
+Novara Commerce tries each language in turn: first the languages from `Accept-Language` in the order the header gives them, then the request's `languageCode`, then the Channel's default language, then English. For each one it looks in the catalogs first and in the inline array second. A catalog entry therefore wins over an inline string for the same language, which is what allows a third-party operation's wording to be overridden. An operation which ships only inline strings still resolves to its own language rather than to an English catalog entry defined elsewhere.
 
 Select option labels behave slightly differently. The description and the argument labels arrive at the client already resolved to a single string, but option labels are sent as the full array with the catalog translation merged into it. The merged entry carries the language code the client asked for. Clients look up their own display language and fall back to the first entry in the array when they find no exact match, so a translation filed under any other code would be passed over.
 
@@ -240,7 +240,7 @@ Several of core's descriptions are templates rather than sentences, for example 
 
 ### Use translations
 
-Vendure uses the internationalization-framework [i18next](https://www.i18next.com/).
+Novara Commerce uses the internationalization-framework [i18next](https://www.i18next.com/).
 
 Therefore you are free to use the i18next translate function to [access keys](https://www.i18next.com/translation-function/essentials#accessing-keys) \
 `i18next.t('error.any-message');`

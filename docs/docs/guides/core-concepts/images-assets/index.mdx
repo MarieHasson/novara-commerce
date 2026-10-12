@@ -1,14 +1,14 @@
 ---
 title: "Assets"
-metaTitle: "Asset Management in Vendure"
-metaDescription: "Manage product images, videos, and files in Vendure with customizable naming, preview, and storage strategies plus the AssetServerPlugin."
+metaTitle: "Asset Management in Novara Commerce"
+metaDescription: "Manage product images, videos, and files in Novara Commerce with customizable naming, preview, and storage strategies plus the AssetServerPlugin."
 ---
 
 [`Assets`](/reference/typescript-api/entities/asset/) are used to store files such as images, videos, PDFs, etc. Assets can be
 assigned to **products**, **variants** and **collections** by default. By using [custom fields](/developer-guide/custom-fields/) it is
 possible to assign assets to other entities. For example, for implementing customer profile images.
 
-The handling of assets in Vendure is implemented in a modular way, allowing you full control over the way assets
+The handling of assets in Novara Commerce is implemented in a modular way, allowing you full control over the way assets
 are stored, named, imported and previewed.
 
 ![Asset creation and retrieval](./asset-flow.webp)
@@ -23,7 +23,7 @@ read the file from the storage location.
 
 ## AssetServerPlugin
 
-Vendure comes with the [`AssetServerPlugin`](/reference/core-plugins/asset-server-plugin/) pre-installed, which provides ready-made strategies for asset handling, a powerful image transformation API (resize, crop, format conversion via query parameters), and support for custom storage backends such as AWS S3 or Minio.
+Novara Commerce comes with the [`AssetServerPlugin`](/reference/core-plugins/asset-server-plugin/) pre-installed, which provides ready-made strategies for asset handling, a powerful image transformation API (resize, crop, format conversion via query parameters), and support for custom storage backends such as AWS S3 or Minio.
 
 :::info
 See the [AssetServerPlugin docs](/reference/core-plugins/asset-server-plugin/) for a detailed description of all the features.

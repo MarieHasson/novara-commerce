@@ -1,10 +1,10 @@
 ---
 title: "Search"
-metaTitle: "Pluggable Search Architecture in Vendure"
-metaDescription: "Learn how Vendure's search system works: denormalized search indexes, the DefaultSearchPlugin, ElasticsearchPlugin, and facet-based filtering."
+metaTitle: "Pluggable Search Architecture in Novara Commerce"
+metaDescription: "Learn how Novara Commerce's search system works: denormalized search indexes, the DefaultSearchPlugin, ElasticsearchPlugin, and facet-based filtering."
 ---
 
-Vendure provides a pluggable search architecture that decouples the search experience from the underlying storage mechanism. Rather than querying the relational product tables directly, Vendure maintains a **denormalized search index** that is optimized for fast, full-text catalog queries with filtering and facet aggregations.
+Novara Commerce provides a pluggable search architecture that decouples the search experience from the underlying storage mechanism. Rather than querying the relational product tables directly, Novara Commerce maintains a **denormalized search index** that is optimized for fast, full-text catalog queries with filtering and facet aggregations.
 
 ## The search index
 
@@ -20,7 +20,7 @@ You can also trigger a full re-index manually via the Admin API when needed — 
 
 ## Search plugins
 
-Vendure ships with two search plugin options:
+Novara Commerce ships with two search plugin options:
 
 ### DefaultSearchPlugin
 
@@ -30,7 +30,7 @@ It supports full-text search, filtering by facet values, collection membership, 
 
 ### ElasticsearchPlugin
 
-The [`@vendure-community/elasticsearch-plugin`](https://github.com/vendurehq/community-plugins) stores the search index in an Elasticsearch cluster. It is designed for production workloads with large catalogs where you need more advanced full-text search capabilities, better performance at scale, or features like fuzzy matching and relevance tuning.
+The [`@vendure-community/elasticsearch-plugin`](https://github.com/MarieHasson/community-plugins) stores the search index in an Elasticsearch cluster. It is designed for production workloads with large catalogs where you need more advanced full-text search capabilities, better performance at scale, or features like fuzzy matching and relevance tuning.
 
 Because both plugins implement the same GraphQL schema, switching from the DefaultSearchPlugin to the ElasticsearchPlugin requires no changes to your storefront queries.
 

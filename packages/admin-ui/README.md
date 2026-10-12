@@ -1,6 +1,6 @@
-# Vendure Admin UI
+# Novara Commerce Admin UI
 
-This is the administration interface for Vendure.
+This is the administration interface for Novara Commerce.
 
 It is an Angular application built with the Angular CLI.
 

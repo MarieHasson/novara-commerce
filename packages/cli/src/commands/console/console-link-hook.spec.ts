@@ -273,7 +273,7 @@ describe('console link hooks', () => {
         // Repair is local. Nothing is asked of Console, so no second Project
         // Link is created and the first is not abandoned.
         expect(fetchMock).not.toHaveBeenCalled();
-        const currentManifest = manifestForConsole('https://console.vendure.io', 'https://api.vendure.io');
+        const currentManifest = manifestForConsole('https://console.example.com', 'https://api.example.com');
         expect(fs.readJsonSync(getProjectLinkManifestPath(root))).toEqual(currentManifest);
         expect(contexts).toHaveLength(1);
         expect(contexts[0].outcome).toBe('repaired');
@@ -303,7 +303,7 @@ describe('console link hooks', () => {
         expect(output).toContain('was not changed');
         expect(output).not.toContain('The link succeeded');
         expect(fs.readJsonSync(getProjectLinkManifestPath(root))).toEqual(
-            manifestForConsole('https://console.vendure.io', 'https://api.vendure.io'),
+            manifestForConsole('https://console.example.com', 'https://api.example.com'),
         );
     });
 

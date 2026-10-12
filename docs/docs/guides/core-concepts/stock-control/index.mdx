@@ -1,20 +1,20 @@
 ---
 title: "Inventory"
-metaTitle: "Inventory and Stock Management in Vendure"
-metaDescription: "Vendure inventory management explained: stock locations, allocation strategies, back orders, stock movements, and how saleable quantities are calculated."
+metaTitle: "Inventory and Stock Management in Novara Commerce"
+metaDescription: "Novara Commerce inventory management explained: stock locations, allocation strategies, back orders, stock movements, and how saleable quantities are calculated."
 ---
 
-Vendure includes features to help manage your stock levels, stock allocations and back orders. The basic purpose is to help you keep track of how many of a given ProductVariant you have available to sell.
+Novara Commerce includes features to help manage your stock levels, stock allocations and back orders. The basic purpose is to help you keep track of how many of a given ProductVariant you have available to sell.
 
 Stock control is enabled globally via the Global Settings:
 
 ![./global-stock-control.webp](./global-stock-control.webp)
 
-It can be disabled if, for example, you manage your stock with a separate inventory management system and synchronize stock levels into Vendure automatically. The setting can also be overridden at the individual ProductVariant level.
+It can be disabled if, for example, you manage your stock with a separate inventory management system and synchronize stock levels into Novara Commerce automatically. The setting can also be overridden at the individual ProductVariant level.
 
 ## Stock Locations
 
-Vendure uses the concept of [`StockLocations`](/reference/typescript-api/entities/stock-location/) to represent the physical locations where stock is stored. This could be a warehouse, a retail store, or any other location. If you do not have multiple stock locations, then you can simply use the default location which is created automatically.
+Novara Commerce uses the concept of [`StockLocations`](/reference/typescript-api/entities/stock-location/) to represent the physical locations where stock is stored. This could be a warehouse, a retail store, or any other location. If you do not have multiple stock locations, then you can simply use the default location which is created automatically.
 
 ![Stock levels](./stock-levels.webp)
 
@@ -89,7 +89,7 @@ The saleable value is what determines whether the customer is able to add a vari
 
 ### Stock allocation
 
-Allocation mean we are setting stock aside because it has been purchased but not yet shipped. It prevents us from selling more of a particular item than we are able to deliver. 
+Allocation mean we are setting stock aside because it has been purchased but not yet shipped. It prevents us from selling more of a particular item than we are able to deliver.
 
 By default, stock gets allocated to an order once the order transitions to the `PaymentAuthorized` or `PaymentSettled` state. This is defined by the [`DefaultStockAllocationStrategy`](/reference/typescript-api/orders/default-stock-allocation-strategy). Using a custom [`StockAllocationStrategy`](/reference/typescript-api/orders/stock-allocation-strategy/) you can define your own rules for when stock is allocated.
 
@@ -98,7 +98,7 @@ With the [`defaultFulfillmentProcess`](/reference/typescript-api/fulfillment/ful
 
 ### Back orders
 
-You may have noticed that the `outOfStockThreshold` value can be set to a negative number. This allows you to sell variants even when you don't physically have them in stock. This is known as a "back order". 
+You may have noticed that the `outOfStockThreshold` value can be set to a negative number. This allows you to sell variants even when you don't physically have them in stock. This is known as a "back order".
 
 Back orders can be really useful to allow orders to keep flowing even when stockOnHand temporarily drops to zero. For many businesses with predictable re-supply schedules they make a lot of sense.
 

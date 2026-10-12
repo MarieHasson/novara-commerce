@@ -1,6 +1,6 @@
 # TypeORM version test harness
 
-Vendure supports both TypeORM v0.3 and v1 from the same source, so that existing projects can
+Novara Commerce supports both TypeORM v0.3 and v1 from the same source, so that existing projects can
 stay on v0.3 while new ones adopt v1. These scripts run the database-backed test suites against
 either version.
 

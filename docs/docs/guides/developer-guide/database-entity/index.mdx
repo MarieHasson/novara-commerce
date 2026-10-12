@@ -1,7 +1,7 @@
 ---
 title: "Define a database entity"
-metaTitle: "Defining Custom Database Entities in Vendure Plugins"
-metaDescription: "Create new TypeORM database entities in Vendure plugins to store custom data like reviews, wishlists, or any domain-specific model your application needs."
+metaTitle: "Defining Custom Database Entities in Novara Commerce Plugins"
+metaDescription: "Create new TypeORM database entities in Novara Commerce plugins to store custom data like reviews, wishlists, or any domain-specific model your application needs."
 ---
 
 :::cli
@@ -28,7 +28,7 @@ class ProductReview extends VendureEntity {
 
     @ManyToOne(type => Product)
     product: Product;
-    
+
     @EntityId()
     productId: ID;
 
@@ -67,9 +67,9 @@ In this example, we are making use of the following TypeORM decorators:
 * [`@Column()`](https://typeorm.io/decorator-reference#column) - defines a column in the database table. The data type of the column is inferred from the TypeScript type of the property, but can be overridden by passing an options object to the decorator. The `@Column()` also supports many other options for defining the column, such as `nullable`, `default`, `unique`, `primary`, `enum` etc.
 * [`@ManyToOne()`](https://typeorm.io/decorator-reference#manytoone) - defines a many-to-one relationship between this entity and another entity. In this case, many  `ProductReview` entities can be associated with a given `Product`. There are other types of relations that can be defined - see the [TypeORM relations docs](https://typeorm.io/relations).
 
-There is an additional Vendure-specific decorator:
+There is an additional Novara Commerce-specific decorator:
 
-* [`@EntityId()`](/reference/typescript-api/configuration/entity-id-decorator) marks a property as the ID of another entity. In this case, the `productId` property is the ID of the `Product` entity. The reason that we have a special decorator for this is that Vendure supports both numeric and string IDs, and the `@EntityId()` decorator will automatically set the database column to be the correct type. This `productId` is not _necessary_, but it is a useful convention to allow access to the ID of the associated entity without having to perform a database join.
+* [`@EntityId()`](/reference/typescript-api/configuration/entity-id-decorator) marks a property as the ID of another entity. In this case, the `productId` property is the ID of the `Product` entity. The reason that we have a special decorator for this is that Novara Commerce supports both numeric and string IDs, and the `@EntityId()` decorator will automatically set the database column to be the correct type. This `productId` is not _necessary_, but it is a useful convention to allow access to the ID of the associated entity without having to perform a database join.
 
 ## Register the entity
 
@@ -125,7 +125,7 @@ In addition to the decorators described above, there are many other decorators p
 - [`@Index()`](https://typeorm.io/decorator-reference#index)
 - [`@Unique()`](https://typeorm.io/decorator-reference#unique)
 
-There is also another Vendure-specific decorator for representing monetary values specifically:
+There is also another Novara Commerce-specific decorator for representing monetary values specifically:
 
 - [`@Money()`](/reference/typescript-api/money/money-decorator): This works together with the [`MoneyStrategy`](/reference/typescript-api/money/money-strategy) to allow configurable control over how monetary values are stored in the database. For more information see the [Money & Currency guide](/core-concepts/money/#the-money-decorator).
 

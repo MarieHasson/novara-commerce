@@ -7,15 +7,15 @@
         "javascript",
         "extensions"
     ],
-    "author": "Michael Bromley <michael@michaelbromley.co.uk>",
-    "homepage": "https://www.vendure.io",
+    "author": "Marie Hasson <mariehasson15@gmail.com>",
+    "homepage": "https://github.com/MarieHasson/novara-commerce",
     "license": "GPL-3.0-or-later",
     "files": [
         "client",
         "compiler",
         "scaffold"
     ],
-    "funding": "https://github.com/sponsors/michaelbromley",
+    "funding": "https://github.com/sponsors/MarieHasson",
     "publishConfig": {
         "access": "public"
     },
@@ -23,7 +23,7 @@
     "types": "client/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vendurehq/vendure.git",
+        "url": "git+https://github.com/MarieHasson/novara-commerce.git",
         "directory": "packages/ui-devkit"
     },
     "scripts": {
@@ -34,7 +34,7 @@
         "lint": "eslint --fix ."
     },
     "bugs": {
-        "url": "https://github.com/vendurehq/vendure/issues"
+        "url": "https://github.com/MarieHasson/novara-commerce/issues"
     },
     "dependencies": {
         "@angular-devkit/build-angular": "^19.2.5",

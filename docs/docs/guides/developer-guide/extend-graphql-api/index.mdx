@@ -1,7 +1,7 @@
 ---
 title: "Extend the GraphQL API"
-metaTitle: "Extending the Vendure GraphQL API with Custom Queries and Mutations"
-metaDescription: "Add custom queries, mutations, and types to the Vendure Shop and Admin GraphQL APIs using schema extensions and resolvers in your plugins."
+metaTitle: "Extending the Novara Commerce GraphQL API with Custom Queries and Mutations"
+metaDescription: "Add custom queries, mutations, and types to the Novara Commerce Shop and Admin GraphQL APIs using schema extensions and resolvers in your plugins."
 ---
 
 Extension to the GraphQL API consists of two parts:
@@ -60,7 +60,7 @@ export const shopApiExtensions = gql`
 `;
 ```
 
-This defines a new query called `activeBanner` which takes a `locationId` string argument and returns a string. 
+This defines a new query called `activeBanner` which takes a `locationId` string argument and returns a string.
 
 :::tip
 `!` = non-nullable
@@ -197,7 +197,7 @@ class ProductReview extends VendureEntity {
 
     @ManyToOne(type => Product)
     product: Product;
-    
+
     @EntityId()
     productId: ID;
 
@@ -253,7 +253,7 @@ export class ReviewsPlugin {}
 
 ## Add fields to existing types
 
-Let's say you want to add a new field to the `ProductVariant` type to allow the storefront to display some indication of how long a particular product variant would take to deliver, based on data from some external service. 
+Let's say you want to add a new field to the `ProductVariant` type to allow the storefront to display some indication of how long a particular product variant would take to deliver, based on data from some external service.
 
 First we extend the `ProductVariant` GraphQL type:
 
@@ -313,7 +313,7 @@ export class DeliveryTimePlugin {}
 
 ## Override built-in resolvers
 
-It is also possible to override an existing built-in resolver function with one of your own. To do so, you need to define a resolver with the same name as the query or mutation you wish to override. When that query or mutation is then executed, your code, rather than the default Vendure resolver, will handle it.
+It is also possible to override an existing built-in resolver function with one of your own. To do so, you need to define a resolver with the same name as the query or mutation you wish to override. When that query or mutation is then executed, your code, rather than the default Novara Commerce resolver, will handle it.
 
 ```ts
 import { Args, Query, Mutation, Resolver } from '@nestjs/graphql';
@@ -363,7 +363,7 @@ export class FieldOverrideExampleResolver {
 
 When dealing with operations that return a GraphQL union type, there is an extra step needed.
 
-Union types are commonly returned from mutations in the Vendure APIs. For more detail on this see the section on [ErrorResults](/developer-guide/error-handling#expected-errors-errorresults). For example: 
+Union types are commonly returned from mutations in the Novara Commerce APIs. For more detail on this see the section on [ErrorResults](/developer-guide/error-handling#expected-errors-errorresults). For example:
 
 ```graphql
 type MyCustomErrorResult implements ErrorResult {
@@ -378,12 +378,12 @@ extend type Mutation {
 }
 ```
 
-In this example, the resolver which handles the `myCustomMutation` operation will be returning either an `Order` object or a `MyCustomErrorResult` object. The problem here is that the GraphQL server has no way of knowing which one it is at run-time. Luckily Apollo Server (on which Vendure is built) has a means to solve this:
+In this example, the resolver which handles the `myCustomMutation` operation will be returning either an `Order` object or a `MyCustomErrorResult` object. The problem here is that the GraphQL server has no way of knowing which one it is at run-time. Luckily Apollo Server (on which Novara Commerce is built) has a means to solve this:
 
 > To fully resolve a union, Apollo Server needs to specify which of the union's types is being returned. To achieve this, you define a `__resolveType` function for the union in your resolver map.
-> 
+>
 > The `__resolveType` function is responsible for determining an object's corresponding GraphQL type and returning the name of that type as a string.
-> 
+>
 -- <cite>Source: [Apollo Server docs](https://www.apollographql.com/docs/apollo-server/schema/unions-interfaces/#resolving-a-union)</cite>
 
 In order to implement a `__resolveType` function as part of your plugin, you need to create a dedicated Resolver class with a single field resolver method which will look like this:
@@ -394,10 +394,10 @@ import { Ctx, RequestContext, ProductVariant } from '@vendure/core';
 
 @Resolver('MyCustomMutationResult')
 export class MyCustomMutationResultResolver {
-  
+
   @ResolveField()
   __resolveType(value: any): string {
-    // If it has an "id" property we can assume it is an Order.  
+    // If it has an "id" property we can assume it is an Order.
     return value.hasOwnProperty('id') ? 'Order' : 'MyCustomErrorResult';
   }
 }
@@ -441,7 +441,7 @@ This is because Typescript entities do not correspond 1-to-1 with their GraphQL 
 
 ## Defining custom scalars
 
-By default, Vendure bundles `DateTime` and a `JSON` custom scalars (from the [graphql-scalars library](https://github.com/Urigo/graphql-scalars)). From v1.7.0, you can also define your own custom scalars for use in your schema extensions:
+By default, Novara Commerce bundles `DateTime` and a `JSON` custom scalars (from the [graphql-scalars library](https://github.com/Urigo/graphql-scalars)). From v1.7.0, you can also define your own custom scalars for use in your schema extensions:
 
 ```ts
 import { GraphQLScalarType} from 'graphql';
@@ -468,9 +468,9 @@ const FooScalar = new GraphQLScalarType({
       scalar Foo
       scalar EmailAddress
     `,
-    scalars: { 
+    scalars: {
       // The key must match the scalar name
-      // given in the schema  
+      // given in the schema
       Foo: FooScalar,
       EmailAddress: GraphQLEmailAddress,
     },

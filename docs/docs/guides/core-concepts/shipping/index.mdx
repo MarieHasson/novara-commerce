@@ -1,11 +1,11 @@
 ---
 title: "Shipping & Fulfillment"
-metaTitle: "Shipping Methods and Fulfillment in Vendure"
-metaDescription: "Overview of shipping methods, eligibility checkers, calculators, and fulfillments in Vendure."
+metaTitle: "Shipping Methods and Fulfillment in Novara Commerce"
+metaDescription: "Overview of shipping methods, eligibility checkers, calculators, and fulfillments in Novara Commerce."
 ---
 
-Shipping in Vendure is handled by [ShippingMethods](/reference/typescript-api/entities/shipping-method/). 
-A ShippingMethod is composed of a **checker** and a **calculator**. 
+Shipping in Novara Commerce is handled by [ShippingMethods](/reference/typescript-api/entities/shipping-method/).
+A ShippingMethod is composed of a **checker** and a **calculator**.
 
 * The [`ShippingEligibilityChecker`](/reference/typescript-api/shipping/shipping-eligibility-checker/) determines whether the order is eligible for the ShippingMethod. It can contain custom logic such as checking the total weight of the order, or whether the order is being shipped to a particular country.
 * The [`ShippingCalculator`](/reference/typescript-api/shipping/shipping-calculator/) calculates the cost of shipping the order. The calculation can be performed directly by the calculator itself, or it could call out to a third-party API to determine the cost.

@@ -1,7 +1,7 @@
 ---
 title: 'Navigation'
-metaTitle: 'Dashboard Navigation and Sidebar Configuration in Vendure'
-metaDescription: 'Configure sidebar navigation sections, menu items, ordering, placement, unauthenticated routes, and Lucide icons in the Vendure Dashboard.'
+metaTitle: 'Dashboard Navigation and Sidebar Configuration in Novara Commerce'
+metaDescription: 'Configure sidebar navigation sections, menu items, ordering, placement, unauthenticated routes, and Lucide icons in the Novara Commerce Dashboard.'
 ---
 
 The dashboard provides a flexible navigation system that allows you to add custom navigation sections and menu items. Navigation items are organized into sections that can be placed in either the "Platform" (top) or "Administration" (bottom) areas of the sidebar.
@@ -345,7 +345,7 @@ A `navSections` function runs only once, but it is handed the framework's own se
 
 `isVisible` predicates are ANDed. When `setNavVisibility` or `keepOnlyNavEntries` add a predicate to an entry that already has one, both are kept and both must pass. **Any plugin can hide an entry, and no plugin can force one to appear.**
 
-`navSections` functions are chained in registration order, which follows the order of the `plugins` array in your Vendure config. Each receives the previous one's output. Where two of them rebuild `sections` and disagree about the result, the later one wins.
+`navSections` functions are chained in registration order, which follows the order of the `plugins` array in your Novara Commerce config. Each receives the previous one's output. Where two of them rebuild `sections` and disagree about the result, the later one wins.
 
 Registration and modification happen at different times. Every `navSections` array entry and every route's `navMenuItem`, from every plugin, is collected before any `navSections` function runs. A `navSections` function therefore always sees the fully assembled menu, including entries contributed by plugins registered after it. Reordering the `plugins` array does not change which entries it can see.
 
@@ -356,7 +356,7 @@ Registration and modification happen at different times. Every `navSections` arr
 navSections: config => keepOnlyNavEntries(config, { sections: ['pos'] }, isFloorStaff),
 ```
 
-A whitelist is usually what you want for a locked-down role, since a plugin installed later cannot widen what the user sees. If you would rather stay open to other plugins, name their ids alongside your own, or hide the specific built-in sections with `setNavVisibility` instead of keeping only your own. The trade-off is that a section added by a future Vendure release would then be visible until you exclude it.
+A whitelist is usually what you want for a locked-down role, since a plugin installed later cannot widen what the user sees. If you would rather stay open to other plugins, name their ids alongside your own, or hide the specific built-in sections with `setNavVisibility` instead of keeping only your own. The trade-off is that a section added by a future Novara Commerce release would then be visible until you exclude it.
 
 ### This is presentation only, not authorization
 

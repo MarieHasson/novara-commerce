@@ -1,6 +1,6 @@
 ---
 title: 'Logging & Observability'
-metaTitle: 'MCP Server Logging & Observability | Vendure'
+metaTitle: 'MCP Server Logging & Observability | Novara Commerce'
 metaDescription: 'Record MCP tool calls with tiered capture, read them back in the dashboard and Admin API, grant operator permissions, and subscribe to events or export OpenTelemetry spans.'
 order: 7
 ---
@@ -66,7 +66,7 @@ deletes expired rows daily at 02:30. Override the schedule with `logging.retenti
 `logging.captureClientIp` is disabled by default because IP addresses are personal data. Enable it only if you
 need to identify or distinguish anonymous callers.
 
-Captured IP addresses follow the same `ttlDays` retention period as the rest of the log. If Vendure runs behind
+Captured IP addresses follow the same `ttlDays` retention period as the rest of the log. If Novara Commerce runs behind
 a reverse proxy, enable
 [`trustProxy`](/mcp-server/production/#configure-your-reverse-proxy) so the recorded IP is the actual
 client IP.
@@ -136,7 +136,7 @@ The hook's `args` are the arguments `callTool` received, so `args[3]` is the too
 
 `methodHooks` is a developer preview option of the telemetry plugin and may change in a future release.
 
-Vendure exports OpenTelemetry spans, but does not provide a metrics read-back API equivalent to `mcpStats`. If
+Novara Commerce exports OpenTelemetry spans, but does not provide a metrics read-back API equivalent to `mcpStats`. If
 you want MCP metrics in Grafana or another monitoring system, use the OpenTelemetry Collector's `spanmetrics`
 connector to derive metrics from the exported spans.
 
@@ -145,7 +145,7 @@ connector to derive metrics from the exported spans.
 | What you see | Cause | Fix |
 |---|---|---|
 | `input`/`output` are `null` on call-log rows | `logging.capture` is `'metadata'` (the default), or the reader lacks the `ReadCustomer` permission, or your `redact` function threw | Set `capture: 'full'`, grant `ReadCustomer`, or fix the `redact` function |
-| `clientIp` is missing or wrong on call-log rows | `captureClientIp` is off, the reader lacks `ReadCustomer`, or Vendure runs behind a proxy without `trustProxy` | Set `logging.captureClientIp: true`, grant `ReadCustomer`, or enable `trustProxy` |
+| `clientIp` is missing or wrong on call-log rows | `captureClientIp` is off, the reader lacks `ReadCustomer`, or Novara Commerce runs behind a proxy without `trustProxy` | Set `logging.captureClientIp: true`, grant `ReadCustomer`, or enable `trustProxy` |
 | Calls are missing from the logs | The request was rejected before the tool ran | Check authentication, permissions, argument validation, and rate limits |
 
 ## See also

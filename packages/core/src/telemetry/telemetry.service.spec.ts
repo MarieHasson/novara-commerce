@@ -226,7 +226,7 @@ describe('TelemetryService', () => {
                 await flushPromises();
 
                 expect(mockFetch).toHaveBeenCalledWith(
-                    'https://telemetry.vendure.io/api/v1/collect',
+                    'https://telemetry.example.com/api/v1/collect',
                     expect.objectContaining({
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
@@ -239,7 +239,7 @@ describe('TelemetryService', () => {
                 await flushPromises();
 
                 expect(mockFetch).toHaveBeenCalledWith(
-                    'https://telemetry.vendure.io/api/v1/collect',
+                    'https://telemetry.example.com/api/v1/collect',
                     expect.any(Object),
                 );
             });

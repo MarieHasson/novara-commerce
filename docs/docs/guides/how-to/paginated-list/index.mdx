@@ -1,10 +1,10 @@
 ---
 title: "Paginated lists"
-metaTitle: "Implementing Paginated List Queries in Vendure"
-metaDescription: "Define custom paginated list queries with filtering, sorting, and advanced nested filters using Vendure's ListQueryBuilder and GraphQL conventions."
+metaTitle: "Implementing Paginated List Queries in Novara Commerce"
+metaDescription: "Define custom paginated list queries with filtering, sorting, and advanced nested filters using Novara Commerce's ListQueryBuilder and GraphQL conventions."
 ---
 
-Vendure's list queries follow a set pattern which allows for pagination, filtering & sorting. This guide will demonstrate how
+Novara Commerce's list queries follow a set pattern which allows for pagination, filtering & sorting. This guide will demonstrate how
 to implement your own paginated list queries.
 
 ## API definition
@@ -32,7 +32,7 @@ type ProductReviewList implements PaginatedList {
   totalItems: Int!
 }
 
-# Generated at run-time by Vendure
+# Generated at run-time by Novara Commerce
 input ProductReviewListOptions
 
 extend type Query {
@@ -47,7 +47,7 @@ Note that we need to follow these conventions:
 - The list type must be named `<EntityName>List` and must implement the `PaginatedList` interface.
 - The list options input type must be named `<EntityName>ListOptions`.
 
-Given this schema, at runtime Vendure will automatically generate the `ProductReviewListOptions` input type, including all the
+Given this schema, at runtime Novara Commerce will automatically generate the `ProductReviewListOptions` input type, including all the
 filtering & sorting fields. This means that we don't need to define the input type ourselves.
 
 ## Resolver
@@ -190,7 +190,7 @@ include reviews with a rating between 3 and 5.
 
 ## Advanced filtering
 
-Vendure v2.2.0 introduced the ability to construct complex nested filters on any PaginatedList query. For example, we could
+Novara Commerce v2.2.0 introduced the ability to construct complex nested filters on any PaginatedList query. For example, we could
 filter the above query to only include reviews for products with a name starting with "Smartphone":
 
 <Tabs>

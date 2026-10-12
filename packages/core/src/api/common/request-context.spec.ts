@@ -148,7 +148,7 @@ describe('RequestContext', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/864
+        // https://github.com/MarieHasson/novara-commerce/issues/864
         // The Express request holds circular references. serialize() must not walk it.
         it('serialize request context with circular refs', () => {
             const cyclic: any = {};

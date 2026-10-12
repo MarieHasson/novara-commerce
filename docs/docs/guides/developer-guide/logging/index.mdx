@@ -1,12 +1,12 @@
 ---
 title: "Logging"
-metaTitle: "Logging Configuration in Vendure - Levels, Custom Loggers, and DB Queries"
-metaDescription: "Configure logging in Vendure with the DefaultLogger or a custom implementation. Covers log levels, database query logging, and production best practices."
+metaTitle: "Logging Configuration in Novara Commerce - Levels, Custom Loggers, and DB Queries"
+metaDescription: "Configure logging in Novara Commerce with the DefaultLogger or a custom implementation. Covers log levels, database query logging, and production best practices."
 ---
 
-Logging allows you to see what is happening inside the Vendure server. It is useful for debugging and for monitoring the health of the server in production.
+Logging allows you to see what is happening inside the Novara Commerce server. It is useful for debugging and for monitoring the health of the server in production.
 
-In Vendure, logging is configured using the `logger` property of the [VendureConfig](/reference/typescript-api/configuration/vendure-config/#logger) object. The logger must implement the [VendureLogger](/reference/typescript-api/logger/vendure-logger) interface.
+In Novara Commerce, logging is configured using the `logger` property of the [VendureConfig](/reference/typescript-api/configuration/vendure-config/#logger) object. The logger must implement the [VendureLogger](/reference/typescript-api/logger/vendure-logger) interface.
 
 :::info
 To implement a custom logger, see the [Implementing a custom logger](/reference/typescript-api/logger/#implementing-a-custom-logger) guide.
@@ -14,7 +14,7 @@ To implement a custom logger, see the [Implementing a custom logger](/reference/
 
 ## Log levels
 
-Vendure uses 5 log levels, in order of increasing severity:
+Novara Commerce uses 5 log levels, in order of increasing severity:
 
 | Level     | Description                                                                                              |
 |-----------|----------------------------------------------------------------------------------------------------------|
@@ -27,7 +27,7 @@ Vendure uses 5 log levels, in order of increasing severity:
 
 ## DefaultLogger
 
-Vendure ships with a [DefaultLogger](/reference/typescript-api/logger/default-logger) which logs to the console (process.stdout). It can be configured with the desired log level:
+Novara Commerce ships with a [DefaultLogger](/reference/typescript-api/logger/default-logger) which logs to the console (process.stdout). It can be configured with the desired log level:
 
 ```ts title="src/vendure-config.ts"
 import { DefaultLogger, VendureConfig } from '@vendure/core';
@@ -51,7 +51,7 @@ const config: VendureConfig = {
     dbConnectionOptions: {
         // ... etc
         logging: true,
-        
+
         // You can also specify which types of DB events to log:
         // logging: ['error', 'warn', 'schema', 'query', 'info', 'log'],
     },
@@ -62,7 +62,7 @@ More information about the `logging` option can be found in the [TypeORM logging
 
 ## Logging in your own plugins
 
-When you extend Vendure by creating your own plugins, it's a good idea to log useful information about what your plugin is doing. To do this, you need to import the [Logger](/reference/typescript-api/logger/) class from `@vendure/core` and use it in your plugin:
+When you extend Novara Commerce by creating your own plugins, it's a good idea to log useful information about what your plugin is doing. To do this, you need to import the [Logger](/reference/typescript-api/logger/) class from `@vendure/core` and use it in your plugin:
 
 ```ts title="src/plugins/my-plugin/my.plugin.ts"
 import { Logger } from '@vendure/core';

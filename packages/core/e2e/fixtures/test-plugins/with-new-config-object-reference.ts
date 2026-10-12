@@ -1,7 +1,7 @@
 import { VendurePlugin } from '@vendure/core';
 
 /**
- * https://github.com/vendurehq/vendure/issues/2906
+ * https://github.com/MarieHasson/novara-commerce/issues/2906
  */
 @VendurePlugin({
     configuration: config => {

@@ -1,6 +1,6 @@
-# Vendure Dev Server
+# Novara Commerce Dev Server
 
-This package is not published to npm. It is used in development of the Vendure server and plugins.
+This package is not published to npm. It is used in development of the Novara Commerce server and plugins.
 
 ## Running
 
@@ -44,7 +44,7 @@ worktree-specific API hostname, while Docker resources and database data remain 
 Before starting any long-running process, `dev` builds the package entry points required by the API
 and Dashboard Vite server. It then supervises:
 
-- the Vendure API server;
+- the Novara Commerce API server;
 - the Dashboard Vite development server;
 - the `@vendure/common` and `@vendure/core` watchers;
 - the Dashboard Vite-plugin and backend-plugin watchers.
@@ -162,7 +162,7 @@ from multiple worktrees simultaneously.
 
 ## Populating data
 
-Test data can be populated by running the `populate` script. This uses the same sample data as is used by the Vendure CLI when running `init`, albeit with the additional step of populating some sample customer & address data too.
+Test data can be populated by running the `populate` script. This uses the same sample data as is used by the Novara Commerce CLI when running `init`, albeit with the additional step of populating some sample customer & address data too.
 
 Specify the database as above to populate that database:
 
@@ -183,7 +183,7 @@ the [temporary admin ui `tsconfig.json`](./custom-admin-ui/tsconfig.json) file:
 
 ## Load testing
 
-This package also contains scripts for load testing the Vendure server. The load testing infrastructure and scripts are located in the [`./load-testing`](./load-testing) directory.
+This package also contains scripts for load testing the Novara Commerce server. The load testing infrastructure and scripts are located in the [`./load-testing`](./load-testing) directory.
 
 Load testing is done with [k6](https://docs.k6.io/), and to run them you will need k6 installed and (in Windows) available in your PATH environment variable so that it can be run with the command `k6`.
 
@@ -208,15 +208,15 @@ bun run load-test:1k deep-query.js
 The following queries can be used when running load tests against postgres to analyze the queries:
 
 ```sql
-SELECT 
+SELECT
   dbid,
-  (total_time / 1000 / 60) as total, 
-  (total_time/calls) as avg, 
+  (total_time / 1000 / 60) as total,
+  (total_time/calls) as avg,
   calls,
-  query 
-FROM pg_stat_statements 
+  query
+FROM pg_stat_statements
 WHERE dbid = <db_id>
-ORDER BY total DESC 
+ORDER BY total DESC
 LIMIT 100;
 
 -- SELECT pg_stat_statements_reset();

@@ -1,10 +1,10 @@
 ---
 title: 'CLI'
-metaTitle: "Vendure CLI - Automate Plugin, Entity, and API Scaffolding"
-metaDescription: "Use the Vendure CLI to scaffold features, diagnose projects, and link a local project to Vendure Console."
+metaTitle: "Novara Commerce CLI - Automate Plugin, Entity, and API Scaffolding"
+metaDescription: "Use the Novara Commerce CLI to scaffold features, diagnose projects, and link a local project to Novara Commerce Console."
 ---
 
-The Vendure CLI is a command-line tool for boosting your productivity as a developer by automating common tasks
+The Novara Commerce CLI is a command-line tool for boosting your productivity as a developer by automating common tasks
 such as creating new plugins, entities, API extensions and more.
 
 It is much more than just a scaffolding tool - it is able to analyze your project and intelligently modify your existing
@@ -13,7 +13,7 @@ codebase to integrate new functionality.
 ## Installation
 
 :::info
-The Vendure CLI comes installed with a new Vendure project by default from v2.2.0+
+The Novara Commerce CLI comes installed with a new Novara Commerce project by default from v2.2.0+
 :::
 
 To manually install the CLI, run:
@@ -24,7 +24,7 @@ npm install -D @vendure/cli
 
 ## Interactive vs Non-Interactive Mode
 
-The Vendure CLI supports both **interactive** and **non-interactive** modes:
+The Novara Commerce CLI supports both **interactive** and **non-interactive** modes:
 
 - **Interactive mode**: Provides guided prompts and menus for easy use during development
 - **Non-interactive mode**: Allows direct command execution with arguments and options, perfect for automation, CI/CD, and AI agents
@@ -73,7 +73,7 @@ to the project directory.
 
 | Option | Description |
 | --- | --- |
-| `--project <dir>` | Select the Vendure project directory before discovery. |
+| `--project <dir>` | Select the Novara Commerce project directory before discovery. |
 | `--server-entry <path>` | Server entry file. Default: `./src/index.ts`. |
 | `--worker-entry <path>` | Worker entry file. Default: `./src/index-worker.ts`. |
 | `--vite-config <path>` | Dashboard Vite config file. Default: Vite config discovery. |
@@ -83,7 +83,7 @@ to the project directory.
 
 ## The Add Command
 
-The `add` command is used to add new entities, resolvers, services, plugins, and more to your Vendure project.
+The `add` command is used to add new entities, resolvers, services, plugins, and more to your Novara Commerce project.
 
 ### Interactive Mode
 
@@ -147,7 +147,7 @@ npx vendure add -p MyPlugin --config ./custom-vendure.config.ts
 | `-c` | `--codegen [plugin]`       | Add GraphQL codegen configuration  | `vendure add -c MyPlugin`                                                |
 | `-a` | `--api-extension [plugin]` | Add API extension scaffold         | `vendure add -a MyPlugin --queryName getName --mutationName setName`     |
 | `-d` | `--dashboard [plugin]`     | Add Dashboard extensions setup     | `vendure add -d MyPlugin`                                                |
-|      | `--config <path>`          | Specify custom Vendure config file | `--config ./custom-config.ts`                                            |
+|      | `--config <path>`          | Specify custom Novara Commerce config file | `--config ./custom-config.ts`                                            |
 
 #### Sub-options for specific commands
 
@@ -178,7 +178,7 @@ npx vendure add -p MyPlugin --config ./custom-vendure.config.ts
 
 ## The Migrate Command
 
-The `migrate` command is used to generate and manage [database migrations](/developer-guide/migrations) for your Vendure project.
+The `migrate` command is used to generate and manage [database migrations](/developer-guide/migrations) for your Novara Commerce project.
 
 ### Interactive Mode
 
@@ -224,7 +224,7 @@ npx vendure migrate -g initial --from-empty
 ## The Schema Command
 
 :::info
-The `schema` command was added in Vendure v3.5
+The `schema` command was added in Novara Commerce v3.5
 :::
 
 The `schema` command allows you to generate a schema file for your Admin or Shop APIs, in either the GraphQL schema definition language (SDL)
@@ -266,10 +266,10 @@ npx vendure schema --api shop --format json
 ## The Doctor Command
 
 :::info
-The `doctor` command was added in Vendure v3.7
+The `doctor` command was added in Novara Commerce v3.7
 :::
 
-The `doctor` command runs a series of diagnostic checks against your Vendure project and produces an
+The `doctor` command runs a series of diagnostic checks against your Novara Commerce project and produces an
 actionable report. It is useful for debugging a misbehaving project, verifying an upgrade, onboarding
 a new machine, or as a guard rail in CI.
 
@@ -285,7 +285,7 @@ By default, the following checks run in order:
 
 | Check            | What it verifies                                                                                                                                                |
 | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Project**      | Vendure project structure, config file discovery, package manager detection, lockfile consistency, and monorepo support.                                       |
+| **Project**      | Novara Commerce project structure, config file discovery, package manager detection, lockfile consistency, and monorepo support.                                       |
 | **Dependencies** | `@vendure/*` packages are on matching versions, no duplicate singleton dependencies (`graphql`, `typeorm`, `@nestjs/core`, `@nestjs/common`, `@apollo/server`), and that a database driver is installed. |
 | **Config**       | Your config loads and validates via `preBootstrapConfig()` (custom fields, entities), and that plugin compatibility ranges are satisfied.                       |
 | **Schema**       | The Admin API and Shop API GraphQL schemas build successfully, so all plugin extensions and custom field types compile.                                         |
@@ -302,11 +302,11 @@ they all depend on a successfully loaded config.
 ### Example output
 
 ```text
-Vendure Doctor
+Novara Commerce Doctor
 
-Project         pass  Vendure config found at src/vendure-config.ts
+Project         pass  Novara Commerce config found at src/vendure-config.ts
 Dependencies    pass  All dependency checks passed
-Config          pass  Vendure config loaded and validated successfully
+Config          pass  Novara Commerce config loaded and validated successfully
 Schema          pass  Admin and Shop schemas generated successfully
 Database        pass  Successfully connected to postgres database
 
@@ -353,7 +353,7 @@ npx vendure doctor --strict --format json
 
 | Long Form           | Description                                                                            | Example                                       |
 | ------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `--config <path>`   | Specify the path to a custom Vendure config file                                       | `vendure doctor --config ./src/my-config.ts`  |
+| `--config <path>`   | Specify the path to a custom Novara Commerce config file                                       | `vendure doctor --config ./src/my-config.ts`  |
 | `--check <names...>` | Run specific checks only (`project`, `dependencies`, `config`, `schema`, `database`)  | `vendure doctor --check config schema`        |
 | `--profile <name>`  | Run profile-specific checks (`production`)                                              | `vendure doctor --profile production`         |
 | `--format <type>`   | Output format: `text` (default) or `json`                                              | `vendure doctor --format json`                |
@@ -361,8 +361,8 @@ npx vendure doctor --strict --format json
 
 ## The Auth Command
 
-The `auth` command signs you in to your Vendure account. `vendure console link`, Vendure Cloud and other CLI features
-share this one login. It does not need a Vendure project, so you can run it from any directory:
+The `auth` command signs you in to your Novara Commerce account. `vendure console link`, Novara Commerce Cloud and other CLI features
+share this one login. It does not need a Novara Commerce project, so you can run it from any directory:
 
 ```bash
 npx vendure auth login
@@ -373,14 +373,14 @@ than one organization, you choose one in the browser. Nothing on this machine ne
 another device.
 
 To choose the organization on the command line instead, for example in a script or on a remote machine, pass its
-Account identifier (in Vendure Console under **Settings**) or its name. Names match ignoring case:
+Account identifier (in Novara Commerce Console under **Settings**) or its name. Names match ignoring case:
 
 ```bash
 npx vendure auth login --organization 79e629da-...
 npx vendure auth login --organization "Bromley Art Supplies"
 ```
 
-The CLI looks the organization up in Vendure Console after you sign in. It refuses a name that more than one of your
+The CLI looks the organization up in Novara Commerce Console after you sign in. It refuses a name that more than one of your
 organizations share, and lists their Account identifiers so you can pick one. To change organization later, run
 `vendure auth login --organization` again.
 
@@ -397,23 +397,23 @@ code 1 when nobody is signed in.
 
 The login is stored in `auth.json` in the CLI configuration directory (`~/.config/vendure` by default, or
 `VENDURE_CLI_CONFIG_DIR`) and is readable only by your user. The CLI renews the access token automatically.
-`vendure auth logout` asks Vendure Console to end the session, then removes the login from this machine. This ends
+`vendure auth logout` asks Novara Commerce Console to end the session, then removes the login from this machine. This ends
 the login for `vendure console` too. Once Console has ended the session, a copy of the login stops working as well. When Console cannot be reached, the command still
 removes the login and warns that a copy keeps working until it expires.
 
-The CLI signs in to production Vendure Console by default. It reads the WorkOS client to sign in with from that
+The CLI signs in to production Novara Commerce Console by default. It reads the WorkOS client to sign in with from that
 Console, so a login is always one the Console accepts. To work against staging, set
-`VENDURE_CONSOLE_API_URL=https://staging.api.vendure.io`. `vendure console link` reads the same variable but also needs
-`VENDURE_CONSOLE_APP_URL=https://staging.console.vendure.io`, so set both when you use both commands. A login stored
+`VENDURE_CONSOLE_API_URL=https://example.com`. `vendure console link` reads the same variable but also needs
+`VENDURE_CONSOLE_APP_URL=https://example.com`, so set both when you use both commands. A login stored
 for one Console is not used with another.
 
-The CLI sends your access token only to the official Vendure Console API of the selected environment. During local
+The CLI sends your access token only to the official Novara Commerce Console API of the selected environment. During local
 development, `VENDURE_CONSOLE_API_URL` can point at a loopback Console API. Any other value is refused.
 
 ## The Console Command
 
-The `console` command links a local Vendure application to a Project in Vendure Console. Run the command from a
-Vendure project directory:
+The `console` command links a local Novara Commerce application to a Project in Novara Commerce Console. Run the command from a
+Novara Commerce project directory:
 
 ```bash
 npx vendure console link
@@ -423,7 +423,7 @@ The command uses the login from [`vendure auth login`](#the-auth-command). When 
 selected Console, the command signs you in first, the same way: it shows a one-time code and opens your browser. If
 the browser cannot open, the CLI prints the URL so that you can open it on any device.
 
-The CLI reads your Customer Accounts from Vendure Console. With one Customer Account, it uses that account. With
+The CLI reads your Customer Accounts from Novara Commerce Console. With one Customer Account, it uses that account. With
 more than one, you choose the account in the terminal, also when the sign-in already scoped the login to one of them.
 The account the login is scoped to is the first choice. Without a terminal and with more than one account, the command
 keeps the account the login is scoped to, prints its name, and shows how to pass another one with `--organization`. If
@@ -433,10 +433,10 @@ account, so the next command with `--organization` or a single account does not 
 
 The CLI then lists the active Projects of the organization you are signed in to. With one Project, it links that
 Project. With more than one, you choose the Project in the terminal. Console records the Project Link, and the CLI
-writes `.vendure/project.json` in the resolved Vendure project. Your role in the organization must allow you to
+writes `.vendure/project.json` in the resolved Novara Commerce project. Your role in the organization must allow you to
 develop the Project.
 
-To link a Project of a different organization, pass its Account identifier (in Vendure Console under **Settings**) or
+To link a Project of a different organization, pass its Account identifier (in Novara Commerce Console under **Settings**) or
 its name:
 
 ```bash
@@ -448,28 +448,28 @@ replaces the stored login, the same as `vendure auth login --organization`.
 
 The CLI sends the access token only to the selected Console API, and never prints it.
 
-If the organization has no active Project, the command stops and links nothing. Create a Project in Vendure Console
-at [console.vendure.io](https://console.vendure.io). You can create it without a plan or trial. Then run
+If the organization has no active Project, the command stops and links nothing. Create a Project in Novara Commerce Console
+at [example.com](https://example.com). You can create it without a plan or trial. Then run
 `vendure console link` again.
 
-### Use Vendure development workflows in your coding assistant
+### Use Novara Commerce development workflows in your coding assistant
 
-A linked Project gives you Vendure development workflows and patterns through your coding assistant. After a
+A linked Project gives you Novara Commerce development workflows and patterns through your coding assistant. After a
 successful link, the CLI prints these steps:
 
-1. Add `https://docs.vendure.io/mcp` as an MCP server in your coding assistant.
-2. The first time you use a development tool, the assistant asks you to sign in with Vendure Console. Sign in and
+1. Add `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp` as an MCP server in your coding assistant.
+2. The first time you use a development tool, the assistant asks you to sign in with Novara Commerce Console. Sign in and
    select the Account that owns the linked Project.
 
-The CLI also prints a link to the setup guide at [docs.vendure.io/how-to-use](https://docs.vendure.io/how-to-use).
+The CLI also prints a link to the setup guide at [example.com/how-to-use](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/how-to-use).
 For every Console other than the production Console, the link goes to the staging docs.
 
 Linking does not configure or sign in to any coding assistant. You add the server to each assistant yourself. The
-same URL also gives public documentation without sign-in. Vendure Console decides access when the assistant asks for
+same URL also gives public documentation without sign-in. Novara Commerce Console decides access when the assistant asks for
 a development tool. Members of the Account who can develop the Project get access after one successful link. They do
 not have to link the Project themselves, and they do not need a plan or trial. If you are signed in but have no
 access, the assistant tells you to run `vendure console link` and names
-[console.vendure.io](https://console.vendure.io).
+[example.com](https://example.com).
 
 The CLI prints these steps only in human output. With `--json` or `--non-interactive`, the output does not change.
 
@@ -521,7 +521,7 @@ npx vendure console status
 ```
 
 The output includes the Account, Project, Console origins, schema version, and protocol version. This command reads
-local state only. It does not contact Vendure Console and does not sign you in. Use `vendure auth status` to see who is
+local state only. It does not contact Novara Commerce Console and does not sign you in. Use `vendure auth status` to see who is
 signed in.
 
 ### Unlink a project
@@ -538,7 +538,7 @@ does not revoke server-side credentials. Your CLI login stays. Run `vendure auth
 ### Project selection and confirmation
 
 The CLI uses the nearest project that has a direct `@vendure/core` dependency. From a monorepo root, it uses the only
-Vendure project under `packages`, `apps`, `libs`, `services`, or `modules`. If more than one project exists, select one:
+Novara Commerce project under `packages`, `apps`, `libs`, `services`, or `modules`. If more than one project exists, select one:
 
 ```bash
 npx vendure console status --project ./apps/server
@@ -579,8 +579,8 @@ The manifest contains Project Link identity metadata and Console endpoint metada
     "account": { "id": "<uuid>", "name": "<display name>" },
     "link": { "id": "<uuid>", "protocolVersion": 1 },
     "console": {
-        "appOrigin": "https://console.vendure.io",
-        "apiOrigin": "https://api.vendure.io"
+        "appOrigin": "https://example.com",
+        "apiOrigin": "https://example.com"
     }
 }
 ```
@@ -615,7 +615,7 @@ The original ancestor rule stays unchanged, and other projects remain ignored. T
 ### Console environments
 
 The command uses the Console recorded in `.vendure/project.json`. A manifest without `console` and an unlinked project use
-`https://console.vendure.io` and `https://api.vendure.io`. To use a local Console environment, set both variables:
+`https://example.com` and `https://example.com`. To use a local Console environment, set both variables:
 
 ```bash
 VENDURE_CONSOLE_APP_URL=http://localhost:3000 \
@@ -640,13 +640,13 @@ staging pair, or a loopback pair. It rejects other hosts.
 
 ## Working in Monorepos
 
-The Vendure CLI automatically supports monorepo structures where packages have their own `tsconfig.json` files that extend a shared base configuration.
+The Novara Commerce CLI automatically supports monorepo structures where packages have their own `tsconfig.json` files that extend a shared base configuration.
 
 ### Requirements
 
 For the CLI to work correctly in a monorepo, ensure that:
 
-1. **Each package containing a Vendure config has its own `tsconfig.json`** that extends the root config
+1. **Each package containing a Novara Commerce config has its own `tsconfig.json`** that extends the root config
 2. **Path mappings are defined in your root `tsconfig.json`**
 
 ### Example Setup
@@ -695,7 +695,7 @@ my-monorepo/
 
 When you run CLI commands, it:
 
-1. Locates the nearest `tsconfig.json` by walking up from your Vendure config file
+1. Locates the nearest `tsconfig.json` by walking up from your Novara Commerce config file
 2. Resolves the `extends` chain to merge all configurations
 3. Registers path mappings so imports like `@my-org/shared` resolve correctly
 
@@ -773,7 +773,7 @@ Options from @example/vendure-cli-plugin:
   --token <token>           API token
 
 Commands:
-  add [options]             Add a feature to your Vendure project
+  add [options]             Add a feature to your Novara Commerce project
   ...
 
 Commands from @example/vendure-cli-plugin:
@@ -922,7 +922,7 @@ export default defineCliPlugin({
     extendCommands: [
         {
             command: 'dev',
-            description: 'Run Vendure in development mode with linked credentials',
+            description: 'Run Novara Commerce in development mode with linked credentials',
             options: [{ long: '--rotate-credential', description: 'Replace the stored credential' }],
             decorate:
                 ({ command, next }) =>
@@ -1037,7 +1037,7 @@ The context contains `projectRoot`, `manifest`, `manifestPath`, `endpoints`,
 objects. A session is also copied when the hook requested one and a CLI login
 exists.
 
-Wrap a hook with `requiresSession: true` when it calls Vendure Console as the
+Wrap a hook with `requiresSession: true` when it calls Novara Commerce Console as the
 user. `vendure console link` then makes sure a [CLI login](#using-the-cli-login)
 exists before the hook runs. Read the access token with `getAccessToken()`,
 pointed at the Console of the link:
@@ -1124,7 +1124,7 @@ manifest unless the matching environment variables are set.
 
 ### Using the CLI login
 
-A plugin that calls a Vendure service on the user's behalf reads the login made with `vendure auth login`. It never
+A plugin that calls a Novara Commerce service on the user's behalf reads the login made with `vendure auth login`. It never
 reads `auth.json` directly. `vendure console link` uses the same login. `getAccessToken()` returns a valid access token, renewing it first when it is about to
 expire, or `undefined` when nobody is signed in:
 
@@ -1153,7 +1153,7 @@ login in place and is usually transient, such as a network failure. Its message 
 not writable. Nothing was spent, so the command can be retried.
 
 `readAuthStatus()` describes the login, including the organization it is scoped to, without its tokens.
-`listOrganizations()` returns the Vendure Console organizations the user is an active member of. To change the
+`listOrganizations()` returns the Novara Commerce Console organizations the user is an active member of. To change the
 organization, ask the user to run `vendure auth login --organization`.
 
 ### Checking what the installed CLI supports
@@ -1252,7 +1252,7 @@ argument is mandatory.
 
 ### Commands that need a project
 
-A command that reads or writes a Vendure project sets `requiresProject: true`.
+A command that reads or writes a Novara Commerce project sets `requiresProject: true`.
 The CLI then refuses to run it outside a project, rather than letting it fail
 part way through — after a stack of prompts, or on a `require` of a package that
 only a project installs:
@@ -1279,8 +1279,8 @@ Running it from a directory that is not in a project writes to stderr and exits
 with code 1, without the action running:
 
 ```text
-vendure deploy must be run from a Vendure project directory.
-No package.json with a Vendure dependency was found in /home/user or any parent directory.
+vendure deploy must be run from a Novara Commerce project directory.
+No package.json with a Novara Commerce dependency was found in /home/user or any parent directory.
 ```
 
 Declared on a command that has subcommands, or on a group, it applies to every
@@ -1290,7 +1290,7 @@ which is how a group mixes commands that need a project with ones that do not:
 ```ts
 {
     name: 'cloud',
-    description: 'Vendure Cloud commands',
+    description: 'Novara Commerce Cloud commands',
     requiresProject: true,
     subcommands: [
         // Needs a project, inherited from the group.
@@ -1306,7 +1306,7 @@ which can be run from any directory on the machine.
 
 The CLI looks for a `package.json` with a dependency in the `@vendure/` scope, in
 the current directory or any parent, so the check passes from a subdirectory of a
-project. It answers one question — is there a Vendure project here — and a
+project. It answers one question — is there a Novara Commerce project here — and a
 command whose needs are narrower still checks for itself and reports its own
 error: `migrate` wants a config file it can resolve, `add` wants a tsconfig.
 
@@ -1320,14 +1320,14 @@ Commands:
   deploy      Deploy this project *
   whoami      Show the current user
 
-  * Requires a Vendure project. You are not in one.
+  * Requires a Novara Commerce project. You are not in one.
 ```
 
 Inside a project nothing is marked and no legend is added.
 
 Set it only where running outside a project cannot produce a useful result.
 The built-in `doctor` command, for instance, does **not** set it: reporting
-that a directory is not a Vendure project is one of the things it checks, so
+that a directory is not a Novara Commerce project is one of the things it checks, so
 refusing to run would remove the answer in the case that most needs it.
 
 ### Collisions
@@ -1494,7 +1494,7 @@ written against. Check for the capabilities you rely on — see
 
 Built-in commands that read a project — `migrate`, `schema`, `doctor` — load
 `@vendure/core` from the project rather than from the CLI's own installation, so
-a global CLI runs each project against that project's own version of Vendure.
+a global CLI runs each project against that project's own version of Novara Commerce.
 
 ## Getting Help
 

@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-// Same bug class as https://github.com/vendurehq/vendure/issues/4920:
+// Same bug class as https://github.com/MarieHasson/novara-commerce/issues/4920:
 //
 // Express types are part of this plugin's PUBLISHED `.d.ts` surface — e.g.
 // `GetImageTransformParametersArgs.req` (express `Request`), the storage-strategy

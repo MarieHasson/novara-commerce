@@ -531,7 +531,7 @@ describe('Default search plugin', () => {
 
         it('matches partial search term', () => testMatchPartialSearchTerm(testProductsShop));
 
-        // https://github.com/vendurehq/vendure/security/advisories/GHSA-9pp3-53p2-ww9v
+        // https://github.com/MarieHasson/novara-commerce/security/advisories/GHSA-9pp3-53p2-ww9v
         it('does not error when search term contains special characters', async () => {
             // A single quote in the search term should not cause a tsquery
             // syntax error on Postgres. On other DBs this is a no-op.
@@ -607,7 +607,7 @@ describe('Default search plugin', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1236
+        // https://github.com/MarieHasson/novara-commerce/issues/1236
         it('returns correct facetValues when not grouped by product, with search term', async () => {
             const result = await shopClient.query(searchFacetValuesDocument, {
                 input: {
@@ -1202,7 +1202,7 @@ describe('Default search plugin', () => {
                 ]);
             });
 
-            // https://github.com/vendurehq/vendure/issues/295
+            // https://github.com/MarieHasson/novara-commerce/issues/295
             it('enabled status survives reindex', async () => {
                 await adminClient.query(reindexDocument);
 
@@ -1215,7 +1215,7 @@ describe('Default search plugin', () => {
                 ]);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1482
+            // https://github.com/MarieHasson/novara-commerce/issues/1482
             it('price range omits disabled variant', async () => {
                 const result1 = await shopClient.query(searchGetPricesShopDocument, {
                     input: {
@@ -1250,7 +1250,7 @@ describe('Default search plugin', () => {
                 ]);
             });
 
-            // https://github.com/vendurehq/vendure/issues/745
+            // https://github.com/MarieHasson/novara-commerce/issues/745
             it('very long Product descriptions no not cause indexing to fail', async () => {
                 // We generate this long string out of random chars because Postgres uses compression
                 // when storing the string value, so e.g. a long series of a single character will not
@@ -1294,7 +1294,7 @@ describe('Default search plugin', () => {
             });
         });
 
-        // https://github.com/vendurehq/vendure/issues/609
+        // https://github.com/MarieHasson/novara-commerce/issues/609
         describe('Synthetic index items', () => {
             let createdProductId: string;
 
@@ -1361,7 +1361,7 @@ describe('Default search plugin', () => {
             });
         });
 
-        // https://github.com/vendurehq/vendure/issues/4805
+        // https://github.com/MarieHasson/novara-commerce/issues/4805
         describe('duplicate index writes', () => {
             async function getFailedJobsCount(): Promise<number> {
                 const { jobs } = await adminClient.query(getRunningJobsDocument, {
@@ -1549,7 +1549,7 @@ describe('Default search plugin', () => {
                 expect(searchGrouped.items.map(i => i.productName)).toEqual(['xyz']);
             });
 
-            // https://github.com/vendurehq/vendure/issues/896
+            // https://github.com/MarieHasson/novara-commerce/issues/896
             it('removing from channel with multiple languages', async () => {
                 adminClient.setChannelToken(E2E_DEFAULT_CHANNEL_TOKEN);
 
@@ -1834,8 +1834,8 @@ describe('Default search plugin', () => {
                     );
                 }
 
-                // https://github.com/vendurehq/vendure/issues/1752
-                // https://github.com/vendurehq/vendure/issues/1746
+                // https://github.com/MarieHasson/novara-commerce/issues/1752
+                // https://github.com/MarieHasson/novara-commerce/issues/1746
                 it('fallbacks to default language en', async () => {
                     const { search } = await searchInLanguage(LanguageCode.af);
 
@@ -1925,7 +1925,7 @@ describe('Default search plugin', () => {
             });
         });
 
-        // https://github.com/vendurehq/vendure/issues/1789
+        // https://github.com/MarieHasson/novara-commerce/issues/1789
         describe('input escaping', () => {
             function search(term: string) {
                 return adminClient.query(
@@ -1962,7 +1962,7 @@ describe('Default search plugin', () => {
         });
     });
 
-    // https://github.com/vendurehq/community-plugins/issues/1
+    // https://github.com/MarieHasson/community-plugins/issues/1
     describe('multi-channel productInStock cache', () => {
         const STOCK_CHANNEL_TOKEN = 'stock-test-channel-token';
         let stockTestChannelId: string;

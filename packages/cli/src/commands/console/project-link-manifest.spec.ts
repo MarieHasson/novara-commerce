@@ -29,8 +29,8 @@ describe('Project Link Manifest', () => {
     it('parses a manifest without Console origins and resolves it to production', () => {
         expect(parseProjectLinkManifest(structuredClone(manifest), LINK_ID)).toEqual(manifest);
         expect(consoleOriginsForManifest(manifest)).toEqual({
-            appOrigin: 'https://console.vendure.io',
-            apiOrigin: 'https://api.vendure.io',
+            appOrigin: 'https://console.example.com',
+            apiOrigin: 'https://api.example.com',
         });
 
         const root = vendureProject();
@@ -41,8 +41,8 @@ describe('Project Link Manifest', () => {
         expect(read).toMatchObject({ kind: 'valid', manifest });
         if (read.kind === 'valid') {
             expect(consoleOriginsForManifest(read.manifest)).toEqual({
-                appOrigin: 'https://console.vendure.io',
-                apiOrigin: 'https://api.vendure.io',
+                appOrigin: 'https://console.example.com',
+                apiOrigin: 'https://api.example.com',
             });
         }
     });
@@ -52,8 +52,8 @@ describe('Project Link Manifest', () => {
             ...manifest,
             schemaVersion: 1,
             console: {
-                appOrigin: 'https://staging.console.vendure.io',
-                apiOrigin: 'https://staging.api.vendure.io',
+                appOrigin: 'https://staging.console.example.com',
+                apiOrigin: 'https://staging.api.example.com',
             },
         };
 
@@ -86,22 +86,22 @@ describe('Project Link Manifest', () => {
         [
             'a path',
             {
-                appOrigin: 'https://console.vendure.io/link',
-                apiOrigin: 'https://api.vendure.io',
+                appOrigin: 'https://console.example.com/link',
+                apiOrigin: 'https://api.example.com',
             },
         ],
         [
             'a query',
             {
-                appOrigin: 'https://console.vendure.io',
-                apiOrigin: 'https://api.vendure.io?target=staging',
+                appOrigin: 'https://console.example.com',
+                apiOrigin: 'https://api.example.com?target=staging',
             },
         ],
         [
             'credentials',
             {
-                appOrigin: 'https://user:secret@console.vendure.io',
-                apiOrigin: 'https://api.vendure.io',
+                appOrigin: 'https://user:secret@console.example.com',
+                apiOrigin: 'https://api.example.com',
             },
         ],
         [

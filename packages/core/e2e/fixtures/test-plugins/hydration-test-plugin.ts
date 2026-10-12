@@ -54,7 +54,7 @@ export class TestAdminPluginResolver {
         return product;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1153
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1153
     @Query()
     async hydrateProductAsset(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const product = await this.connection.getRepository(ctx, Product).findOne({ where: { id: args.id } });
@@ -65,7 +65,7 @@ export class TestAdminPluginResolver {
         return product;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1161
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1161
     @Query()
     async hydrateProductVariant(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const [variant] = await this.productVariantService.findByIds(ctx, [args.id]);
@@ -75,7 +75,7 @@ export class TestAdminPluginResolver {
         return variant;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1324
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1324
     @Query()
     async hydrateProductWithNoFacets(@Ctx() ctx: RequestContext) {
         const product = await this.productService.create(ctx, {
@@ -95,7 +95,7 @@ export class TestAdminPluginResolver {
         return product;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1172
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1172
     @Query()
     async hydrateOrder(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const order = await this.orderService.findOne(ctx, args.id);
@@ -105,7 +105,7 @@ export class TestAdminPluginResolver {
         return order;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1229
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1229
     @Query()
     async hydrateOrderReturnQuantities(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const order = await this.orderService.findOne(ctx, args.id);
@@ -120,7 +120,7 @@ export class TestAdminPluginResolver {
         return order?.lines.map(line => line.quantity);
     }
 
-    // Test case for https://github.com/vendurehq/vendure/issues/1284
+    // Test case for https://github.com/MarieHasson/novara-commerce/issues/1284
     @Query()
     async hydrateChannel(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const channel = await this.channelService.findOne(ctx, args.id);
@@ -167,7 +167,7 @@ export class TestAdminPluginResolver {
         return channel;
     }
 
-    // Test case for https://github.com/vendurehq/vendure/pull/5030
+    // Test case for https://github.com/MarieHasson/novara-commerce/pull/5030
     @Query()
     async hydrateChannelWithLongCustomFieldName(@Ctx() ctx: RequestContext, @Args() args: { id: ID }) {
         const channel = await this.channelService.findOne(ctx, args.id);
@@ -254,7 +254,7 @@ export class TreeEntity extends VendureEntity {
         // The name is chosen so that the grouping key used by TypeORM's query relation load
         // strategy, `AdditionalConfig_customFields_additionalConfigWithAVeryLongPropertyName_id`
         // (74 chars), exceeds the 63-char postgres/mysql alias limit. See
-        // typeorm-relation-id-loader-fix.ts and https://github.com/vendurehq/vendure/pull/5030
+        // typeorm-relation-id-loader-fix.ts and https://github.com/MarieHasson/novara-commerce/pull/5030
         config.customFields.Channel.push({
             name: 'additionalConfigWithAVeryLongPropertyName',
             type: 'relation',

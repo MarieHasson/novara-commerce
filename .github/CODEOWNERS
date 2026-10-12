@@ -16,8 +16,8 @@
 # `npm stage publish`, which still requires a maintainer's 2FA staging approval
 # before anything goes live. Restricting workflow_dispatch is a GitHub setting,
 # not expressible here.
-/.github/workflows/   @michaelbromley @dlhck
+/.github/workflows/   @MarieHasson
 
 # Protect this file itself, so the ownership rules can't be removed without
 # the same owners signing off.
-/.github/CODEOWNERS    @michaelbromley @dlhck
+/.github/CODEOWNERS    @MarieHasson

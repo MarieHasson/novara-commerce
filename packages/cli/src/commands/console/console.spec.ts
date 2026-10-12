@@ -32,8 +32,8 @@ const LOCAL_CONSOLE = {
     apiOrigin: 'http://localhost:3001',
 };
 const STAGING_CONSOLE = {
-    appOrigin: 'https://staging.console.vendure.io',
-    apiOrigin: 'https://staging.api.vendure.io',
+    appOrigin: 'https://staging.console.example.com',
+    apiOrigin: 'https://staging.api.example.com',
 };
 
 const localManifest: ProjectLinkManifest = {
@@ -96,8 +96,8 @@ describe('console command', () => {
 
     it('requires paired endpoint overrides and validates origins', () => {
         expect(resolveConsoleEndpoints({})).toEqual({
-            consoleUrl: 'https://console.vendure.io',
-            apiUrl: 'https://api.vendure.io',
+            consoleUrl: 'https://console.example.com',
+            apiUrl: 'https://api.example.com',
         });
         expect(
             resolveConsoleEndpoints({
@@ -105,8 +105,8 @@ describe('console command', () => {
                 VENDURE_CONSOLE_API_URL: '   ',
             }),
         ).toEqual({
-            consoleUrl: 'https://console.vendure.io',
-            apiUrl: 'https://api.vendure.io',
+            consoleUrl: 'https://console.example.com',
+            apiUrl: 'https://api.example.com',
         });
         expect(() => resolveConsoleEndpoints({ VENDURE_CONSOLE_APP_URL: 'http://localhost:3000' })).toThrow(
             'Set both',
@@ -131,14 +131,14 @@ describe('console command', () => {
         ).toThrow('not trusted');
         expect(() =>
             resolveConsoleEndpoints({
-                VENDURE_CONSOLE_APP_URL: 'https://staging.console.vendure.io',
+                VENDURE_CONSOLE_APP_URL: 'https://staging.console.example.com',
                 VENDURE_CONSOLE_API_URL: 'https://api.example.com',
             }),
         ).toThrow('not trusted');
         expect(() =>
             resolveConsoleEndpoints({
-                VENDURE_CONSOLE_APP_URL: 'https://console.vendure.io',
-                VENDURE_CONSOLE_API_URL: 'https://staging.api.vendure.io',
+                VENDURE_CONSOLE_APP_URL: 'https://console.example.com',
+                VENDURE_CONSOLE_API_URL: 'https://staging.api.example.com',
             }),
         ).toThrow('Official Console app and API origins must be used as a matching pair');
     });
@@ -166,8 +166,8 @@ describe('console command', () => {
         expect(() =>
             resolveConsoleEndpoints(
                 {
-                    VENDURE_CONSOLE_APP_URL: 'https://console.vendure.io',
-                    VENDURE_CONSOLE_API_URL: 'https://api.vendure.io',
+                    VENDURE_CONSOLE_APP_URL: 'https://console.example.com',
+                    VENDURE_CONSOLE_API_URL: 'https://api.example.com',
                 },
                 STAGING_CONSOLE,
             ),
@@ -180,15 +180,15 @@ describe('console command', () => {
         fs.writeJsonSync(getProjectLinkManifestPath(root), stagingManifest);
         const test = testDependencies(root, vi.fn() as unknown as typeof fetch, {
             env: {
-                VENDURE_CONSOLE_APP_URL: 'https://console.vendure.io',
-                VENDURE_CONSOLE_API_URL: 'https://api.vendure.io',
+                VENDURE_CONSOLE_APP_URL: 'https://console.example.com',
+                VENDURE_CONSOLE_API_URL: 'https://api.example.com',
             },
         });
 
         expect(await consoleCommand('status', {}, test.dependencies)).toBe(1);
         const output = test.messages.join('\n');
         expect(output).toContain(STAGING_CONSOLE.appOrigin);
-        expect(output).toContain('https://console.vendure.io');
+        expect(output).toContain('https://console.example.com');
         expect(output).toContain('conflicts with the Project Link Manifest');
     });
 
@@ -272,8 +272,8 @@ describe('console command', () => {
     // PDEV-478: a link is the step before the docs MCP grants development workflows.
     // PDEV-553: the setup guide is the one the Console card links, for the same environment.
     it.each([
-        ['https://console.vendure.io', 'https://api.vendure.io', 'https://docs.vendure.io/how-to-use'],
-        [STAGING_CONSOLE.appOrigin, STAGING_CONSOLE.apiOrigin, 'https://staging.docs.vendure.io/how-to-use'],
+        ['https://console.example.com', 'https://api.example.com', 'https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/how-to-use'],
+        [STAGING_CONSOLE.appOrigin, STAGING_CONSOLE.apiOrigin, 'https://staging.docs.example.com/how-to-use'],
     ])(
         'points to the docs MCP setup after a link to %s without claiming it configured an assistant',
         async (appOrigin, apiOrigin, guideUrl) => {
@@ -291,7 +291,7 @@ describe('console command', () => {
             expect(guidance).toContain(
                 'Vendure development workflows and patterns through your coding assistant',
             );
-            expect(guidance).toContain('https://docs.vendure.io/mcp');
+            expect(guidance).toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
             expect(guidance).toContain('sign in with Vendure Console');
             expect(guidance).toContain('first time you use a development tool');
             expect(guidance).toContain('Acme');
@@ -445,7 +445,7 @@ describe('console command', () => {
         // PDEV-478: creating a Project is free, and the link still needs a real one.
         expect(test.messages.join('\n')).toContain('without a plan or trial');
         expect(test.messages.join('\n')).toContain('run vendure console link again');
-        expect(test.messages.join('\n')).not.toContain('https://docs.vendure.io/mcp');
+        expect(test.messages.join('\n')).not.toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
         expect(fs.existsSync(getProjectLinkManifestPath(root))).toBe(false);
     });
 
@@ -778,14 +778,14 @@ describe('console command', () => {
             ...manifest,
             schemaVersion: 1,
             console: {
-                appOrigin: 'https://console.vendure.io',
-                apiOrigin: 'https://api.vendure.io',
+                appOrigin: 'https://console.example.com',
+                apiOrigin: 'https://api.example.com',
             },
         });
         const output = test.messages.join('\n');
         expect(output).toContain('Already linked to');
         expect(output).toContain('vendure console link --force');
-        expect(output).toContain('https://docs.vendure.io/mcp');
+        expect(output).toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
     });
 
     it('keeps the docs MCP guidance out of --non-interactive output', async () => {
@@ -796,7 +796,7 @@ describe('console command', () => {
 
         expect(await consoleCommand('link', { nonInteractive: true }, test.dependencies)).toBe(0);
         expect(test.messages.join('\n')).toContain('Already linked to');
-        expect(test.messages.join('\n')).not.toContain('https://docs.vendure.io/mcp');
+        expect(test.messages.join('\n')).not.toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
     });
 
     it('does not show the docs MCP guidance when plugin setup after the link fails', async () => {
@@ -815,7 +815,7 @@ describe('console command', () => {
         );
 
         expect(await consoleCommand('link', {}, test.dependencies)).toBe(1);
-        expect(test.messages.join('\n')).not.toContain('https://docs.vendure.io/mcp');
+        expect(test.messages.join('\n')).not.toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
     });
 
     // A manifest is meant to be committed, so an already-linked project may be
@@ -913,8 +913,8 @@ describe('console command', () => {
         expect(fs.readJsonSync(manifestPath)).toEqual({
             ...manifest,
             console: {
-                appOrigin: 'https://console.vendure.io',
-                apiOrigin: 'https://api.vendure.io',
+                appOrigin: 'https://console.example.com',
+                apiOrigin: 'https://api.example.com',
             },
         });
         expect(test.messages.join('\n')).not.toContain('Project Link Manifest is unchanged');
@@ -1136,7 +1136,7 @@ function testDependencies(
         }),
         VENDURE_CLI_CONFIG_DIR: createCliConfigDir(temporaryDirectories),
     };
-    storeLogin(env, env.VENDURE_CONSOLE_API_URL?.trim() || 'https://api.vendure.io');
+    storeLogin(env, env.VENDURE_CONSOLE_API_URL?.trim() || 'https://api.example.com');
     const reporter: ConsoleReporter = {
         error: message => messages.push(message),
         info: message => messages.push(message),

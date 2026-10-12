@@ -1,10 +1,10 @@
 ---
 title: "Secret fields"
-metaTitle: "Encrypting secret custom fields and config args in Vendure"
+metaTitle: "Encrypting secret custom fields and config args in Novara Commerce"
 metaDescription: "Store sensitive values such as API keys encrypted at rest and control who can read them via the API using the `secret` flag."
 ---
 
-Some data stored by Vendure is sensitive — payment-gateway API keys, webhook signing secrets and
+Some data stored by Novara Commerce is sensitive — payment-gateway API keys, webhook signing secrets and
 similar. The `secret` flag lets you mark a custom field or a config arg so that its value is
 **encrypted in the database** and is **only returned in decrypted form via the API to users who are
 permitted to see it**.
@@ -100,7 +100,7 @@ Secret values are stored encrypted, so a database dump contains ciphertext, not 
 The key that encrypted them lives only in your environment configuration, never in the database. This
 means a dump can only be read in an environment that uses the **same** encryption key.
 
-The first time an encryption key is used against a database, Vendure stores a small "key check" value
+The first time an encryption key is used against a database, Novara Commerce stores a small "key check" value
 (a known string encrypted with that key). On every startup it verifies the configured key against
 this check, so if you restore a dump into an environment with a different key — or change the key of
 an existing database — the server **fails to start** with a clear error, rather than failing later

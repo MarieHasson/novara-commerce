@@ -1,7 +1,7 @@
 ---
 title: "Deploying the Admin UI"
-metaTitle: "Deploying the Vendure Admin UI as a Stand-Alone App"
-metaDescription: "Compile and deploy the Vendure Admin UI with custom extensions, configure API host and port settings, and optionally host it as a stand-alone static app."
+metaTitle: "Deploying the Novara Commerce Admin UI as a Stand-Alone App"
+metaDescription: "Compile and deploy the Novara Commerce Admin UI with custom extensions, configure API host and port settings, and optionally host it as a stand-alone static app."
 ---
 
 ## Compiling the Admin UI
@@ -20,7 +20,7 @@ Instead, compile the Admin UI ahead of time and deploy the compiled assets, as c
 ## Setting the API host & port
 
 When running in development mode, the Admin UI app will "guess" the API host and port based on the current URL in the browser. Typically, this will
-be `http://localhost:3000`. For production deployments where the Admin UI app is served from a different host or port than the Vendure server, you'll need to
+be `http://localhost:3000`. For production deployments where the Admin UI app is served from a different host or port than the Novara Commerce server, you'll need to
 configure the Admin UI app to point to the correct API host and port.
 
 ```ts title="src/vendure-config.ts"
@@ -44,7 +44,7 @@ const config: VendureConfig = {
 
 ## Deploying a stand-alone Admin UI
 
-Usually, the Admin UI is served from the Vendure server via the AdminUiPlugin. However, you may wish to deploy the Admin UI app elsewhere. Since it is just a static Angular app, it can be deployed to any static hosting service such as Vercel or Netlify.
+Usually, the Admin UI is served from the Novara Commerce server via the AdminUiPlugin. However, you may wish to deploy the Admin UI app elsewhere. Since it is just a static Angular app, it can be deployed to any static hosting service such as Vercel or Netlify.
 
 #### Metrics
 
@@ -106,7 +106,7 @@ compileUiExtensions({
 })
     .compile?.()
     .then(() => {
-        // If building for Vercel deployment, replace the config to make 
+        // If building for Vercel deployment, replace the config to make
         // api calls to api.example.com instead of localhost.
         if (process.env.VERCEL) {
             console.log('Overwriting the vendure-ui-config.json for Vercel deployment.');

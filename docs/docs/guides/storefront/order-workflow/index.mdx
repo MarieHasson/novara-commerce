@@ -1,7 +1,7 @@
 ---
 title: "Order Workflow"
-metaTitle: "Vendure Order Workflow and State Transitions"
-metaDescription: "Understand the Vendure Order state machine, order structure, and the full client-side workflow from cart manipulation through checkout and payment."
+metaTitle: "Novara Commerce Order Workflow and State Transitions"
+metaDescription: "Understand the Novara Commerce Order state machine, order structure, and the full client-side workflow from cart manipulation through checkout and payment."
 ---
 
 An Order is a collection of one or more ProductVariants which can be purchased by a Customer. Orders are represented internally by the [Order entity](/reference/typescript-api/entities/order/) and in the GraphQL API by the [Order type](/reference/graphql-api/admin/enums/#ordertype).
@@ -18,7 +18,7 @@ Note that this default workflow can be modified to better fit your business proc
 
 ## Structure of an Order
 
-In Vendure an [Order](/reference/typescript-api/entities/order) consists of one or more [OrderLines](/reference/typescript-api/entities/order-line) (representing a given quantity of a particular SKU).
+In Novara Commerce an [Order](/reference/typescript-api/entities/order) consists of one or more [OrderLines](/reference/typescript-api/entities/order-line) (representing a given quantity of a particular SKU).
 
 Here is a simplified diagram illustrating this relationship:
 
@@ -108,13 +108,13 @@ At any time we can query the contents of the active Order:
 query ActiveOrder {
   activeOrder {
     ... ActiveOrder
-  }  
+  }
 }
 ```
 
 ### Checking out
 
-During the checkout process, we'll need to make sure a Customer is assigned to the Order. If the Customer is already signed in, then this can be skipped since Vendure will have already assigned them. If not, then you'd execute:
+During the checkout process, we'll need to make sure a Customer is assigned to the Order. If the Customer is already signed in, then this can be skipped since Novara Commerce will have already assigned them. If not, then you'd execute:
 
 ```graphql
 mutation SetCustomerForOrder($input: CreateCustomerInput!){

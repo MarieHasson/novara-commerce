@@ -1,11 +1,11 @@
 ---
 title: 'Custom Fields'
-metaTitle: "Adding Custom Fields to Vendure Entities"
-metaDescription: "Extend Vendure entities like Product, Customer, and Order with custom data fields. Covers field types, validation, UI configuration, and relational fields."
+metaTitle: "Adding Custom Fields to Novara Commerce Entities"
+metaDescription: "Extend Novara Commerce entities like Product, Customer, and Order with custom data fields. Covers field types, validation, UI configuration, and relational fields."
 order: 3
 ---
 
-Custom fields allow you to add your own custom data properties to almost every Vendure entity. The entities which may have custom fields defined are listed in the [CustomFields interface documentation](/reference/typescript-api/custom-fields/).
+Custom fields allow you to add your own custom data properties to almost every Novara Commerce entity. The entities which may have custom fields defined are listed in the [CustomFields interface documentation](/reference/typescript-api/custom-fields/).
 
 Some use-cases for custom fields include:
 
@@ -16,7 +16,7 @@ Some use-cases for custom fields include:
 * Adding a longitude and latitude to the `StockLocation` for use in selecting the closest location to a customer.
 
 :::note
-Custom fields are not solely restricted to Vendure's native entities though, it's also possible to add support for custom fields to your own custom entities. See: [Supporting custom fields](/developer-guide/database-entity/#supporting-custom-fields)
+Custom fields are not solely restricted to Novara Commerce's native entities though, it's also possible to add support for custom fields to your own custom entities. See: [Supporting custom fields](/developer-guide/database-entity/#supporting-custom-fields)
 :::
 
 ## Defining custom fields
@@ -248,7 +248,7 @@ console.log(customer.avatar);
 
 ### Relation ids
 
-From Vendure v3.8, single (non-list) relation custom fields also expose the id of the related entity directly
+From Novara Commerce v3.8, single (non-list) relation custom fields also expose the id of the related entity directly
 on the entity, named `'<field name>Id'`. This means that when you only need the id of the related entity - for
 example to compare it against the active user id - no join is required:
 
@@ -985,7 +985,7 @@ The step value. See [the MDN datetime-local docs](https://developer.mozilla.org/
 ### Properties for `struct` fields
 
 :::info
-The `struct` custom field type is available from Vendure v3.1.0.
+The `struct` custom field type is available from Novara Commerce v3.1.0.
 :::
 
 In addition to the common properties, the `struct` custom fields have some type-specific properties:
@@ -1167,7 +1167,7 @@ const config = {
 };
 ```
 
-In the above example, the `CmsArticle` entity is being used as a related entity. However, the GraphQL type name is `BlogPost`, so we must specify this in the `graphQLType` property, otherwise Vendure will try to extend the GraphQL schema with reference to a non-existent "CmsArticle" type.
+In the above example, the `CmsArticle` entity is being used as a related entity. However, the GraphQL type name is `BlogPost`, so we must specify this in the `graphQLType` property, otherwise Novara Commerce will try to extend the GraphQL schema with reference to a non-existent "CmsArticle" type.
 
 #### inverseSide
 
@@ -1238,7 +1238,7 @@ The [onDelete](https://typeorm.io/docs/relations/relations/) behavior for the re
 
 :::caution
 
-Setting `onDelete: 'CASCADE'` means that when the referenced entity is deleted, the database also deletes every row that references it through this custom field. For example, with a relation to `ProductVariant` and `onDelete: 'CASCADE'`, deleting a `ProductVariant` also deletes every row that references it. These deletions happen at the database level, so no Vendure events are published for the deleted rows.
+Setting `onDelete: 'CASCADE'` means that when the referenced entity is deleted, the database also deletes every row that references it through this custom field. For example, with a relation to `ProductVariant` and `onDelete: 'CASCADE'`, deleting a `ProductVariant` also deletes every row that references it. These deletions happen at the database level, so no Novara Commerce events are published for the deleted rows.
 
 Setting `cascade: ['remove']` acts in the opposite direction: removing the owning entity with TypeORM's `remove()` also removes the related entity. The `cascade` setting has no effect when the referenced entity is deleted.
 
@@ -1421,7 +1421,7 @@ If none of the built-in form input components are suitable, you can create your 
 
 ## Tabbed custom fields
 
-With a large, complex project, it's common for lots of custom fields to be required. This can get visually noisy in the UI, so Vendure supports tabbed custom fields. Just specify the tab name in the `ui` object, and those fields with the same tab name will be grouped in the UI! The tab name can also be a translation token if you need to support multiple languages.
+With a large, complex project, it's common for lots of custom fields to be required. This can get visually noisy in the UI, so Novara Commerce supports tabbed custom fields. Just specify the tab name in the `ui` object, and those fields with the same tab name will be grouped in the UI! The tab name can also be a translation token if you need to support multiple languages.
 
 :::note
 
@@ -1509,7 +1509,7 @@ One way to ensure that your custom field typings always get imported first is to
 :::
 
 :::tip
-For a working example of this setup, see the [real-world-vendure repo](https://github.com/vendurehq/real-world-vendure/blob/master/src/plugins/reviews/types.ts)
+For a working example of this setup, see the [real-world-vendure repo](https://github.com/MarieHasson/real-world-vendure/blob/master/src/plugins/reviews/types.ts)
 :::
 
 ## Special cases
@@ -1518,7 +1518,7 @@ Beyond adding custom fields to the corresponding GraphQL types, and updating pag
 
 ### OrderLine custom fields
 
-When you define custom fields on the `OrderLine` entity, the following API changes are also automatically provided by Vendure:
+When you define custom fields on the `OrderLine` entity, the following API changes are also automatically provided by Novara Commerce:
 
 - Shop API: [addItemToOrder](/reference/graphql-api/shop/mutations#additemtoorder) will have a 3rd input argument, `customFields`, which allows custom field values to be set when adding an item to the order.
 - Shop API: [adjustOrderLine](/reference/graphql-api/shop/mutations#additemtoorder) will have a 3rd input argument, `customFields`, which allows custom field values to be updated.
@@ -1530,25 +1530,25 @@ To see an example of this in practice, see the [Configurable Product guide](/how
 
 ### Order custom fields
 
-When you define custom fields on the `Order` entity, the following API changes are also automatically provided by Vendure:
+When you define custom fields on the `Order` entity, the following API changes are also automatically provided by Novara Commerce:
 
 - Admin API: [modifyOrder](/reference/graphql-api/admin/mutations#modifyorder) will have a `customFields` field on the input object.
 
 ### ShippingMethod custom fields
 
-When you define custom fields on the `ShippingMethod` entity, the following API changes are also automatically provided by Vendure:
+When you define custom fields on the `ShippingMethod` entity, the following API changes are also automatically provided by Novara Commerce:
 
 - Shop API: [eligibleShippingMethods](/reference/graphql-api/shop/queries#eligibleshippingmethods) will have public custom fields available on the result.
 
 ### PaymentMethod custom fields
 
-When you define custom fields on the `PaymentMethod` entity, the following API changes are also automatically provided by Vendure:
+When you define custom fields on the `PaymentMethod` entity, the following API changes are also automatically provided by Novara Commerce:
 
 - Shop API: [eligiblePaymentMethods](/reference/graphql-api/shop/queries#eligiblepaymentmethods) will have public custom fields available on the result.
 
 ### Customer custom fields
 
-When you define custom fields on the `Customer` entity, the following API changes are also automatically provided by Vendure:
+When you define custom fields on the `Customer` entity, the following API changes are also automatically provided by Novara Commerce:
 
 - Shop API: [registerCustomerAccount](/reference/graphql-api/shop/mutations#registercustomeraccount) will have have a `customFields` field on the input
   object.

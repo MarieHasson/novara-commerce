@@ -35,7 +35,7 @@ class TestResolver {
     }
 }
 
-// A plugin to explore solutions to https://github.com/vendurehq/vendure/issues/1103
+// A plugin to explore solutions to https://github.com/MarieHasson/novara-commerce/issues/1103
 @VendurePlugin({
     imports: [PluginCommonModule],
     adminApiExtensions: {

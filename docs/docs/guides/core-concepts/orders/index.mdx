@@ -1,10 +1,10 @@
 ---
 title: 'Orders'
-metaTitle: "Order Lifecycle and State Machine in Vendure"
-metaDescription: "Vendure's order process from cart to delivery, powered by a finite state machine. Covers default states and transitions."
+metaTitle: "Order Lifecycle and State Machine in Novara Commerce"
+metaDescription: "Novara Commerce's order process from cart to delivery, powered by a finite state machine. Covers default states and transitions."
 ---
 
-In Vendure, the [`Order`](/reference/typescript-api/entities/order/) entity represents the entire lifecycle of an order, from the moment a customer adds an item to their cart, through to the point where the order is completed and the customer has received their goods.
+In Novara Commerce, the [`Order`](/reference/typescript-api/entities/order/) entity represents the entire lifecycle of an order, from the moment a customer adds an item to their cart, through to the point where the order is completed and the customer has received their goods.
 
 An [`Order`](/reference/typescript-api/entities/order/) is composed of one or more [`OrderLines`](/reference/typescript-api/entities/order-line/).
 Each order line represents a single product variant, and contains information such as the quantity, price, tax rate, etc.
@@ -17,16 +17,16 @@ the shipping address, billing address, shipping method, payment method, etc.
 
 ## The Order Process
 
-Vendure defines an order process which is based on a [finite state machine](/reference/typescript-api/state-machine/fsm/) (a method of precisely controlling how the order moves from one state to another). This means that the [`Order.state` property](/reference/typescript-api/entities/order/#state) will be one of a set of [pre-defined states](/reference/typescript-api/orders/order-process/#orderstate). From the current state, the Order can then transition (change) to another state, and the available next states depend on what the current state is.
+Novara Commerce defines an order process which is based on a [finite state machine](/reference/typescript-api/state-machine/fsm/) (a method of precisely controlling how the order moves from one state to another). This means that the [`Order.state` property](/reference/typescript-api/entities/order/#state) will be one of a set of [pre-defined states](/reference/typescript-api/orders/order-process/#orderstate). From the current state, the Order can then transition (change) to another state, and the available next states depend on what the current state is.
 
 :::note
-In Vendure, there is no distinction between a "cart" and an "order". The same entity is used for both. A "cart" is simply an order
+In Novara Commerce, there is no distinction between a "cart" and an "order". The same entity is used for both. A "cart" is simply an order
 which is still "active" according to its current state.
 :::
 
 The current state of an order is available via the `state` field on the `Order` type. The next possible states can be queried via the [`nextOrderStates`](/reference/graphql-api/shop/queries/#nextorderstates) query.
 
-The available states and the permissible transitions between them are defined by the configured [`OrderProcess`](/reference/typescript-api/orders/order-process/). By default, Vendure defines a [`DefaultOrderProcess`](/reference/typescript-api/orders/order-process/#defaultorderprocess) which is suitable for typical B2C use-cases. Here's a simplified diagram of the default order process:
+The available states and the permissible transitions between them are defined by the configured [`OrderProcess`](/reference/typescript-api/orders/order-process/). By default, Novara Commerce defines a [`DefaultOrderProcess`](/reference/typescript-api/orders/order-process/#defaultorderprocess) which is suitable for typical B2C use-cases. Here's a simplified diagram of the default order process:
 
 ![Default order process](./order-process.webp)
 
@@ -194,7 +194,7 @@ export const customerValidationProcess: OrderProcess<'ValidatingCustomer'> = {
 
 This object means:
 
-* the `AddingItems` state may _only_ transition to the `ValidatingCustomer` state (`mergeStrategy: 'replace'` tells Vendure to discard any existing transition targets and replace with this one).
+* the `AddingItems` state may _only_ transition to the `ValidatingCustomer` state (`mergeStrategy: 'replace'` tells Novara Commerce to discard any existing transition targets and replace with this one).
 * the `ValidatingCustomer` may transition to the `ArrangingPayment` state (assuming the tax ID is valid) or back to the `AddingItems` state.
 
 And then add this configuration to our main VendureConfig:

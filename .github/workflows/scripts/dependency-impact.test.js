@@ -83,7 +83,7 @@ if (failure) {
                 ...process.env,
                 PATH: `${temporaryDirectory}${path.delimiter}${process.env.PATH}`,
                 GITHUB_EVENT_PATH: eventPath,
-                GITHUB_REPOSITORY: 'vendurehq/vendure',
+                GITHUB_REPOSITORY: 'MarieHasson/novara-commerce',
                 MOCK_CHANGED_FILES: JSON.stringify(files),
                 MOCK_MANIFESTS: JSON.stringify(manifests),
                 MOCK_COMMENTS: JSON.stringify(comments),
@@ -112,12 +112,12 @@ if (failure) {
 }
 
 function manifestEndpoint(filePath, ref) {
-    return `repos/vendurehq/vendure/contents/${filePath}?ref=${ref}`;
+    return `repos/MarieHasson/novara-commerce/contents/${filePath}?ref=${ref}`;
 }
 
 function appliedLabels(calls) {
     return calls
-        .filter(args => args[1] === 'repos/vendurehq/vendure/issues/42/labels' && args.includes('POST'))
+        .filter(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/labels' && args.includes('POST'))
         .flatMap(args => args.filter(arg => arg.startsWith('labels[]=')))
         .map(arg => arg.slice('labels[]='.length));
 }
@@ -141,7 +141,7 @@ test('labels a published dependency range edit as a contract change', () => {
     assert.deepEqual(appliedLabels(calls), ['deps: contract change']);
     assert.match(output, /1 contract, 0 other/);
     const body = calls
-        .find(args => args[1] === 'repos/vendurehq/vendure/issues/42/comments' && args.includes('POST'))
+        .find(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/comments' && args.includes('POST'))
         .find(arg => arg.startsWith('body='));
     assert.match(
         body,
@@ -204,9 +204,9 @@ test('clears both labels and the bot report when no dependency files remain', ()
 
     const deletedEndpoints = calls.filter(args => args.includes('DELETE')).map(args => args[1]);
     assert.deepEqual(deletedEndpoints, [
-        'repos/vendurehq/vendure/issues/42/labels/deps%3A%20contract%20change',
-        'repos/vendurehq/vendure/issues/42/labels/deps%3A%20lockfile%20only',
-        'repos/vendurehq/vendure/issues/comments/34',
+        'repos/MarieHasson/novara-commerce/issues/42/labels/deps%3A%20contract%20change',
+        'repos/MarieHasson/novara-commerce/issues/42/labels/deps%3A%20lockfile%20only',
+        'repos/MarieHasson/novara-commerce/issues/comments/34',
     ]);
     assert.match(output, /cleared dependency impact classification/);
 });
@@ -217,7 +217,7 @@ test('does not suppress a failure while removing the opposite label', () => {
             runClassifier({
                 files: ['bun.lock'],
                 failures: {
-                    'repos/vendurehq/vendure/issues/42/labels/deps%3A%20contract%20change': 500,
+                    'repos/MarieHasson/novara-commerce/issues/42/labels/deps%3A%20contract%20change': 500,
                 },
             }),
         // Naming the endpoint and the status, so an unrelated TypeError cannot satisfy this.
@@ -226,17 +226,17 @@ test('does not suppress a failure while removing the opposite label', () => {
 });
 
 test('accepts a concurrent label creation only after confirming the label exists', () => {
-    const labelEndpoint = 'repos/vendurehq/vendure/labels/deps%3A%20contract%20change';
+    const labelEndpoint = 'repos/MarieHasson/novara-commerce/labels/deps%3A%20contract%20change';
     const { calls } = runClassifier({
         files: ['bun.lock'],
         failures: {
             [labelEndpoint]: [404, null],
-            'repos/vendurehq/vendure/labels': [422],
+            'repos/MarieHasson/novara-commerce/labels': [422],
         },
     });
 
     assert.equal(calls.filter(args => args[1] === labelEndpoint).length, 2);
-    assert.equal(calls.filter(args => args[1] === 'repos/vendurehq/vendure/labels').length, 1);
+    assert.equal(calls.filter(args => args[1] === 'repos/MarieHasson/novara-commerce/labels').length, 1);
 });
 
 test('updates only a report owned by github-actions', () => {
@@ -248,8 +248,8 @@ test('updates only a report owned by github-actions', () => {
         ],
     });
 
-    assert.ok(calls.some(args => args[1] === 'repos/vendurehq/vendure/issues/comments/34'));
-    assert.ok(!calls.some(args => args[1] === 'repos/vendurehq/vendure/issues/comments/12'));
+    assert.ok(calls.some(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/comments/34'));
+    assert.ok(!calls.some(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/comments/12'));
 });
 
 test('escapes untrusted dependency names and ranges in the report table', () => {
@@ -268,7 +268,7 @@ test('escapes untrusted dependency names and ranges in the report table', () => 
         },
     });
     const commentCall = calls.find(
-        args => args[1] === 'repos/vendurehq/vendure/issues/42/comments' && args.includes('POST'),
+        args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/comments' && args.includes('POST'),
     );
     const body = commentCall.find(arg => arg.startsWith('body='));
 
@@ -292,13 +292,13 @@ test('takes a range carrying a backslash out of the code span', () => {
                 name: '@vendure/core',
                 dependencies: {
                     graphql:
-                        '^17.0.0 \\| forged | row | [maintainer](https://example.com) ![tracker](https://example.com/pixel.png) @michaelbromley #123',
+                        '^17.0.0 \\| forged | row | [maintainer](https://example.com) ![tracker](https://example.com/pixel.png) @MarieHasson #123',
                 },
             },
         },
     });
     const body = calls
-        .find(args => args[1] === 'repos/vendurehq/vendure/issues/42/comments' && args.includes('POST'))
+        .find(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/comments' && args.includes('POST'))
         .find(arg => arg.startsWith('body='));
 
     // Escaping only the pipe would leave the backslash in front of it, so the row would carry a
@@ -309,9 +309,9 @@ test('takes a range carrying a backslash out of the code span', () => {
     assert.doesNotMatch(body, /\\\\\|/);
     assert.match(body, /&#91;maintainer&#93;&#40;https&#58;&#47;&#47;example&#46;com&#41;/);
     assert.match(body, /&#33;&#91;tracker&#93;&#40;https&#58;&#47;&#47;example&#46;com&#47;pixel&#46;png&#41;/);
-    assert.match(body, /&#64;michaelbromley &#35;123/);
+    assert.match(body, /&#64;MarieHasson &#35;123/);
     assert.match(body, /<code>.*<\/code>/);
-    assert.doesNotMatch(body, /\[maintainer\]\(|!\[tracker\]\(|@michaelbromley|#123/);
+    assert.doesNotMatch(body, /\[maintainer\]\(|!\[tracker\]\(|@MarieHasson|#123/);
 });
 
 test('renders a comparator range through fully escaped HTML code', () => {
@@ -330,7 +330,7 @@ test('renders a comparator range through fully escaped HTML code', () => {
         },
     });
     const body = calls
-        .find(args => args[1] === 'repos/vendurehq/vendure/issues/42/comments' && args.includes('POST'))
+        .find(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/comments' && args.includes('POST'))
         .find(arg => arg.startsWith('body='));
 
     assert.match(
@@ -383,7 +383,7 @@ test('reads a dependency section that is not an object as absent', () => {
     assert.deepEqual(appliedLabels(calls), ['deps: contract change']);
     assert.match(output, /1 contract, 0 other/);
     const body = calls
-        .find(args => args[1] === 'repos/vendurehq/vendure/issues/42/comments' && args.includes('POST'))
+        .find(args => args[1] === 'repos/MarieHasson/novara-commerce/issues/42/comments' && args.includes('POST'))
         .find(arg => arg.startsWith('body='));
     assert.match(body, /`graphql` \| packages&#47;core \/ dependencies \| removed `\^16\.0\.0`/);
     assert.doesNotMatch(body, /\| `0` \|/);

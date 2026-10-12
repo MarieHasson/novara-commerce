@@ -1,4 +1,4 @@
-# Vendure Documentation
+# Novara Commerce Documentation
 
 ## Structure
 

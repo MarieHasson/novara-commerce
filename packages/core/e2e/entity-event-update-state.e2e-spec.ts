@@ -52,7 +52,7 @@ const testPromoAction = new PromotionOrderAction({
  * Tests that VendureEntityEvent subclasses emit the post-update entity state,
  * not the pre-update state.
  *
- * See https://github.com/vendurehq/vendure/issues/4351
+ * See https://github.com/MarieHasson/novara-commerce/issues/4351
  */
 describe('Entity event updated state', () => {
     const { server, adminClient } = createTestEnvironment({

@@ -114,7 +114,7 @@ describe('Collection resolver', () => {
     });
 
     /**
-     * Test case for https://github.com/vendurehq/vendure/issues/97
+     * Test case for https://github.com/MarieHasson/novara-commerce/issues/97
      */
     it('collection breadcrumbs works after bootstrap', async () => {
         const result = await adminClient.query(getCollectionBreadcrumbsDocument, {
@@ -479,7 +479,7 @@ describe('Collection resolver', () => {
             expect(result.collection.id).toBe(computersCollection.id);
         });
 
-        // https://github.com/vendurehq/vendure/issues/538
+        // https://github.com/MarieHasson/novara-commerce/issues/538
         it('falls back to default language slug', async () => {
             const result = await adminClient.query(
                 getCollectionDocument,
@@ -523,7 +523,7 @@ describe('Collection resolver', () => {
             expect(result.collection.parent!.name).toBe('Electronics');
         });
 
-        // Tests fix for https://github.com/vendurehq/vendure/issues/361
+        // Tests fix for https://github.com/MarieHasson/novara-commerce/issues/361
         it('parent field resolved by CollectionEntityResolver', async () => {
             const { product } = await adminClient.query(getProductCollectionsWithParentDocument, {
                 id: 'T_1',
@@ -582,7 +582,7 @@ describe('Collection resolver', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/981
+        // https://github.com/MarieHasson/novara-commerce/issues/981
         it('nested parent field in shop API', async () => {
             const { collections } = await shopClient.query(getCollectionNestedParentsDocument);
 
@@ -656,7 +656,7 @@ describe('Collection resolver', () => {
             expect(collections.items[0].assets).toBeDefined();
         });
 
-        // https://github.com/vendurehq/vendure/issues/642
+        // https://github.com/MarieHasson/novara-commerce/issues/642
         it('sorting on Collection.productVariants.price', async () => {
             const { collection } = await adminClient.query(getCollectionDocument, {
                 id: computersCollection.id,
@@ -673,7 +673,7 @@ describe('Collection resolver', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/3107
+        // https://github.com/MarieHasson/novara-commerce/issues/3107
         it('collection list with translations, filtered by name', async () => {
             const { collections } = await adminClient.query(getCollectionListWithTranslationsDocument, {
                 options: {
@@ -846,7 +846,7 @@ describe('Collection resolver', () => {
             ),
         );
 
-        // https://github.com/vendurehq/vendure/issues/1595
+        // https://github.com/MarieHasson/novara-commerce/issues/1595
         it('children correctly ordered', async () => {
             await adminClient.query(moveCollectionDocument, {
                 input: {
@@ -1346,7 +1346,7 @@ describe('Collection resolver', () => {
                 ]);
             });
 
-            // https://github.com/vendurehq/vendure/issues/927
+            // https://github.com/MarieHasson/novara-commerce/issues/927
             it('nested variantName filter', async () => {
                 const parent = await createVariantNameFilteredCollection('contains', 'lap');
 
@@ -1950,7 +1950,7 @@ describe('Collection resolver', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1213
+        // https://github.com/MarieHasson/novara-commerce/issues/1213
         it('does not list deleted variants', async () => {
             await adminClient.query(deleteProductVariantDocument, {
                 id: 'T_18', // Instant Camera
@@ -2165,7 +2165,7 @@ describe('Collection resolver', () => {
     });
 
     describe('combining an AND-ed and an OR-ed filter', () => {
-        // https://github.com/vendurehq/vendure/issues/5415
+        // https://github.com/MarieHasson/novara-commerce/issues/5415
         it('does not duplicate variants pulled in by the OR-ed filter when they have multiple translations', async () => {
             adminClient.setChannelToken(E2E_DEFAULT_CHANNEL_TOKEN);
 
@@ -2483,7 +2483,7 @@ describe('Collection resolver', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/5415
+    // https://github.com/MarieHasson/novara-commerce/issues/5415
     it('AND-ed variantName filters can match different translations of a variant', async () => {
         adminClient.setChannelToken(E2E_DEFAULT_CHANNEL_TOKEN);
         const hardDriveVariantIds = ['T_11', 'T_12', 'T_13', 'T_14', 'T_15'];

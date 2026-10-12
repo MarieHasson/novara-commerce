@@ -785,10 +785,10 @@ function displayOutro(outroOptions: OutroOptions) {
         `Username: ${pc.green(identifier)}`,
         `Password: ${pc.green(password)}`,
         '\n',
-        '➡️ Docs: https://docs.vendure.io',
-        '➡️ Discord community: https://vendure.io/community',
+        '➡️ Docs: https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs',
+        '➡️ Discord community: https://github.com/MarieHasson/novara-commerce/community',
         '➡️ Star us on GitHub:',
-        '   https://github.com/vendurehq/vendure',
+        '   https://github.com/MarieHasson/novara-commerce',
     ];
 
     let nextSteps: string[];

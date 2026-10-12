@@ -1,18 +1,18 @@
 ---
 title: "Migrations"
-metaTitle: "Database Migrations in Vendure - Generate, Run, and Revert"
-metaDescription: "Manage database schema changes in Vendure with TypeORM migrations. Covers generating, running, and reverting migrations for custom fields and plugins."
+metaTitle: "Database Migrations in Novara Commerce - Generate, Run, and Revert"
+metaDescription: "Manage database schema changes in Novara Commerce with TypeORM migrations. Covers generating, running, and reverting migrations for custom fields and plugins."
 ---
 
 Database migrations are needed whenever the database schema changes. This can be caused by:
 
 * changes to the [custom fields](/developer-guide/custom-fields/) configuration
 * new [database entities defined by plugins](/developer-guide/database-entity/)
-* occasional changes to the core Vendure database schema when updating to newer versions
+* occasional changes to the core Novara Commerce database schema when updating to newer versions
 
 ## Synchronize vs migrate
 
-TypeORM (which Vendure uses to interact with the database) has a `synchronize` option which, when set to `true`, will automatically update your database schema to reflect the current Vendure configuration. This is equivalent to automatically generating and running a migration _every time_ the server starts up.
+TypeORM (which Novara Commerce uses to interact with the database) has a `synchronize` option which, when set to `true`, will automatically update your database schema to reflect the current Novara Commerce configuration. This is equivalent to automatically generating and running a migration _every time_ the server starts up.
 
 This is convenient while developing, but **should not be used in production**, since a misconfiguration could potentially delete production data. In this case, migrations should be used.
 
@@ -54,7 +54,7 @@ For PostgreSQL and MySQL/MariaDB, `--from-empty` creates and drops a temporary d
 
 ## Migration workflow
 
-This section assumes a standard Vendure installation based on `@vendure/create`. 
+This section assumes a standard Novara Commerce installation based on `@vendure/create`.
 
 Let's assume you have defined a new "keywords" custom field on the Product entity. The next time you start your server you'll see a message like this:
 
@@ -131,11 +131,11 @@ You can read more about this issue in [typeorm/issues/7054](https://github.com/t
 
 Now we'll dive into what's going on under the hood.
 
-Vendure exposes a some helper function which wrap around the underlying [TypeORM migration functionality](https://typeorm.io/migrations). The 
-reason for using these helper functions rather than using the TypeORM CLI directly is that Vendure generates additional 
+Novara Commerce exposes a some helper function which wrap around the underlying [TypeORM migration functionality](https://typeorm.io/migrations). The
+reason for using these helper functions rather than using the TypeORM CLI directly is that Novara Commerce generates additional
 schema information based on custom fields and plugin configurations which are not available to the TypeORM CLI.
 
-In a standard Vendure installation prior to v2.2.0, you'll see the following migration script in your project root directory.
+In a standard Novara Commerce installation prior to v2.2.0, you'll see the following migration script in your project root directory.
 Running the `vendure migrate` command also uses a very similar script internally.
 
 ```ts title="migration.ts"
@@ -183,7 +183,7 @@ and a set of scripts in your `package.json` file:
 }
 ```
 
-When running and reverting migrations, Vendure is looking for migration files in the directory specified by the `dbConnectionOptions.migrations` option is set in your VendureConfig:
+When running and reverting migrations, Novara Commerce is looking for migration files in the directory specified by the `dbConnectionOptions.migrations` option is set in your VendureConfig:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -204,7 +204,7 @@ TypeORM to know which migration to revert when the `revertLastMigration` functio
 
 ![Migrations table](./migration.webp)
 
-These are the underlying function exposed by Vendure which are used to generate, run and revert migrations:
+These are the underlying function exposed by Novara Commerce which are used to generate, run and revert migrations:
 
 - [`generateMigration` function](/reference/typescript-api/migration/generate-migration/)
 - [`runMigrations` function](/reference/typescript-api/migration/run-migrations/)

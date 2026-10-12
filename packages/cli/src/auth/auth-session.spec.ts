@@ -46,7 +46,7 @@ const WORKOS_DEVICE_AUTHORIZE_URL = 'https://api.workos.com/user_management/auth
 const WORKOS_AUTHENTICATE_URL = 'https://api.workos.com/user_management/authenticate';
 const PRODUCTION_CLIENT_ID = 'client_01PRODUCTION';
 const STAGING_CLIENT_ID = 'client_01STAGING';
-const CONSOLE_ME_URL = 'https://api.vendure.io/v1/me';
+const CONSOLE_ME_URL = 'https://api.example.com/v1/me';
 
 /** Console's public `GET /v1`, which names the WorkOS client its verifier accepts. */
 function serviceInfo(clientId = PRODUCTION_CLIENT_ID) {
@@ -143,7 +143,7 @@ let options: AuthOptions;
 function storedAuth(overrides: Partial<StoredAuth> = {}): StoredAuth {
     return {
         version: 1,
-        consoleApiUrl: 'https://api.vendure.io',
+        consoleApiUrl: 'https://api.example.com',
         clientId: PRODUCTION_CLIENT_ID,
         workosApiHostname: 'api.workos.com',
         accessToken: accessToken(3600),
@@ -196,7 +196,7 @@ describe('loginWithDevice', () => {
             'urn:ietf:params:oauth:grant-type:device_code',
             undefined,
         ]);
-        expect(workos.requests[0].url).toBe('https://api.vendure.io/v1');
+        expect(workos.requests[0].url).toBe('https://api.example.com/v1');
         expect(workos.requests[1].body.client_id).toBe(PRODUCTION_CLIENT_ID);
         expect(status).toMatchObject({
             loggedIn: true,
@@ -326,9 +326,9 @@ describe('loginWithDevice', () => {
         const workos = fakeWorkos([{ status: 404, body: { code: 'not_found' } }]);
 
         await expect(loginWithDevice({ ...options, fetch: workos.fetch })).rejects.toThrow(
-            'Could not read the sign-in settings from Vendure Console at https://api.vendure.io',
+            'Could not read the sign-in settings from Vendure Console at https://api.example.com',
         );
-        expect(workos.requests.map(r => r.url)).toEqual(['https://api.vendure.io/v1']);
+        expect(workos.requests.map(r => r.url)).toEqual(['https://api.example.com/v1']);
     });
 
     it('tells the user to choose an organization in the browser when it requires a new sign-in', async () => {
@@ -368,16 +368,16 @@ describe('loginWithDevice', () => {
         ]);
         const staging = {
             ...options,
-            env: { ...options.env, VENDURE_CONSOLE_API_URL: 'https://staging.api.vendure.io/' },
+            env: { ...options.env, VENDURE_CONSOLE_API_URL: 'https://staging.api.example.com/' },
         };
 
         await loginWithDevice({ ...staging, fetch: workos.fetch, organization: 'Example GmbH' });
 
-        expect(workos.requests[0].url).toBe('https://staging.api.vendure.io/v1');
+        expect(workos.requests[0].url).toBe('https://staging.api.example.com/v1');
         expect(workos.requests[1].body.client_id).toBe(STAGING_CLIENT_ID);
-        expect(workos.requests[3].url).toBe('https://staging.api.vendure.io/v1/me');
+        expect(workos.requests[3].url).toBe('https://staging.api.example.com/v1/me');
         expect(readStoredAuth(staging)).toMatchObject({
-            consoleApiUrl: 'https://staging.api.vendure.io',
+            consoleApiUrl: 'https://staging.api.example.com',
             clientId: STAGING_CLIENT_ID,
         });
     });
@@ -475,7 +475,7 @@ describe('getAccessToken', () => {
     });
 
     it('ignores a login for another Vendure Console', async () => {
-        writeStoredAuth(storedAuth({ consoleApiUrl: 'https://staging.api.vendure.io' }), options);
+        writeStoredAuth(storedAuth({ consoleApiUrl: 'https://staging.api.example.com' }), options);
 
         await expect(getAccessToken(options)).resolves.toBeUndefined();
         expect(readAuthStatus(options).loggedIn).toBe(false);
@@ -483,13 +483,13 @@ describe('getAccessToken', () => {
 
     it('uses the staging login when the staging Console API is selected', async () => {
         const stored = storedAuth({
-            consoleApiUrl: 'https://staging.api.vendure.io',
+            consoleApiUrl: 'https://staging.api.example.com',
             clientId: STAGING_CLIENT_ID,
         });
         writeStoredAuth(stored, options);
         const staging = {
             ...options,
-            env: { ...options.env, VENDURE_CONSOLE_API_URL: 'https://staging.api.vendure.io' },
+            env: { ...options.env, VENDURE_CONSOLE_API_URL: 'https://staging.api.example.com' },
         };
 
         await expect(getAccessToken(staging)).resolves.toBe(stored.accessToken);
@@ -687,7 +687,7 @@ describe('logout', () => {
         });
         expect(workos.requests).toEqual([
             {
-                url: 'https://api.vendure.io/v1/me/sign-out',
+                url: 'https://api.example.com/v1/me/sign-out',
                 body: {},
                 authorization: `Bearer ${stored.accessToken}`,
             },

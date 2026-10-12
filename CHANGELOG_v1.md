@@ -24,7 +24,7 @@
 
 ## <small>1.9.5 (2023-03-24)</small>
 
-#### Fixes 
+#### Fixes
 * **payments-plugin** Fix issue with handling of partial payments in Mollie. If you are using the MolliePlugin you should update as a priority. ([#2092](https://github.com/vendure-ecommerce/vendure/pull/2092))
 
 ## <small>1.9.4 (2023-03-22)</small>
@@ -371,7 +371,7 @@ This release corrects a publishing error with the `@vendure/admin-ui` packages. 
 
 ### BREAKING CHANGE
 
-* (TypeORM): Due to an update of the TypeORM version, there is a **very remote** potential breaking change if you make use of TypeORM's soft-remove feature in combination with listeners/subscribers. Namely, update listeners and subscriber no longer triggered by soft-remove and recover (https://github.com/typeorm/typeorm/blob/master/CHANGELOG.md#0242-2022-02-16). This is not used in Vendure core and is a relatively obscure edge-case.
+* (TypeORM): Due to an update of the TypeORM version, there is a **very remote** potential breaking change if you make use of TypeORM's soft-remove feature in combination with listeners/subscribers. Namely, update listeners and subscriber no longer triggered by soft-remove and recover (https://github.com/typeorm/typeorm/blob/master/CHANGELOG.md#0242-2022-02-16). This is not used in Novara Commerce core and is a relatively obscure edge-case.
 
 ## <small>1.6.5 (2022-08-15)</small>
 
@@ -1101,18 +1101,18 @@ This release fixes an error in the publishing of the TypeScript definitions from
 
 ## 1.0.0 (2021-05-19)
 
-Vendure v1.0 is here! 🎉
+Novara Commerce v1.0 is here! 🎉
 
 **Note** with this release, all deprecated APIs have been removed. If you were still using any, you'll have a very small amount of work to do in switching over to their replacements. Removed deprecated APIs:
 
 * TypeScript: `EventBus.sucscribe()`, use `EventBus.ofType()` instead.
 * TypeScript: `getEntityOrThrow()` helper. Use `TransactionalConnection.getEntityOrThrow()` instead.
-* TypeScript: `Injector.getConnection()`. Use `Injector.get(TransactionalConnection)` instead.  
+* TypeScript: `Injector.getConnection()`. Use `Injector.get(TransactionalConnection)` instead.
 * TypeScript: `PriceCalculationStrategy`. Use `OrderItemPriceCalculationStrategy` instead.
 * TypeScript: `TaxCalculationStrategy`. Use `ProductVariantPriceCalculationStrategy` instead.
 * TypeScript: `VendureConfig.authOptions.sessionSecret`. Use `VendureConfig.authOptions.cookieOptions.secret` instead.
 * TypeScript - AssetServerPlugin: The `region` option of the S3AssetStorageStrategy should be moved into the `nativeS3Configuration` object.
-* GraphQL: `SearchResult` type - `productPreview` & `productVariantPreview` fields. Use `productAsset.preview`, `productVariantAsset.preview` instead. 
+* GraphQL: `SearchResult` type - `productPreview` & `productVariantPreview` fields. Use `productAsset.preview`, `productVariantAsset.preview` instead.
 * GraphQL: `Order.adjustments`. Use `Order.discounts` instead.
 * GraphQL: `OrderItem.unitPriceIncludesTax`. This is removed as redundant - `unitPrice` is always without tax.
 * GraphQL: `OrderLine.totalPrice`. Use `OrderLine.linePriceWithTax` instead.
@@ -1383,7 +1383,7 @@ tax, use `amountWithTax` and otherwise use `amount`.
 * **admin-ui** Tags can be assigned to Assets in detail view ([995d1b4](https://github.com/vendure-ecommerce/vendure/commit/995d1b4)), closes [#316](https://github.com/vendure-ecommerce/vendure/issues/316)
 * **asset-server-plugin** Add S3 upload options in configuration ([fa4d1c0](https://github.com/vendure-ecommerce/vendure/commit/fa4d1c0))
 * **core** Add eligiblePaymentMethods query to Shop API ([e528c09](https://github.com/vendure-ecommerce/vendure/commit/e528c09)), closes [#469](https://github.com/vendure-ecommerce/vendure/issues/469)
-* **core** Add order line limit to Vendure configuration ([6755329](https://github.com/vendure-ecommerce/vendure/commit/6755329))
+* **core** Add order line limit to Novara Commerce configuration ([6755329](https://github.com/vendure-ecommerce/vendure/commit/6755329))
 * **core** Add support for Asset tags ([71cf3b9](https://github.com/vendure-ecommerce/vendure/commit/71cf3b9)), closes [#316](https://github.com/vendure-ecommerce/vendure/issues/316)
 * **core** Add support for relation custom fields on Channel entity ([7b96b9f](https://github.com/vendure-ecommerce/vendure/commit/7b96b9f)), closes [#598](https://github.com/vendure-ecommerce/vendure/issues/598)
 * **core** Allow custom field validate fn to be async & injectable ([5e04a14](https://github.com/vendure-ecommerce/vendure/commit/5e04a14))
@@ -1650,7 +1650,7 @@ it instead of `order.total` when creating a new payment.
 The `PriceCalculationStrategy` has been renamed to `OrderItemPriceCalculationStrategy`.
 * The Fulfillment and ShippingMethod entities have new fields relating to
 FulfillmentHandlers. This will require a DB migration, though no custom data migration will be
-needed for this particular change. 
+needed for this particular change.
 * The `addFulfillmentToOrder` mutation input has changed: the `method` & `trackingCode` fields
 have been replaced by a `handler` field which accepts a FulfillmentHandler code, and any
 expected arguments defined by that handler.
@@ -1948,9 +1948,9 @@ RequestContext of the current request.
 
 ### BREAKING CHANGE
 
-* All Vendure packages are now built on TypeScript v4.0.3. With new TypeScript versions come the possibility that its improved type-checking abilities will uncover new errors that it had not detected previously.
+* All Novara Commerce packages are now built on TypeScript v4.0.3. With new TypeScript versions come the possibility that its improved type-checking abilities will uncover new errors that it had not detected previously.
 * If you are using the `.loadData()` method of an EmailEventHandler, the callback signature has changed to provide an instance of the Injector class, rather than an `inject()` function.
-* The `orderOptions.generateOrderCode` config option has been replaced with `orderOptions.orderCodeStrategy`. This change allows order code generation to take advantage of the `InjectableStrategy` interface, i.e. to be able to inject Vendure services and other providers (e.g. the database connection). See the `OrderCodeStrategy` documentation for guidance on how to use the new API.
+* The `orderOptions.generateOrderCode` config option has been replaced with `orderOptions.orderCodeStrategy`. This change allows order code generation to take advantage of the `InjectableStrategy` interface, i.e. to be able to inject Novara Commerce services and other providers (e.g. the database connection). See the `OrderCodeStrategy` documentation for guidance on how to use the new API.
 * The `Payment.metadata` field is not private by default, meaning that it can only be read via the Admin API. Data required in the Shop API can be accessed by putting it in a field named `public`. Example: `Payment.metadata.public.redirectUrl`
 * The TypeORM `Connection` should no longer be directly used. Instead, inject the new `TransactionalConnection` class, which wraps the TypeORM connection and enables database transactions to be used in conjunction with the new `@Transaction` decorator.
 
@@ -2295,7 +2295,7 @@ Fixes broken publish of admin-ui-plugin
     middleware: [/*...*/],
     // ...
   }
-  
+
   // after
   const config: VendureConfig = {
     apiOptions: {
@@ -2387,9 +2387,9 @@ Fixes broken publish of admin-ui-plugin
 * In order to accommodate Asset deletion, some non-destructive DB modifications have been made which will require a migration.
 * Nestjs has been updated to v7. If you make use of any of the Nest internals in your plugins, this may cause some breaking changes. Please see the [Nest migration guide](https://docs.nestjs.com/migration-guide) for details.
 
-  This release also includes updates to many dependencies which in turn have dropped support for Node.js v8. Therefore **Vendure now supports Node.js v10** or higher.
+  This release also includes updates to many dependencies which in turn have dropped support for Node.js v8. Therefore **Novara Commerce now supports Node.js v10** or higher.
 * The CollectionAsset entity had a cascade delete defined, which will require a DB migration.
-* The JobQueueService has been completely re-designed. In the event that you are using this service in your Plugins, please see the [API documentation](https://www.vendure.io/docs/developer-guide/job-queue) on how to use it now.
+* The JobQueueService has been completely re-designed. In the event that you are using this service in your Plugins, please see the [API documentation](https://github.com/MarieHasson/novara-commerce/docs/developer-guide/job-queue) on how to use it now.
 ## <small>0.10.2 (2020-04-02)</small>
 
 
@@ -3116,7 +3116,7 @@ extensions: [
 
 * `adjustmentOperations` query has been replaced by `promotionConditions` and `promotionActions`
 
-* ConfigurableOperations (ShippingEligibilityChecker, ShippingCalculator, CollectionFilter, PromotionCondition, PromotionAction, PaymentMethodHandler) have a new API for defining their arguments. For existing Vendure installations, any Shipping Methods, Promotions and Collection will need to be re-configured after the update by removing any checker/calculator/filter/condition/action and re-adding it.
+* ConfigurableOperations (ShippingEligibilityChecker, ShippingCalculator, CollectionFilter, PromotionCondition, PromotionAction, PaymentMethodHandler) have a new API for defining their arguments. For existing Novara Commerce installations, any Shipping Methods, Promotions and Collection will need to be re-configured after the update by removing any checker/calculator/filter/condition/action and re-adding it.
 * ConfigurableOperations descriptions must now be specified as an array of LocalizedString rather than just a plain string. This allows the descriptions to be adapted to other locales.
 ## <small>0.1.2-beta.10 (2019-08-01)</small>
 
@@ -3160,7 +3160,7 @@ extensions: [
 ### BREAKING CHANGE
 
 * All `languageCode` GraphQL arguments have been removed from queries and instead, a "languageCode" query param may be attached to the API URL to specify the language of any translatable entities.
-* Vendure plugins are now defined as Nestjs modules. For
+* Novara Commerce plugins are now defined as Nestjs modules. For
 existing installations, the VendureConfig will need to be modified so
 that plugins are not instantiated, but use the static .init() method to
 pass options to the plugin, e.g.:

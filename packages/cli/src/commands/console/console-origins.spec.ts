@@ -11,10 +11,10 @@ import { DEFAULT_CONSOLE_API_URL, DEFAULT_CONSOLE_URL, officialConsoleEnvironmen
  * somebody edited one of the two places and not the other.
  */
 const OFFICIAL_ORIGINS = {
-    productionApp: 'https://console.vendure.io',
-    productionApi: 'https://api.vendure.io',
-    stagingApp: 'https://staging.console.vendure.io',
-    stagingApi: 'https://staging.api.vendure.io',
+    productionApp: 'https://console.example.com',
+    productionApi: 'https://api.example.com',
+    stagingApp: 'https://staging.console.example.com',
+    stagingApi: 'https://staging.api.example.com',
 };
 
 describe('officialConsoleEnvironment()', () => {
@@ -47,13 +47,13 @@ describe('officialConsoleEnvironment()', () => {
     // Everything past the host list. Each of these points a request somewhere
     // else while the hostname still reads correctly.
     it.each([
-        ['plain http', 'http://console.vendure.io', 'http://api.vendure.io'],
-        ['embedded credentials', 'https://user:pw@console.vendure.io', OFFICIAL_ORIGINS.productionApi],
-        ['a path', 'https://console.vendure.io/link', OFFICIAL_ORIGINS.productionApi],
-        ['a query', 'https://console.vendure.io/?next=x', OFFICIAL_ORIGINS.productionApi],
-        ['a fragment', 'https://console.vendure.io/#x', OFFICIAL_ORIGINS.productionApi],
-        ['a lookalike host', 'https://console.vendure.io.evil.test', OFFICIAL_ORIGINS.productionApi],
-        ['a subdomain of an official host', 'https://a.console.vendure.io', OFFICIAL_ORIGINS.productionApi],
+        ['plain http', 'http://console.example.com', 'http://api.example.com'],
+        ['embedded credentials', 'https://user:pw@console.example.com', OFFICIAL_ORIGINS.productionApi],
+        ['a path', 'https://console.example.com/link', OFFICIAL_ORIGINS.productionApi],
+        ['a query', 'https://console.example.com/?next=x', OFFICIAL_ORIGINS.productionApi],
+        ['a fragment', 'https://console.example.com/#x', OFFICIAL_ORIGINS.productionApi],
+        ['a lookalike host', 'https://console.example.com.evil.test', OFFICIAL_ORIGINS.productionApi],
+        ['a subdomain of an official host', 'https://a.console.example.com', OFFICIAL_ORIGINS.productionApi],
         ['an unparseable URL', 'not a url', OFFICIAL_ORIGINS.productionApi],
     ])('refuses %s', (_label, consoleUrl, apiUrl) => {
         expect(officialConsoleEnvironment({ consoleUrl, apiUrl })).toBeUndefined();

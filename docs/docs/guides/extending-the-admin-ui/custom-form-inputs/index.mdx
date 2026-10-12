@@ -1,7 +1,7 @@
 ---
 title: 'Custom Form Inputs'
-metaTitle: "Custom Form Inputs for Vendure Admin UI Custom Fields"
-metaDescription: "Define custom Angular or React form input components to render custom fields and configurable operation arguments in the Vendure Admin UI."
+metaTitle: "Custom Form Inputs for Novara Commerce Admin UI Custom Fields"
+metaDescription: "Define custom Angular or React form input components to render custom fields and configurable operation arguments in the Novara Commerce Admin UI."
 ---
 
 You can define custom Angular or React components which can be used to render [Custom Fields](/developer-guide/custom-fields/) you have defined on your entities as well as [configurable args](/reference/typescript-api/configurable-operation-def/config-args/) used by custom [Configurable Operations](/developer-guide/strategies-configurable-operations/#configurable-operations).
@@ -65,8 +65,8 @@ export class SliderControlComponent implements FormInputComponent<IntCustomField
 </TabItem>
 <TabItem value="React" label="React">
 
-React components can use the [`useFormControl`](/reference/admin-ui-api/react-hooks/use-form-control) hook to access the form control and set its value. The 
-component will also receive `config` and `readonly` data as props. 
+React components can use the [`useFormControl`](/reference/admin-ui-api/react-hooks/use-form-control) hook to access the form control and set its value. The
+component will also receive `config` and `readonly` data as props.
 
 ```tsx title="src/plugins/common/ui/components/SliderFormInput.tsx"
 import React from 'react';
@@ -254,7 +254,7 @@ export class RelationReviewInputComponent implements OnInit, FormInputComponent<
 
 [ConfigArgs](/reference/typescript-api/configurable-operation-def/config-args/) are used by classes which extend [Configurable Operations](/developer-guide/strategies-configurable-operations/#configurable-operations) (such as ShippingCalculator or PaymentMethodHandler). These ConfigArgs allow user-input values to be passed to the operation's business logic.
 
-They are configured in a very similar way to custom fields, and likewise can use custom form inputs by specifying the `ui` property. 
+They are configured in a very similar way to custom fields, and likewise can use custom form inputs by specifying the `ui` property.
 
 Here's an example:
 

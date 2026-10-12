@@ -1,22 +1,22 @@
 ---
 title: "Integrating S3-Compatible Asset Storage"
-metaTitle: "S3-Compatible Asset Storage for Vendure"
-metaDescription: "Configure Vendure's AssetServerPlugin for S3-compatible storage with AWS S3, DigitalOcean Spaces, CloudFlare R2, MinIO, Supabase, and Hetzner."
+metaTitle: "S3-Compatible Asset Storage for Novara Commerce"
+metaDescription: "Configure Novara Commerce's AssetServerPlugin for S3-compatible storage with AWS S3, DigitalOcean Spaces, CloudFlare R2, MinIO, Supabase, and Hetzner."
 ---
 
-This guide demonstrates how to integrate S3-compatible asset storage into your Vendure application using multiple cloud storage platforms. You'll learn to configure a single, platform-agnostic storage solution that works seamlessly with AWS S3, DigitalOcean Spaces, MinIO, CloudFlare R2, and Supabase Storage.
+This guide demonstrates how to integrate S3-compatible asset storage into your Novara Commerce application using multiple cloud storage platforms. You'll learn to configure a single, platform-agnostic storage solution that works seamlessly with AWS S3, DigitalOcean Spaces, MinIO, CloudFlare R2, and Supabase Storage.
 
 ## Working Example Repository
 
 :::info
-This guide is based on the [s3-file-storage](https://github.com/vendurehq/examples/tree/publish/examples/s3-file-storage) example.
+This guide is based on the [s3-file-storage](https://github.com/MarieHasson/examples/tree/publish/examples/s3-file-storage) example.
 Refer to the complete working code for full implementation details.
 :::
 
 ## Prerequisites
 
 - Node.js 20+ with npm package manager
-- An existing Vendure project created with the [Vendure create command](/getting-started/installation/)
+- An existing Novara Commerce project created with the [Novara Commerce create command](/getting-started/installation/)
 - An account with one of the supported S3-compatible storage providers
 
 ## S3-Compatible Storage Provider Setup
@@ -60,7 +60,7 @@ Configure your chosen storage provider by following the setup instructions for y
    # Leave S3_FORCE_PATH_STYLE empty for AWS S3
    ```
 
-   ![AWS S3 Setup](https://cdn.vendure.io/learn/s3-guides/aws-bucket-iam.gif)
+   ![AWS S3 Setup](https://example.com/learn/s3-guides/aws-bucket-iam.gif)
 
 </TabItem>
 <TabItem value="supabase" label="Supabase Storage">
@@ -101,7 +101,7 @@ Configure your chosen storage provider by following the setup instructions for y
    Replace `your-project-ref` with your actual Supabase project reference ID found in your project settings.
    :::
 
-   ![Supabase Storage Setup](https://cdn.vendure.io/learn/s3-guides/Supabase-create-bucket.gif)
+   ![Supabase Storage Setup](https://example.com/learn/s3-guides/Supabase-create-bucket.gif)
 
 </TabItem>
 <TabItem value="digitalocean" label="DigitalOcean Spaces">
@@ -155,7 +155,7 @@ Configure your chosen storage provider by following the setup instructions for y
    Use the regional endpoint (e.g., `https://fra1.digitaloceanspaces.com`) not the CDN endpoint. The AWS SDK constructs URLs automatically.
    :::
 
-   ![DigitalOcean Spaces Setup](https://cdn.vendure.io/learn/s3-guides/digital-ocean-create-bucket.gif)
+   ![DigitalOcean Spaces Setup](https://example.com/learn/s3-guides/digital-ocean-create-bucket.gif)
 
 </TabItem>
 <TabItem value="cloudflare-r2" label="CloudFlare R2">
@@ -181,7 +181,7 @@ Configure your chosen storage provider by following the setup instructions for y
 4. **Generate API Tokens**
    - Go to "Manage R2 API tokens" section
    - Click "Create API token"
-   - Configure token name: "Vendure R2 Token"
+   - Configure token name: "Novara Commerce R2 Token"
    - Under Permissions, select "Object Read & Write"
    - Optionally restrict to specific buckets under "Account resources"
    - Click "Create API token"
@@ -207,7 +207,7 @@ Configure your chosen storage provider by following the setup instructions for y
    Replace `your-account-id` with your actual CloudFlare account ID. If using a custom domain, update `S3_FILE_URL` to point to your custom domain with `https://`.
    :::
 
-   ![CloudFlare R2 Setup](https://cdn.vendure.io/learn/s3-guides/cloudflareR2-bucket.gif)
+   ![CloudFlare R2 Setup](https://example.com/learn/s3-guides/cloudflareR2-bucket.gif)
 
 </TabItem>
 <TabItem value="hetzner" label="Hetzner Object Storage">
@@ -236,7 +236,7 @@ Configure your chosen storage provider by following the setup instructions for y
 4. **Generate S3 API Credentials**
    - In the Object Storage section, navigate to **"API Credentials"** or **"Access Keys"**
    - Click **"Generate new credentials"** or **"Create access key"**
-   - Provide a name for the credentials (e.g., "Vendure API Key")
+   - Provide a name for the credentials (e.g., "Novara Commerce API Key")
    - Copy the generated **Access Key** and **Secret Key**
    - ⚠️ **Important**: Save the Secret Key immediately as it cannot be viewed again
 
@@ -256,7 +256,7 @@ Configure your chosen storage provider by following the setup instructions for y
    Replace `fsn1` with your chosen location (e.g., `nbg1` for Nuremberg). The endpoint URL will match your bucket's location. Ensure the region and endpoint location match.
    :::
 
-   ![Hetzner Object Storage Setup](https://cdn.vendure.io/learn/s3-guides/hetzner-create-storage.gif)
+   ![Hetzner Object Storage Setup](https://example.com/learn/s3-guides/hetzner-create-storage.gif)
 
 </TabItem>
 <TabItem value="minio" label="MinIO">
@@ -375,9 +375,9 @@ Configure your chosen storage provider by following the setup instructions for y
 </TabItem>
 </Tabs>
 
-## Vendure Configuration
+## Novara Commerce Configuration
 
-Configure your Vendure application to use S3-compatible asset storage by modifying your `vendure-config.ts`:
+Configure your Novara Commerce application to use S3-compatible asset storage by modifying your `vendure-config.ts`:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -433,7 +433,7 @@ export const config: VendureConfig = {
 Create a `.env` file in your project root with your chosen storage provider configuration:
 
 ```bash title=".env"
-# Basic Vendure Configuration
+# Basic Novara Commerce Configuration
 APP_ENV=dev
 SUPERADMIN_USERNAME=superadmin
 SUPERADMIN_PASSWORD=superadmin
@@ -449,14 +449,14 @@ S3_FORCE_PATH_STYLE=true-or-false
 ```
 
 :::cli
-Preconfigured environment examples for each storage provider are available in the [s3-file-storage example repository](https://github.com/vendurehq/examples/tree/publish/examples/s3-file-storage).
+Preconfigured environment examples for each storage provider are available in the [s3-file-storage example repository](https://github.com/MarieHasson/examples/tree/publish/examples/s3-file-storage).
 :::
 
 ## Testing Your Configuration
 
 Verify your S3 storage configuration works correctly:
 
-1. **Start your Vendure server**:
+1. **Start your Novara Commerce server**:
    ```bash
    npm run dev:server
    ```
@@ -548,7 +548,7 @@ S3_FORCE_PATH_STYLE=true
 
 ## Conclusion
 
-You now have a robust, platform-agnostic S3-compatible asset storage solution integrated with your Vendure application. This configuration provides:
+You now have a robust, platform-agnostic S3-compatible asset storage solution integrated with your Novara Commerce application. This configuration provides:
 
 - **Seamless switching** between storage providers via environment variables
 - **Development-to-production** workflow with local storage fallback

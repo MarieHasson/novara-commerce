@@ -1,10 +1,10 @@
-# Vendure Create
+# Novara Commerce Create
 
-A CLI tool for rapidly scaffolding a new Vendure server application. Heavily inspired by [create-react-app](https://github.com/facebook/create-react-app).
+A CLI tool for rapidly scaffolding a new Novara Commerce server application. Heavily inspired by [create-react-app](https://github.com/facebook/create-react-app).
 
 ## Usage
 
-Vendure Create requires [Node.js](https://nodejs.org/en/) `^20.19.0 || >=22.12.0` to be installed.
+Novara Commerce Create requires [Node.js](https://nodejs.org/en/) `^20.19.0 || >=22.12.0` to be installed.
 
 ```sh
 npx @vendure/create my-app

@@ -1,14 +1,14 @@
 ---
 title: "Pricing"
-metaTitle: "How Vendure Calculates Product Prices from Catalog to Checkout"
-metaDescription: "Understand Vendure's price pipeline: from ProductVariantPrice through strategies, promotions, and tax to the final price shown at checkout."
+metaTitle: "How Novara Commerce Calculates Product Prices from Catalog to Checkout"
+metaDescription: "Understand Novara Commerce's price pipeline: from ProductVariantPrice through strategies, promotions, and tax to the final price shown at checkout."
 ---
 
-Vendure uses a multi-stage pipeline to determine the price a customer actually pays. Rather than storing a single "final" price, the system starts with a base price and transforms it step-by-step through strategies, promotions, and tax calculations. This makes it possible to support complex scenarios like channel-specific pricing, dynamic discounts, and tax-inclusive or tax-exclusive display.
+Novara Commerce uses a multi-stage pipeline to determine the price a customer actually pays. Rather than storing a single "final" price, the system starts with a base price and transforms it step-by-step through strategies, promotions, and tax calculations. This makes it possible to support complex scenarios like channel-specific pricing, dynamic discounts, and tax-inclusive or tax-exclusive display.
 
 ## The price pipeline
 
-When an item is added to an order, Vendure resolves its price through the following stages:
+When an item is added to an order, Novara Commerce resolves its price through the following stages:
 
 1. **ProductVariantPrice** — The base price stored in the database. Each [`ProductVariant`](/reference/typescript-api/entities/product-variant/) has one or more [`ProductVariantPrice`](/reference/typescript-api/entities/product-variant-price/) records, scoped by channel and currency.
 2. **ProductVariantPriceSelectionStrategy** — Selects which `ProductVariantPrice` to use when multiple prices exist for the active channel and currency.
@@ -26,7 +26,7 @@ A single variant might have a price of $30 USD in the US channel and 25 GBP in t
 
 ## The `price` vs `priceWithTax` convention
 
-Throughout the Vendure GraphQL APIs, monetary values always come in pairs:
+Throughout the Novara Commerce GraphQL APIs, monetary values always come in pairs:
 
 - **`price`** — The amount _without_ tax (or the tax-inclusive amount if the channel is configured for tax-inclusive pricing, in which case tax has been back-calculated).
 - **`priceWithTax`** — The amount _with_ tax included.
@@ -34,12 +34,12 @@ Throughout the Vendure GraphQL APIs, monetary values always come in pairs:
 This convention applies to individual line items, order subtotals, shipping costs, and the order total. Your storefront can choose which value to display based on local regulations and conventions.
 
 :::info
-All monetary values in Vendure are stored as **integers in the smallest currency unit** (e.g., cents for USD). See [Money & Currency](/core-concepts/money/) for details on how Vendure handles monetary arithmetic.
+All monetary values in Novara Commerce are stored as **integers in the smallest currency unit** (e.g., cents for USD). See [Money & Currency](/core-concepts/money/) for details on how Novara Commerce handles monetary arithmetic.
 :::
 
 ## Promotions and adjustments
 
-After the base price is resolved, Vendure applies any qualifying [promotions](/core-concepts/promotions/). Promotions never modify the base price directly. Instead, they add **adjustments** to the order or order line, which are tracked separately. This means the original price is always preserved, and discounts can be clearly itemized for the customer.
+After the base price is resolved, Novara Commerce applies any qualifying [promotions](/core-concepts/promotions/). Promotions never modify the base price directly. Instead, they add **adjustments** to the order or order line, which are tracked separately. This means the original price is always preserved, and discounts can be clearly itemized for the customer.
 
 There are two levels of adjustment:
 

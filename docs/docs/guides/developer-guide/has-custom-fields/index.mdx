@@ -1,10 +1,10 @@
 ---
 title: "Implementing HasCustomFields"
-metaTitle: "Adding Custom Fields Support to Custom Vendure Entities"
-metaDescription: "Make your own plugin entities support Vendure custom fields by implementing the HasCustomFields interface, with full GraphQL API and UI integration."
+metaTitle: "Adding Custom Fields Support to Custom Novara Commerce Entities"
+metaDescription: "Make your own plugin entities support Novara Commerce custom fields by implementing the HasCustomFields interface, with full GraphQL API and UI integration."
 ---
 
-From Vendure v2.2, it is possible to add support for [custom fields](/developer-guide/custom-fields/) to your custom entities. This is useful when you are defining a custom entity as part of a plugin which is intended to be used by other developers. For example, a plugin which defines a new entity for storing product reviews might want to allow the developer to add custom fields to the review entity.
+From Novara Commerce v2.2, it is possible to add support for [custom fields](/developer-guide/custom-fields/) to your custom entities. This is useful when you are defining a custom entity as part of a plugin which is intended to be used by other developers. For example, a plugin which defines a new entity for storing product reviews might want to allow the developer to add custom fields to the review entity.
 
 ## Defining entities that support custom fields
 
@@ -32,7 +32,7 @@ export class ProductReview extends VendureEntity implements HasCustomFields { //
 
     @Column(() => CustomProductReviewFields) // [!code highlight]
     customFields: CustomProductReviewFields; // [!code highlight]
-    
+
     @ManyToOne(() => Product)
     product: Product;
 
@@ -77,10 +77,10 @@ input UpdateProductReviewInput {
 }
 ```
 
-Notice the lack of manually defining `customFields` on the types, this is because Vendure extends the types automatically once your entity implements `HasCustomFields`.
+Notice the lack of manually defining `customFields` on the types, this is because Novara Commerce extends the types automatically once your entity implements `HasCustomFields`.
 
 :::important Naming convention
-In order for Vendure to find the correct input types to extend to, they must conform to the naming convention of:
+In order for Novara Commerce to find the correct input types to extend to, they must conform to the naming convention of:
 
 - `Create<EntityName>Input`
 - `Update<EntityName>Input`
@@ -132,7 +132,7 @@ export class ReviewService {
     async create(ctx: RequestContext, input: CreateProductReviewInput) {
         const product = await this.connection.getEntityOrThrow(ctx, Product, input.productId);
         // You'll probably want to do more validation/logic here in a real world scenario
-        
+
         const review = new ProductReview({ ...input, product }); // [!code highlight]
         const savedEntity = await this.connection.getRepository(ctx, ProductReview).save(review); // [!code highlight]
         await this.customFieldRelationService.updateRelations(ctx, ProductReview, input, savedEntity); // [!code highlight]

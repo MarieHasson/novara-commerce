@@ -1,20 +1,20 @@
 ---
 title: "Open Telemetry"
-metaTitle: "Open Telemetry Observability for Vendure"
-metaDescription: "Set up distributed tracing and log aggregation in Vendure using the Telemetry Plugin with Jaeger, Loki, and Grafana via OpenTelemetry."
+metaTitle: "Open Telemetry Observability for Novara Commerce"
+metaDescription: "Set up distributed tracing and log aggregation in Novara Commerce using the Telemetry Plugin with Jaeger, Loki, and Grafana via OpenTelemetry."
 ---
 
-[Open Telemetry](https://opentelemetry.io/) is a set of APIs, libraries, agents, and instrumentation to provide observability for applications. 
+[Open Telemetry](https://opentelemetry.io/) is a set of APIs, libraries, agents, and instrumentation to provide observability for applications.
 It provides a standard way to collect and export telemetry data such as traces, metrics, and logs from applications.
 
-From Vendure v3.3, Vendure has built-in support for Open Telemetry, via the `@vendure/telemetry-plugin` package. 
-This package provides a set of decorators and utilities to instrument Vendure services and entities with Open Telemetry.
+From Novara Commerce v3.3, Novara Commerce has built-in support for Open Telemetry, via the `@vendure/telemetry-plugin` package.
+This package provides a set of decorators and utilities to instrument Novara Commerce services and entities with Open Telemetry.
 
-In this guide we will set up a local Vendure server with Open Telemetry, collecting traces and logs
+In this guide we will set up a local Novara Commerce server with Open Telemetry, collecting traces and logs
 using the following parts:
 
 - [Open Telemetry](https://opentelemetry.io/): The standard for observability.
-- [Vendure Telemetry Plugin](/reference/core-plugins/telemetry-plugin/): Instruments the Vendure server & worker for Open Telemetry.
+- [Novara Commerce Telemetry Plugin](/reference/core-plugins/telemetry-plugin/): Instruments the Novara Commerce server & worker for Open Telemetry.
 - [Jaeger](https://www.jaegertracing.io/): A distributed tracing system that can be used to collect and visualize traces.
 - [Loki](https://grafana.com/oss/loki/): A log aggregation system that can be used to collect and visualize logs.
 - [Grafana](https://grafana.com/oss/grafana/): A visualization tool that can be used to visualize traces and logs from Jaeger and Loki.
@@ -29,8 +29,8 @@ In this guide we have chosen some widely-used and open-source tools to demonstra
 
 ### Set up Jaeger, Loki & Grafana
 
-We will be using Docker to run Jaeger, Loki, and Grafana locally. Create a file called `docker-compose.yml` 
-in the root of your project (standard Vendure installations already have one) and add the following contents:
+We will be using Docker to run Jaeger, Loki, and Grafana locally. Create a file called `docker-compose.yml`
+in the root of your project (standard Novara Commerce installations already have one) and add the following contents:
 
 ```yaml
 services:
@@ -102,7 +102,7 @@ If you already have this plugin running, read [Upgrading from earlier
 versions](#upgrading-from-earlier-versions) before you deploy. Span attribute names have changed,
 which will break existing Grafana dashboards and alerts.
 
-Add the plugin to your Vendure config:
+Add the plugin to your Novara Commerce config:
 
 ```ts
 import { VendureConfig, LogLevel } from '@vendure/core';
@@ -126,7 +126,7 @@ export const config: VendureConfig = {
 ### Set environment variables
 
 In order to send telemetry data to the Jaeger and Loki services, you need to set some environment variables.
-In a standard Vendure installation, there is an `.env` file in the root of the project. We will add the following:
+In a standard Novara Commerce installation, there is an `.env` file in the root of the project. We will add the following:
 
 ```env
 # Open Telemetry
@@ -139,7 +139,7 @@ OTEL_LOGS_EXPORTER=otlp
 
 The Open Telemetry libraries for Node.js instrument underlying libraries such as HTTP, Express,
 NestJS, GraphQL, the PostgreSQL & MySQL2 database drivers, and ioredis to collect telemetry data.
-In order to do this, they need to be preloaded before any of the Vendure application code. This
+In order to do this, they need to be preloaded before any of the Novara Commerce application code. This
 is done by means of a preload script.
 
 The script imports the OpenTelemetry SDK and exporters directly, so install them alongside the
@@ -184,10 +184,10 @@ sdk.start();
 There are many, many configuration options available for Open Telemetry. The above is an example that works
 with the services used in this guide. The important things is to make sure the use the
 `getSdkConfiguration` function from the `@vendure/telemetry-plugin/preload` package, as this will ensure that
-the Vendure core is instrumented correctly.
+the Novara Commerce core is instrumented correctly.
 :::
 
-To run the preload script, you need to set the `--require` flag when starting the Vendure server. We will 
+To run the preload script, you need to set the `--require` flag when starting the Novara Commerce server. We will
 also set an environment variable to distinguish the server from the worker process.
 
 You can do this by adding the following script to your `package.json`:
@@ -209,7 +209,7 @@ You can do this by adding the following script to your `package.json`:
 ### Customising instrumentation
 
 By default, `getSdkConfiguration` returns a curated set of OpenTelemetry instrumentations that
-covers the libraries Vendure itself uses (HTTP, Express, NestJS, GraphQL, PostgreSQL, MySQL2,
+covers the libraries Novara Commerce itself uses (HTTP, Express, NestJS, GraphQL, PostgreSQL, MySQL2,
 ioredis). If you need to capture spans from other libraries used in your own plugins — for
 example `kafkajs`, `mongoose`, `winston`, `undici` — you have two options.
 
@@ -237,7 +237,7 @@ const config = getSdkConfiguration({
 
 **Option 2: pick the specific instrumentation packages you need.**
 
-Install just the ones you want and pass them alongside the Vendure-default set:
+Install just the ones you want and pass them alongside the Novara Commerce-default set:
 
 ```bash
 npm install @opentelemetry/instrumentation-http@0.223.0 \
@@ -282,7 +282,7 @@ const config = getSdkConfiguration({
 
 :::info
 Passing `instrumentations` in your config **replaces** the curated default — it does not merge
-with it. If you want to keep the Vendure-default tracing, you need to include those entries in
+with it. If you want to keep the Novara Commerce-default tracing, you need to include those entries in
 your own array as shown above.
 :::
 
@@ -332,7 +332,7 @@ Span names and `http.route` are unchanged.
    trace retention window has passed.
 4. Deploy, then send a request and check each panel before you delete the old queries.
 
-If you cannot change your dashboards yet, put an OpenTelemetry Collector between Vendure and your
+If you cannot change your dashboards yet, put an OpenTelemetry Collector between Novara Commerce and your
 tracing backend. A `transform` processor can copy each new attribute onto its old name, so every
 span carries both and you can migrate later.
 :::
@@ -383,7 +383,7 @@ select **Connections** > **Data Sources** from the left-hand menu. Then click th
 
 Find "Jaeger" and select it. In the config form that opens, set the URL to `http://jaeger:16686` and click "Save & Test".
 
-Now you can select **Explore** from the left-hand menu, select "Jaeger" from the dropdown and then click the 
+Now you can select **Explore** from the left-hand menu, select "Jaeger" from the dropdown and then click the
 "search" tab and select the "vendure-dev-server" service from the dropdown.
 
 Clicking the blue "Run Query" button will show you the traces for that service.

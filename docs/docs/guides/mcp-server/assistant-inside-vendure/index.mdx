@@ -1,25 +1,25 @@
 ---
-title: 'Assistant inside Vendure'
-metaTitle: 'Build an MCP Assistant inside Vendure | Vendure'
-metaDescription: 'Build a shop assistant as a Vendure plugin: inject McpToolExecutionService and run MCP tools directly as the signed-in shopper, with no OAuth, no token and no HTTP call.'
+title: 'Assistant inside Novara Commerce'
+metaTitle: 'Build an MCP Assistant inside Novara Commerce | Novara Commerce'
+metaDescription: 'Build a shop assistant as a Novara Commerce plugin: inject McpToolExecutionService and run MCP tools directly as the signed-in shopper, with no OAuth, no token and no HTTP call.'
 order: 3
 ---
 
-If your assistant runs inside the Vendure server, you can execute MCP tools directly, without OAuth and without an
+If your assistant runs inside the Novara Commerce server, you can execute MCP tools directly, without OAuth and without an
 HTTP connection.
 
-This guide builds a small chat assistant as a Vendure plugin. The assistant receives a shopper's message through
+This guide builds a small chat assistant as a Novara Commerce plugin. The assistant receives a shopper's message through
 the Shop API and passes the available MCP tools to your model. It then executes whichever tool the model picks,
 using the `RequestContext` from that request.
 
 ## When to use this approach
 
-Use this approach when your assistant runs as part of the Vendure server, for example as a Vendure plugin.
+Use this approach when your assistant runs as part of the Novara Commerce server, for example as a Novara Commerce plugin.
 
 Use a different approach when:
 
-- **The assistant runs as a separate service.** It sits outside the Vendure process, so it authenticates with
-  OAuth. See [Assistant outside Vendure](/mcp-server/assistant-outside-vendure/).
+- **The assistant runs as a separate service.** It sits outside the Novara Commerce process, so it authenticates with
+  OAuth. See [Assistant outside Novara Commerce](/mcp-server/assistant-outside-vendure/).
 - **The AI client belongs to the shopper**, such as Claude Desktop, ChatGPT, or Cursor. Those clients authenticate
   themselves, so you need [the customer consent page](/mcp-server/oauth-consent/#before-you-start).
 
@@ -62,7 +62,7 @@ decides which shopper the tool runs as, so a hand-built context runs the tool as
 ### Failed calls
 
 A failed tool call returns `isError: true` with a text explanation instead of throwing. An error thrown inside the
-tool comes back the same way. So does a Vendure error result that a tool returns, for example the
+tool comes back the same way. So does a Novara Commerce error result that a tool returns, for example the
 `CouponCodeInvalidError` from `apply_coupon_code`. In that case `structuredContent` is the error object itself,
 with its `errorCode` and `message`, so the caller can act on the code.
 
@@ -107,7 +107,7 @@ AssistantService
       │                                                      │
       │                                            picks a tool
       │                                                      ▼
-      └── executeTool(ctx, 'shop', name, args) ──────► Vendure MCP tool
+      └── executeTool(ctx, 'shop', name, args) ──────► Novara Commerce MCP tool
 ```
 
 ### 1. Create the plugin
@@ -168,10 +168,10 @@ export class AssistantResolver {
 #### Why the mutation uses Owner
 
 If your assistant should work for guests as well as logged-in shoppers, use the `Owner` permission on the Shop API
-mutation. Vendure creates a shopper's session only when the operation being called asks for `Owner`.
+mutation. Novara Commerce creates a shopper's session only when the operation being called asks for `Owner`.
 
 Without a session, a guest has no active order, and the cart, checkout and order tools all refuse. `add_to_cart`
-answers that it requires a Vendure session and that the mutation calling it must use the `Owner` permission; every
+answers that it requires a Novara Commerce session and that the mutation calling it must use the `Owner` permission; every
 other cart tool answers "There is no active cart. Add an item with add_to_cart first." Tools that only read public
 catalogue data, such as `search_products`, work without a session.
 

@@ -1,4 +1,4 @@
-# Vendure
+# Novara Commerce
 
 Headless e-commerce framework. Lerna monorepo with fixed versioning.
 

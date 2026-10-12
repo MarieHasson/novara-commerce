@@ -19,7 +19,7 @@ export const TEMP_COMPILATION_DIR_NAME = 'vendure-dashboard-temp';
  * the nearest `package.json` — which, inside `@vendure/dashboard`, declares
  * `"type": "module"` — and loading throws
  * `ReferenceError: exports is not defined in ES module scope`. See
- * https://github.com/vendurehq/vendure/issues/4979.
+ * https://github.com/MarieHasson/novara-commerce/issues/4979.
  *
  * Placing the output under the consuming project's `node_modules/.cache` keeps
  * module resolution intact (the compiled config can still resolve

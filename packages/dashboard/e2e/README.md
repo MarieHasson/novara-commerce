@@ -1,6 +1,6 @@
 # Dashboard E2E Tests
 
-Playwright-based end-to-end tests for the Vendure dashboard.
+Playwright-based end-to-end tests for the Novara Commerce dashboard.
 
 ## Running tests
 
@@ -16,7 +16,7 @@ CI=true VITE_TEST_PORT=5176 npx playwright test --config e2e/playwright.config.t
 
 The E2E test infrastructure has two independent servers:
 
-1. **Vendure backend** — started in `global-setup.ts` using `@vendure/testing`.
+1. **Novara Commerce backend** — started in `global-setup.ts` using `@vendure/testing`.
    Runs on the port defined in `constants.ts`. Seeded with test data (products,
    customers, etc.) and configured with custom fields and test plugins.
 
@@ -28,7 +28,7 @@ These two servers use separate configurations:
 
 | Server | Config | Purpose |
 |--------|--------|---------|
-| Vendure backend | `global-setup.ts` (imports `e2e-shared-config.ts`) | Starts the Vendure server with test DB, CORS, custom fields, and server-only plugins |
+| Novara Commerce backend | `global-setup.ts` (imports `e2e-shared-config.ts`) | Starts the Novara Commerce server with test DB, CORS, custom fields, and server-only plugins |
 | Vite dev server | `fixtures/e2e-vendure-config.ts` (via `VENDURE_CONFIG_PATH`) | Tells the Vite plugin which dashboard extensions to load |
 
 **Important:** Custom fields belong only in `global-setup.ts` (via
@@ -43,7 +43,7 @@ discovers custom fields at runtime from the backend API.
 e2e/
 ├── fixtures/                        # Test data and plugins
 │   ├── e2e-shared-config.ts          # Custom fields & payment handlers (backend only)
-│   ├── e2e-vendure-config.ts        # Vendure config for Vite plugin discovery
+│   ├── e2e-vendure-config.ts        # Novara Commerce config for Vite plugin discovery
 │   ├── form-inputs-test-plugin.ts   # Example: E2E-only dashboard plugin
 │   ├── form-inputs-test-dashboard/  # Dashboard extension for the plugin above
 │   │   ├── index.tsx                # Entry point (defineDashboardExtension)

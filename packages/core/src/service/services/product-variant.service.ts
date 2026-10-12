@@ -1111,7 +1111,7 @@ export class ProductVariantService {
         isUpdateOperation?: boolean,
     ) {
         // this could be done with fewer queries but depending on the data, node will crash
-        // https://github.com/vendurehq/vendure/issues/328
+        // https://github.com/MarieHasson/novara-commerce/issues/328
         const optionGroups = (
             await this.connection.getEntityOrThrow(ctx, Product, productId, {
                 channelId: ctx.channelId,

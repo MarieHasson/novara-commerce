@@ -1,15 +1,15 @@
 ---
 title: 'Creating Detail Views'
-metaTitle: "Creating Detail Views in the Vendure Admin UI"
+metaTitle: "Creating Detail Views in the Novara Commerce Admin UI"
 metaDescription: "Build custom entity detail views by extending TypedBaseDetailComponent with forms, GraphQL queries, custom field support, and route configuration."
 ---
 
 The two most common type of components you'll be creating in your UI extensions are list components and detail components.
 
-In Vendure, we have standardized the way you write these components so that your ui extensions can be made to fit seamlessly into the rest of the app.
+In Novara Commerce, we have standardized the way you write these components so that your ui extensions can be made to fit seamlessly into the rest of the app.
 
 :::note
-The specific pattern described here is for Angular-based components. It is also possible to create detail views using React components, but 
+The specific pattern described here is for Angular-based components. It is also possible to create detail views using React components, but
 in that case you won't be able to use the built-in Angular-specific components.
 :::
 
@@ -236,7 +236,7 @@ export default [
 
 ## Supporting custom fields
 
-From Vendure v2.2, it is possible for your [custom entities to support custom fields](/developer-guide/database-entity/#supporting-custom-fields).
+From Novara Commerce v2.2, it is possible for your [custom entities to support custom fields](/developer-guide/database-entity/#supporting-custom-fields).
 
 If you have set up your entity to support custom fields, and you want custom fields to be available in the Admin UI detail view,
 you need to add the following to your detail component:

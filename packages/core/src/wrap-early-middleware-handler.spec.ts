@@ -13,7 +13,7 @@ function makeParser(name: 'jsonParser' | 'urlencodedParser') {
     return fn;
 }
 
-// https://github.com/vendurehq/vendure/issues/5028
+// https://github.com/MarieHasson/novara-commerce/issues/5028
 describe('wrapEarlyMiddlewareHandler', () => {
     it('wraps a route-scoped jsonParser so its name no longer collides', () => {
         const handler = makeParser('jsonParser');

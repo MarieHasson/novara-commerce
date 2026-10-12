@@ -1,35 +1,28 @@
-# @vendure/docs
+# Novara Commerce documentation
 
-This package contains the official documentation for [Vendure](https://www.vendure.io/), the open-source headless e-commerce framework.
+This workspace contains the guides, generated API reference, and administration user documentation for Novara Commerce.
 
-## Overview
+## Contents
 
-The `@vendure/docs` package provides:
+- `docs/guides/` — getting-started, core-concept, developer, and how-to guides
+- `docs/reference/` — generated TypeScript, GraphQL, and plugin API reference
+- `docs/user-guide/` — administration dashboard documentation
+- `src/manifest.ts` — navigation and documentation metadata
 
-- **Guides**: Getting started, core concepts, developer guides, and how-to tutorials
-- **Reference Documentation**: TypeScript API, GraphQL API (Admin & Shop), and plugin documentation
-- **User Guide**: End-user documentation for the Admin UI
+## Development
 
-## Usage
+From the repository root, generate the API reference with:
 
-This package is designed to be consumed by the Vendure documentation platform. It exports a manifest that describes the structure and location of all documentation files.
-
-```typescript
-import { manifest } from '@vendure/docs/manifest';
+```bash
+bun run docs:build
 ```
 
-## Structure
+Files below `docs/reference/` are generated from source code and should not be edited directly. Update the relevant source or JSDoc comments and regenerate them instead.
 
-- `docs/` - MDX documentation files organized by category
-- `dist/` - Compiled TypeScript exports
-- `src/manifest.ts` - Documentation manifest defining navigation structure
+## Repository
 
-## Links
-
-- [Vendure Documentation](https://docs.vendure.io/)
-- [Vendure GitHub](https://github.com/vendure-ecommerce/vendure)
-- [Vendure Website](https://www.vendure.io/)
+Project source, issues, and documentation changes are managed in the [Novara Commerce repository](https://github.com/MarieHasson/novara-commerce).
 
 ## License
 
-This package is part of the Vendure project and is licensed under the GPL v3 license.
+This documentation is distributed under the project license in [`../LICENSE.md`](../LICENSE.md).

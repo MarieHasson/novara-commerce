@@ -233,7 +233,7 @@ describe('Import resolver', () => {
         expect(paperStretcher.customFields.localName).toEqual('纸张拉伸器');
     }, 20000);
 
-    // https://github.com/vendurehq/vendure/issues/4482
+    // https://github.com/MarieHasson/novara-commerce/issues/4482
     it('imports products with shared option groups', async () => {
         const timeout = process.env.CI ? 2000 : 1000;
         await new Promise(resolve => {

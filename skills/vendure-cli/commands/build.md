@@ -1,6 +1,6 @@
 # vendure build
 
-Compiles a Vendure project for production: the server and worker are compiled
+Compiles a Novara Commerce project for production: the server and worker are compiled
 with TypeScript, the dashboard with Vite.
 
 ## Usage

@@ -1,6 +1,6 @@
 ---
 title: "Promotions"
-metaTitle: "Setting Up Promotions and Coupon Codes in Vendure"
+metaTitle: "Setting Up Promotions and Coupon Codes in Novara Commerce"
 metaDescription: "Configure promotions with conditions and actions to offer discounts, free shipping, and coupon codes. Set per-customer usage limits and custom business rules."
 order: 4
 ---
@@ -12,14 +12,14 @@ Promotions are a means of offering discounts on an order based on various criter
 
 ## Promotion Conditions
 
-A condition defines the criteria that must be met for the Promotion to be activated. Vendure comes with some simple conditions provided which enable things like:
+A condition defines the criteria that must be met for the Promotion to be activated. Novara Commerce comes with some simple conditions provided which enable things like:
 
 * If the order total is at least $X
 * Buy at least X of a certain product
 * Buy at least X of any product with the specified [FacetValues](/user-guide/catalog/facets)
 * If the customer is a member of the specified [Customer Group](/user-guide/customers#customer-groups)
 
-Vendure allows completely custom conditions to be defined by your developers, implementing the specific logic needed by your business.
+Novara Commerce allows completely custom conditions to be defined by your developers, implementing the specific logic needed by your business.
 
 ## Coupon codes
 
@@ -32,7 +32,7 @@ Note: Promotions **must** have either a **coupon code** _or_ **at least 1 condit
 
 ## Promotion Actions
 
-If all the defined conditions pass (or if the specified coupon code is used), then the actions are performed on the order. Vendure comes with some commonly-used actions which allow promotions like:
+If all the defined conditions pass (or if the specified coupon code is used), then the actions are performed on the order. Novara Commerce comes with some commonly-used actions which allow promotions like:
 
 * Discount the whole order by a fixed amount
 * Discount the whole order by a percentage

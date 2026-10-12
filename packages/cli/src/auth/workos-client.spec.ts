@@ -102,12 +102,12 @@ describe('startDeviceAuthorization', () => {
         }) as typeof globalThis.fetch;
 
         await startDeviceAuthorization(
-            { clientId: 'client_01TEST', apiHostname: 'auth.vendure.io' },
+            { clientId: 'client_01TEST', apiHostname: 'auth.example.com' },
             { fetch },
         );
 
         expect(requests).toEqual([
-            'https://auth.vendure.io/user_management/authorize/device client_id=client_01TEST',
+            'https://auth.example.com/user_management/authorize/device client_id=client_01TEST',
         ]);
     });
 

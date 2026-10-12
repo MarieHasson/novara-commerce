@@ -1,6 +1,6 @@
 # Email sending problems
 
-Applies to: Vendure 3.x with `@vendure/email-plugin`. The admin password
+Applies to: Novara Commerce 3.x with `@vendure/email-plugin`. The admin password
 reset email is a default handler since v3.8.0.
 
 ## Symptoms
@@ -60,4 +60,4 @@ reset email is a default handler since v3.8.0.
 | Wrong links in emails                 | Set the URL variables in `globalTemplateVars`                               | `core-concepts/email#email-variables`                                  |
 | Different SMTP settings per channel   | Use a transport function                                                    | `reference/core-plugins/email-plugin#dynamic-smtp-settings`            |
 
-All references are paths under `https://docs.vendure.io/current/core/`.
+All references are paths under `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/`.

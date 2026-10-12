@@ -1,10 +1,10 @@
 ---
 title: "Job Queue"
-metaTitle: "Background Job Queue Architecture in Vendure"
-metaDescription: "How Vendure uses a background job queue to handle long-running tasks like search indexing, collection updates, and email sending without blocking API requests."
+metaTitle: "Background Job Queue Architecture in Novara Commerce"
+metaDescription: "How Novara Commerce uses a background job queue to handle long-running tasks like search indexing, collection updates, and email sending without blocking API requests."
 ---
 
-Vendure uses a **background job queue** to offload long-running or resource-intensive tasks from the
+Novara Commerce uses a **background job queue** to offload long-running or resource-intensive tasks from the
 main request-response cycle. Instead of making an API consumer wait while a heavy operation completes,
 the server adds a job to the queue and returns immediately. A separate worker process then picks up
 and executes the job asynchronously.
@@ -18,7 +18,7 @@ The job queue system has two sides:
   search index rather than doing it synchronously.
 
 - **The Worker** — a separate NestJS standalone application that listens to the queue and processes
-  jobs. The worker runs the same Vendure plugins and services as the server, but it is optimized
+  jobs. The worker runs the same Novara Commerce plugins and services as the server, but it is optimized
   for background processing rather than handling HTTP requests.
 
 This separation means the API remains responsive even when the system is processing heavy workloads
@@ -40,7 +40,7 @@ Plugins can also add their own job types to the queue for any custom background 
 ## Job queue strategies
 
 The underlying storage and processing mechanism for the job queue is controlled by a
-**JobQueueStrategy**. Vendure supports several strategies:
+**JobQueueStrategy**. Novara Commerce supports several strategies:
 
 - **In-memory** — jobs are held in process memory. Simple and requires no infrastructure, but jobs
   are lost if the process restarts. Suitable only for development.

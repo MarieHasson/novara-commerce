@@ -70,7 +70,7 @@ export class CustomerChannelAssignmentService {
             // Two requests for the same Customer can reach this at once and both try to add the same
             // Channel. If the database rejects ours as a duplicate, the other one already did the
             // work, so let it pass. Any other failure is real and should surface.
-            // See https://github.com/vendurehq/vendure/issues/834
+            // See https://github.com/MarieHasson/novara-commerce/issues/834
             const isDuplicateError =
                 e.code === 'ER_DUP_ENTRY' /* MySQL/MariaDB */ || e.code === '23505'; /* Postgres */
             if (!isDuplicateError) {

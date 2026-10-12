@@ -1,6 +1,6 @@
 # vendure schema
 
-Generates a schema file from a Vendure GraphQL API (Admin or Shop).
+Generates a schema file from a Novara Commerce GraphQL API (Admin or Shop).
 
 ## Usage
 
@@ -16,7 +16,7 @@ vendure schema -a <admin|shop> [options]
 | `-d, --dir <dir>`          | No       | Output directory (default: current directory)                       |
 | `-n, --file-name <name>`   | No       | Output file name (default `schema.graphql\|json` / `schema-shop.*`) |
 | `-f, --format <sdl\|json>` | No       | Output format: SDL or JSON                                          |
-| `--config <path>`          | No       | Path to a custom Vendure config file                                |
+| `--config <path>`          | No       | Path to a custom Novara Commerce config file                                |
 
 ## Examples
 

@@ -62,7 +62,7 @@ describe('removeEmptyIdFields', () => {
     });
 });
 
-// https://github.com/vendurehq/vendure/issues/4885 (OSS-579)
+// https://github.com/MarieHasson/novara-commerce/issues/4885 (OSS-579)
 // The form seeds a translation row per configured language; submitting the unfilled ones
 // persists empty translation rows that break language fallback. stripUntouchedTranslations
 // keeps a row when it is dirty OR persisted, and drops it otherwise.

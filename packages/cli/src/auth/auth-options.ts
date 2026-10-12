@@ -35,7 +35,7 @@ export function resolveConsoleApiUrl(options: AuthOptions = {}): string {
     const consoleApi = classifyConsoleApiOrigin(apiUrl);
     if (!consoleApi) {
         throw new Error(
-            'VENDURE_CONSOLE_API_URL is not a Vendure Console API. Use https://staging.api.vendure.io for ' +
+            'VENDURE_CONSOLE_API_URL is not a Vendure Console API. Use https://staging.api.example.com for ' +
                 'staging, a loopback URL for local development, or unset it.',
         );
     }

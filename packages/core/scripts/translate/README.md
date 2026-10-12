@@ -66,7 +66,7 @@ first apply.
    argument value, matching on the exact name inside the braces, and it keeps the spaces. A renamed
    or reformatted placeholder is left in the text as-is and the administrator sees the raw braces.
 2. **Keep technical terms untranslated.** "SKU", "API", "GraphQL", "JSON".
-3. **Keep brand names untranslated.** "Vendure".
+3. **Keep brand names untranslated.** "Novara Commerce".
 4. **Use formal address**, as is appropriate for business software.
 5. **Assume e-commerce context.** "order" means a purchase, "customer" means a buyer, "variant"
    means a product variant.

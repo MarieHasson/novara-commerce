@@ -1,6 +1,6 @@
 ---
 title: "Configurable Products"
-metaTitle: "Configurable Products in Vendure with Custom Fields"
+metaTitle: "Configurable Products in Novara Commerce with Custom Fields"
 metaDescription: "Use OrderLine custom fields to support customer-configurable products like engravings or gift messages, with optional dynamic pricing via a custom strategy."
 ---
 
@@ -10,7 +10,7 @@ A "configurable product" is one where aspects can be configured by the customer,
 - A gift message inserted with the packaging
 - An uploaded image to be printed on a t-shirt
 
-In Vendure this is done by defining one or more [custom fields](/developer-guide/custom-fields/) on the [OrderLine](/reference/typescript-api/entities/order-line/) entity.
+In Novara Commerce this is done by defining one or more [custom fields](/developer-guide/custom-fields/) on the [OrderLine](/reference/typescript-api/entities/order-line/) entity.
 
 ## Defining custom fields
 
@@ -89,11 +89,11 @@ mutation {
 }
 ```
 
-Your storefront application will need to provide a `<textarea>` for the customer to enter the engraving text, which would be displayed conditionally depending on the value of the `engravable` custom field on the `ProductVariant`. 
+Your storefront application will need to provide a `<textarea>` for the customer to enter the engraving text, which would be displayed conditionally depending on the value of the `engravable` custom field on the `ProductVariant`.
 
 ## Modifying the price
 
-The values of these OrderLine custom fields can even be used to modify the price. This is done by defining a custom [OrderItemPriceCalculationStrategy](/reference/typescript-api/orders/order-item-price-calculation-strategy/). 
+The values of these OrderLine custom fields can even be used to modify the price. This is done by defining a custom [OrderItemPriceCalculationStrategy](/reference/typescript-api/orders/order-item-price-calculation-strategy/).
 
 Let's say that our engraving service costs and extra $10 on top of the regular price of the product variant. Here's a strategy to implement this:
 

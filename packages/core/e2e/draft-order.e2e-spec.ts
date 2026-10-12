@@ -403,7 +403,7 @@ describe('Draft Orders resolver', () => {
         expect(setDraftOrderShippingMethod.shippingLines[0].shippingMethod.id).toBe('T_2');
     });
 
-    // https://github.com/vendurehq/vendure/issues/2105
+    // https://github.com/MarieHasson/novara-commerce/issues/2105
     it('sets order as placed when payment is settled', async () => {
         TestOrderPlacedStrategy.spy.mockClear();
         expect(TestOrderPlacedStrategy.spy.mock.calls.length).toBe(0);
@@ -437,7 +437,7 @@ describe('Draft Orders resolver', () => {
         expect(TestOrderPlacedStrategy.spy.mock.calls[0][0].code).toBe(draftOrder.code);
     });
 
-    // https://github.com/vendurehq/vendure/issues/4753
+    // https://github.com/MarieHasson/novara-commerce/issues/4753
     // An auto-applied promotion with a perCustomerUsageLimit must not toggle on/off
     // as a draft order is recalculated. Draft orders are not "placed" and must not
     // count towards a promotion's usage limit.

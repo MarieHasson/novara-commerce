@@ -1,7 +1,7 @@
 ---
 title: "Customer Accounts"
-metaTitle: "Customer Account Management in a Vendure Storefront"
-metaDescription: "Implement customer registration, login, email verification, and password reset flows in your Vendure storefront using the Shop API GraphQL mutations."
+metaTitle: "Customer Account Management in a Novara Commerce Storefront"
+metaDescription: "Implement customer registration, login, email verification, and password reset flows in your Novara Commerce storefront using the Shop API GraphQL mutations."
 ---
 
 Customers can register accounts and thereby gain the ability to:
@@ -261,7 +261,7 @@ If a password _does_ get passed at this step, then it won't be needed at the ver
 you can make based on the desired user experience of your storefront.
 
 Upon registration, the [EmailPlugin](/reference/core-plugins/email-plugin/) will generate an email to the
-customer containing a link to the verification page. In a default Vendure installation this is set in the vendure config file:
+customer containing a link to the verification page. In a default Novara Commerce installation this is set in the vendure config file:
 
 ```ts title="src/vendure-config.ts"
 EmailPlugin.init({
@@ -270,10 +270,10 @@ EmailPlugin.init({
     templatePath: path.join(__dirname, '../static/email/templates'),
     outputPath: path.join(__dirname, '../static/email/output'),
     globalTemplateVars: {
-        fromAddress: '"Vendure Demo Store" <noreply@vendure.io>',
-        verifyEmailAddressUrl: 'https://demo.vendure.io/storefront/account/verify', // [!code highlight]
-        passwordResetUrl: 'https://demo.vendure.io/storefront/account/reset-password',
-        changeEmailAddressUrl: 'https://demo.vendure.io/storefront/account/change-email-address'
+        fromAddress: '"Novara Commerce Demo Store" <noreply@example.com>',
+        verifyEmailAddressUrl: 'https://example.com/storefront/account/verify', // [!code highlight]
+        passwordResetUrl: 'https://example.com/storefront/account/reset-password',
+        changeEmailAddressUrl: 'https://example.com/storefront/account/change-email-address'
     },
     devMode: true,
 }),

@@ -1,12 +1,12 @@
 ---
 title: "Database subscribers"
-metaTitle: "TypeORM Database Subscribers in Vendure"
-metaDescription: "Register TypeORM entity subscribers in Vendure to react to database insert, update, and delete events with full dependency injection support."
+metaTitle: "TypeORM Database Subscribers in Novara Commerce"
+metaDescription: "Register TypeORM entity subscribers in Novara Commerce to react to database insert, update, and delete events with full dependency injection support."
 ---
 
 TypeORM allows us to define [subscribers](https://typeorm.io/listeners-and-subscribers#what-is-a-subscriber). With a subscriber, we can listen to specific entity events and take actions based on inserts, updates, deletions and more.
 
-If you need lower-level access to database changes that you get with the [Vendure EventBus system](/reference/typescript-api/events/event-bus/), TypeORM subscribers can be useful.
+If you need lower-level access to database changes that you get with the [Novara Commerce EventBus system](/reference/typescript-api/events/event-bus/), TypeORM subscribers can be useful.
 
 ## Simple subscribers
 
@@ -21,7 +21,7 @@ export class ProductSubscriber implements EntitySubscriberInterface<Product> {
   listenTo() {
     return Product;
   }
-  
+
   beforeUpdate(event: UpdateEvent<Product>) {
     console.log(`BEFORE PRODUCT UPDATED: `, event.entity);
   }
@@ -47,7 +47,7 @@ If you need to make use of providers in your subscriber class, you'll need to us
 
 ## Injectable subscribers
 
-By defining the subscriber as an injectable provider, and passing it to a Vendure plugin, you can take advantage of Nest's dependency injection inside the subscriber methods.
+By defining the subscriber as an injectable provider, and passing it to a Novara Commerce plugin, you can take advantage of Nest's dependency injection inside the subscriber methods.
 
 ```ts title="src/plugins/my-plugin/product-subscriber.ts"
 import {
@@ -107,7 +107,7 @@ export const config: VendureConfig = {
 
 ## Troubleshooting subscribers
 
-An important factor when working with TypeORM subscribers is that they are very low-level and require some understanding of the Vendure schema.
+An important factor when working with TypeORM subscribers is that they are very low-level and require some understanding of the Novara Commerce schema.
 
 For example consider the `ProductSubscriber` above. If an admin changes a product's name in the Dashboard, this subscriber **will not fire**. The reason is that the `name` property is actually stored on the `ProductTranslation` entity, rather than on the `Product` entity.
 

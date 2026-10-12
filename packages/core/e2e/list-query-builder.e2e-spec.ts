@@ -366,7 +366,7 @@ describe('ListQueryBuilder', () => {
                 expect(getItemLabels(testEntities.items)).toEqual(['B', 'D', 'E']);
             });
 
-            // https://github.com/vendurehq/vendure/security/advisories/GHSA-jgm3-qmp2-c4p7
+            // https://github.com/MarieHasson/novara-commerce/security/advisories/GHSA-jgm3-qmp2-c4p7
             it(
                 'rejects a catastrophic-backtracking pattern (ReDoS)',
                 assertThrowsWithMessage(
@@ -401,7 +401,7 @@ describe('ListQueryBuilder', () => {
                 ),
             );
 
-            // https://github.com/vendurehq/vendure/security/advisories/GHSA-jgm3-qmp2-c4p7
+            // https://github.com/MarieHasson/novara-commerce/security/advisories/GHSA-jgm3-qmp2-c4p7
             // An overlapping-alternation pattern that the star-height check does not reject. On
             // SQLite backends it is evaluated by RE2 in linear time and must be accepted. Other
             // database engines handle it their own way (e.g. MySQL's ICU aborts with a match-limit
@@ -1315,7 +1315,7 @@ describe('ListQueryBuilder', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/1586
+    // https://github.com/MarieHasson/novara-commerce/issues/1586
     it('using the getMany() of the resulting QueryBuilder', async () => {
         const { testEntitiesGetMany } = await adminClient.query(GET_ARRAY_LIST, {});
         const actualPrices = testEntitiesGetMany
@@ -1326,7 +1326,7 @@ describe('ListQueryBuilder', () => {
         expect(actualPrices).toEqual(expectedPrices);
     });
 
-    // https://github.com/vendurehq/vendure/issues/1611
+    // https://github.com/MarieHasson/novara-commerce/issues/1611
     describe('translations handling', () => {
         const allTranslations = [
             [
@@ -1495,7 +1495,7 @@ describe('ListQueryBuilder', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/3267
+    // https://github.com/MarieHasson/novara-commerce/issues/3267
     describe('filtering with duplicate custom property fields in _and blocks', () => {
         it('filters by single tagId', async () => {
             const { testEntities } = await shopClient.query(GET_LIST_WITH_TAGS, {

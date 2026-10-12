@@ -3,7 +3,7 @@ title: 'Telemetry'
 sidebar_position: 38
 ---
 
-Starting with Vendure v3.6.0, the framework collects anonymous usage telemetry to help the core team understand how Vendure is being used. This data helps prioritize development efforts and identify common deployment patterns.
+Starting with Novara Commerce v3.6.0, the framework collects anonymous usage telemetry to help the core team understand how Novara Commerce is being used. This data helps prioritize development efforts and identify common deployment patterns.
 
 Telemetry collection is designed with privacy as a core principle. No personally identifiable information (PII) is ever collected, and the data is anonymized before transmission.
 
@@ -17,7 +17,7 @@ The following data is included in each telemetry event:
 
 ### Installation ID
 
-A randomly generated UUID that identifies your Vendure installation. This ID is:
+A randomly generated UUID that identifies your Novara Commerce installation. This ID is:
 
 - Generated using `crypto.randomUUID()` (not derived from any system information)
 - Stored primarily in the database (via the internal Settings Store), with a filesystem fallback at `.vendure/.installation-id` in your project root
@@ -25,7 +25,7 @@ A randomly generated UUID that identifies your Vendure installation. This ID is:
 
 ### Version Information
 
-- Vendure version (e.g., `3.6.0`)
+- Novara Commerce version (e.g., `3.6.0`)
 - Node.js version (e.g., `20.10.0`)
 - Operating system platform and architecture (e.g., `linux x64`, `darwin arm64`, `win32 x64`)
 - `NODE_ENV` environment variable value (e.g., `production`, `development`)
@@ -49,13 +49,13 @@ The type of database being used:
 
 ### Plugins
 
-- **Official Vendure plugins**: Package names are collected (e.g., `@vendure/email-plugin`, `@vendure/dashboard`)
+- **Official Novara Commerce plugins**: Package names are collected (e.g., `@vendure/email-plugin`, `@vendure/dashboard`)
 - **Third-party npm plugins**: Package names are collected if resolvable from `node_modules`
 - **Custom plugins**: Only a count is collected, **names are not collected**
 
 ### Entity Metrics
 
-Record counts for core Vendure entities, reported as **ranges** rather than exact numbers:
+Record counts for core Novara Commerce entities, reported as **ranges** rather than exact numbers:
 
 | Range      | Description               |
 | ---------- | ------------------------- |
@@ -117,7 +117,7 @@ The following data is explicitly **not** collected:
 
 ## How We Use This Data
 
-Telemetry data helps the Vendure team:
+Telemetry data helps the Novara Commerce team:
 
 - **Understand adoption patterns**: Which plugins are most commonly used, what database types are preferred
 - **Prioritize development**: Focus efforts on the most-used features and platforms
@@ -145,7 +145,7 @@ Travis CI, CircleCI, GitHub Actions, GitLab CI, Jenkins, Bitbucket Pipelines, Az
 
 ## Technical Details
 
-- **Endpoint**: `https://telemetry.vendure.io/api/v1/collect`
+- **Endpoint**: `https://example.com/api/v1/collect`
 - **Timing**: An initial send ~5 seconds after startup, then a heartbeat roughly every 24 hours (plus a small random jitter). All sends are non-blocking (fire-and-forget)
 - **Timeout**: 5 seconds (telemetry collection never delays server startup)
 - **Failure handling**: All errors are silently ignored

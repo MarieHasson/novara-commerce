@@ -112,7 +112,7 @@
 
 ## <small>2.2.2 (2024-04-25)</small>
 
-This release contains no changes - it was published to fix a mistake 
+This release contains no changes - it was published to fix a mistake
 in the publishing of the `@vendure/admin-ui@2.2.1` package.
 
 ## <small>2.2.1 (2024-04-25)</small>
@@ -250,7 +250,7 @@ in the publishing of the `@vendure/admin-ui@2.2.1` package.
 * **core** Update NestJS to latest version (v10.3.3) ([573ae18](https://github.com/vendure-ecommerce/vendure/commit/573ae18))
 * **core** Update TypeORM to v0.3.20 ([0afc94e](https://github.com/vendure-ecommerce/vendure/commit/0afc94e))
 * **core** Update TypeScript version to v5.1.6 ([2f51929](https://github.com/vendure-ecommerce/vendure/commit/2f51929))
-* **create** Ship Vendure CLI with new projects ([faf69a9](https://github.com/vendure-ecommerce/vendure/commit/faf69a9))
+* **create** Ship Novara Commerce CLI with new projects ([faf69a9](https://github.com/vendure-ecommerce/vendure/commit/faf69a9))
 * **elasticsearch-plugin** Provide the ctx for custom mappings (#2547) ([c5d0ea2](https://github.com/vendure-ecommerce/vendure/commit/c5d0ea2)), closes [#2547](https://github.com/vendure-ecommerce/vendure/issues/2547)
 * **email-plugin** Multiple currency support in formatMoney helper (#2531) ([ccf17fb](https://github.com/vendure-ecommerce/vendure/commit/ccf17fb)), closes [#2531](https://github.com/vendure-ecommerce/vendure/issues/2531)
 * **email-plugin** Publish EmailSendEvent after send attempted ([e4175e7](https://github.com/vendure-ecommerce/vendure/commit/e4175e7))
@@ -762,7 +762,7 @@ so if you use these languages you will encounter layout issues.
 * **core** Translatable fields default to empty string if falsy ([e119154](https://github.com/vendure-ecommerce/vendure/commit/e119154))
 * **core** Fix error messages containing colon char ([2cfc874](https://github.com/vendure-ecommerce/vendure/commit/2cfc874)), closes [#2153](https://github.com/vendure-ecommerce/vendure/issues/2153)
 * **core** Fix issues with Promotion & PaymentMethod null descriptions ([7b407de](https://github.com/vendure-ecommerce/vendure/commit/7b407de))
-* **create** Use "create" version for all Vendure dependencies ([844b9ba](https://github.com/vendure-ecommerce/vendure/commit/844b9ba))
+* **create** Use "create" version for all Novara Commerce dependencies ([844b9ba](https://github.com/vendure-ecommerce/vendure/commit/844b9ba))
 * **payments-plugin** Make peer dependencies optional ([98c764c](https://github.com/vendure-ecommerce/vendure/commit/98c764c))
 * **testing** More graceful shutdown ([aa91bd0](https://github.com/vendure-ecommerce/vendure/commit/aa91bd0))
 * **ui-devkit** Fix baseHref configuration ([c7836b2](https://github.com/vendure-ecommerce/vendure/commit/c7836b2)), closes [#1794](https://github.com/vendure-ecommerce/vendure/issues/1794)
@@ -834,9 +834,9 @@ so if you use these languages you will encounter layout issues.
 
 #### BREAKING CHANGES
 
-When updating from v1.x, please see the [Migration Guide](https://docs.vendure.io/migrating-from-v1/).
+When updating from v1.x, please see the [Migration Guide](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/migrating-from-v1/).
 
-* The Admin UI app has been refreshed, including upgrading to Angular v16 as well as a host of style, layout & functional improvements. 
+* The Admin UI app has been refreshed, including upgrading to Angular v16 as well as a host of style, layout & functional improvements.
    If you have ui extensions, they should still work but the layout will look somewhat broken. A full upgrade guide will be published with the final v2 release, but for now, wrapping all your custom pages in `<vdr-page-block>` (or `<div class="page-block">`) will improve things.
 * If you use any of the scoped method of the Admin UI `DataService`, you might find that some no longer exist. They are now deprecated and will eventually be removed. Use the `dataService.query()` and `dataService.mutation()` methods only, passing your own GraphQL documents.
 * ChannelService.findAll() will now return a PaginatedList<Channel> instead of a Channel[]
@@ -846,7 +846,7 @@ When updating from v1.x, please see the [Migration Guide](https://docs.vendure.i
 The old behaviour of `ZoneService.findAll()` (all Zones, cached for rapid access) can now be found under the new `ZoneService.getAllWithMembers()` method.
 * The Admin UI component `vdr-product-selector` has been renamed to `vdr-product-variant-selector` to more accurately represent what it does. If you are using `vdr-product-selector` if any ui extensions code, update it to use the new selector.
 * There's a breaking change you'll need to handle if you are using a `CustomOrderProcess`, `CustomFulfillmentProcess` or `CustomPaymentProcess`. Details in the migration guide.
-* The `Channel.currencyCode` field has been renamed to `defaultCurrencyCode`, and a new `currencyCode` field has been added to the `ProductVariantPrice` entity. 
+* The `Channel.currencyCode` field has been renamed to `defaultCurrencyCode`, and a new `currencyCode` field has been added to the `ProductVariantPrice` entity.
 * The introduction of the new MoneyStrategy includes a new GraphQL `Money` scalar, which replaces `Int` used in v1.x. In practice, this is still a `number` type and should not
 break any client applications. One point to note is that `Money` is based on the `Float` scalar and therefore can represent decimal values, allowing fractions of cents to be represented.
 * The minimum Redis recommended version is 6.2.0

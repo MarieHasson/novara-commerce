@@ -14,7 +14,7 @@ export default defineConfig({
         swc.vite({
             jsc: {
                 transform: {
-                    // See https://github.com/vendurehq/vendure/issues/2099
+                    // See https://github.com/MarieHasson/novara-commerce/issues/2099
                     useDefineForClassFields: false,
                 },
             },

@@ -22,7 +22,7 @@ describe('star prompt', () => {
             expect(write.mock.calls[0][0]).toContain(
                 'If you like the experience, please consider starring us on GitHub',
             );
-            expect(write.mock.calls[0][0]).toContain('https://github.com/vendurehq/vendure');
+            expect(write.mock.calls[0][0]).toContain('https://github.com/MarieHasson/novara-commerce');
             expect(existsSync(path.join(configDir, 'star-prompted'))).toBe(true);
 
             expect(showStarPromptOnce({ configDir, isInteractive: true, color: false, write })).toBe(false);

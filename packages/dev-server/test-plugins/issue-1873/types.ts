@@ -7,7 +7,7 @@ export interface PluginInitOptions {
 }
 
 /**
- * https://www.vendure.io/docs/developer-guide/customizing-models/
+ * https://github.com/MarieHasson/novara-commerce/docs/developer-guide/customizing-models/
  * https://www.typescriptlang.org/docs/handbook/modules.html#ambient-modules
  */
 declare module '@vendure/core' {}

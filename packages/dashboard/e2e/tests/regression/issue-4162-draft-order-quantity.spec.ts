@@ -2,8 +2,8 @@ import { type Page, expect, test } from '@playwright/test';
 
 import { BaseListPage } from '../../page-objects/list-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4162
-// Fix PR: https://github.com/vendurehq/vendure/pull/4345
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4162
+// Fix PR: https://github.com/MarieHasson/novara-commerce/pull/4345
 //
 // In a draft order, changing a line item's quantity to 0 or clearing the field
 // immediately removes the product. Mutations also fire on every keystroke,

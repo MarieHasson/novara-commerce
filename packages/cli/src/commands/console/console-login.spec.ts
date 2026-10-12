@@ -35,17 +35,17 @@ import { ProjectLinkManifest, getProjectLinkManifestPath } from './project-link-
  * The official production pair. Nothing reaches the network: every request
  * goes through the injected `fetch`, which answers as Console and WorkOS.
  */
-const API_URL = 'https://api.vendure.io';
+const API_URL = 'https://api.example.com';
 const OFFICIAL_ENV = {
     VENDURE_CLI_NON_INTERACTIVE: 'true',
-    VENDURE_CONSOLE_APP_URL: 'https://console.vendure.io',
+    VENDURE_CONSOLE_APP_URL: 'https://console.example.com',
     VENDURE_CONSOLE_API_URL: API_URL,
 };
 
 const productionManifest: ProjectLinkManifest = {
     ...manifest,
     schemaVersion: 1,
-    console: { appOrigin: 'https://console.vendure.io', apiOrigin: API_URL },
+    console: { appOrigin: 'https://console.example.com', apiOrigin: API_URL },
 };
 
 const twoAccounts = [
@@ -323,7 +323,7 @@ describe('console link command line login', () => {
         expect(run.exitCode).toBe(1);
         expect(run.messages.join('\n')).toContain(
             'Your Vendure Console login has no Customer Account yet. Create one at ' +
-                'https://console.vendure.io/onboarding, then run vendure console link again.',
+                'https://console.example.com/onboarding, then run vendure console link again.',
         );
         expectUnchangedUnscopedLogin(run);
     });

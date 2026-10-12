@@ -1,7 +1,7 @@
 ---
 title: 'The Service Layer'
-metaTitle: "Vendure Service Layer - Business Logic and Database Access"
-metaDescription: "Understand Vendure's service layer where business logic lives. Covers service structure, dependency injection, the RequestContext, and TransactionalConnection."
+metaTitle: "Novara Commerce Service Layer - Business Logic and Database Access"
+metaDescription: "Understand Novara Commerce's service layer where business logic lives. Covers service structure, dependency injection, the RequestContext, and TransactionalConnection."
 order: 2
 ---
 
@@ -16,7 +16,7 @@ Services are classes which, in NestJS terms, are [providers](https://docs.nestjs
 follow all the rules of NestJS providers, including dependency injection, scoping, etc.
 :::
 
-Services are generally scoped to a specific domain or entity. For instance, in the Vendure core, there is a [`Product` entity](/reference/typescript-api/entities/product),
+Services are generally scoped to a specific domain or entity. For instance, in the Novara Commerce core, there is a [`Product` entity](/reference/typescript-api/entities/product),
 and a corresponding [`ProductService`](/reference/typescript-api/services/product-service) which contains all the methods for interacting with products.
 
 Here's a simplified example of a `ProductService`, including an implementation of the `findOne()` method that was
@@ -64,7 +64,7 @@ export class ProductService {
 
 ## Using core services
 
-All the internal Vendure services can be used in your own plugins and scripts. They are listed in the [Services API reference](/reference/typescript-api/services/) and
+All the internal Novara Commerce services can be used in your own plugins and scripts. They are listed in the [Services API reference](/reference/typescript-api/services/) and
 can be imported from the `@vendure/core` package.
 
 To make use of a core service in your own plugin, you need to ensure your plugin is importing the `PluginCommonModule` and
@@ -265,7 +265,7 @@ const product = await this.connection.getRepository(ctx, Product).createQueryBui
 ### Using the EntityHydrator
 
 But what about when we do not control the code which fetches the entity from the database? For instance, we might be implementing
-a function which gets an entity passed to it by Vendure. In this case, we can use the [`EntityHydrator`](/reference/typescript-api/data-access/entity-hydrator/)
+a function which gets an entity passed to it by Novara Commerce. In this case, we can use the [`EntityHydrator`](/reference/typescript-api/data-access/entity-hydrator/)
 to ensure that a given relation is "hydrated" (i.e. joined) before we use it:
 
 ```ts

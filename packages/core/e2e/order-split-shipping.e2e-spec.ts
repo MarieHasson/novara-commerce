@@ -138,7 +138,7 @@ const GET_SELLER_ORDER_SHIPPING = gql`
     }
 `;
 
-// https://github.com/vendurehq/vendure/issues/4117
+// https://github.com/MarieHasson/novara-commerce/issues/4117
 // Seller Order price adjustments are applied in a RequestContext scoped to the seller Channel,
 // which also scopes ShippingMethod resolution (ShippingMethodService.findOne is channel-scoped).
 // A ShippingMethod which exists only in the default Channel must not be dropped from the seller

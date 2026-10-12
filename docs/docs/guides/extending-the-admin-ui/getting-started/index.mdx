@@ -1,11 +1,11 @@
 ---
 title: 'Getting Started'
-metaTitle: "Getting Started with Vendure Admin UI Extensions"
+metaTitle: "Getting Started with Novara Commerce Admin UI Extensions"
 metaDescription: "Set up the ui-devkit package to create Admin UI extensions with providers and routes, configure compileUiExtensions, and run in dev or production mode."
 ---
 
 :::warning[Angular Admin UI Deprecation]
-The Angular-based Admin UI has been replaced by the new [React Admin Dashboard](/extending-the-dashboard/getting-started/). The Angular Admin UI will not be maintained after **July 2026**. 
+The Angular-based Admin UI has been replaced by the new [React Admin Dashboard](/extending-the-dashboard/getting-started/). The Angular Admin UI will not be maintained after **July 2026**.
 Until then, we will continue patching critical bugs and security issues. Community contributions will always be merged and released.
 
 **For new projects, use the [React Admin Dashboard](/extending-the-dashboard/getting-started/) instead.**
@@ -16,7 +16,7 @@ If you want to use the Admin UI and the Dashboard together, both plugins can now
 When creating a plugin, you may wish to extend the Admin UI in order to expose a graphical interface to the plugin's functionality, or to add new functionality to the Admin UI itself. The UI can be extended with custom components written in [Angular](https://angular.io/) or [React](https://react.dev/).
 
 :::note
-The APIs described in this section were introduced in Vendure v2.1.0. For the legacy APIs, see the [Legacy API section](#legacy-api--v210).
+The APIs described in this section were introduced in Novara Commerce v2.1.0. For the legacy APIs, see the [Legacy API section](#legacy-api--v210).
 :::
 
 UI extensions fall into two categories:
@@ -124,7 +124,7 @@ Now when you start the server, the following will happen:
 **Note:** the TypeScript source files of your UI extensions **must not** be compiled by your regular TypeScript build task.
 This is because they will instead be compiled by the Angular compiler when you run `compileUiExtensions()`.
 
-You can exclude them in your main `tsconfig.json` by adding a line to the "exclude" array (this is already defined on a default Vendure project):
+You can exclude them in your main `tsconfig.json` by adding a line to the "exclude" array (this is already defined on a default Novara Commerce project):
 
 ```json title="tsconfig.json"
 {
@@ -302,7 +302,7 @@ This can then be run from the command line:
 npx ts-node src/compile-admin-ui.ts
 ```
 
-Once complete, the production-ready app bundle will be output to `admin-ui/dist/browser`. This method is suitable for a production setup, so that the Admin UI can be compiled ahead-of-time as part of your deployment process. This ensures that your Vendure server starts up as quickly as possible. In this case, you can pass the path of the compiled app to the AdminUiPlugin:
+Once complete, the production-ready app bundle will be output to `admin-ui/dist/browser`. This method is suitable for a production setup, so that the Admin UI can be compiled ahead-of-time as part of your deployment process. This ensures that your Novara Commerce server starts up as quickly as possible. In this case, you can pass the path of the compiled app to the AdminUiPlugin:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -324,7 +324,7 @@ export const config: VendureConfig = {
 
 :::info
 To compile the angular app ahead of time (for production) and copy the dist folder to
-Vendure's output dist folder, include the following commands in your package.json scripts:
+Novara Commerce's output dist folder, include the following commands in your package.json scripts:
 
 ```json
 {
@@ -388,7 +388,7 @@ which would otherwise prevent the Angular Language Service from working correctl
 
 ## Legacy API < v2.1.0
 
-Prior to Vendure v2.1.0, the API for extending the Admin UI was more verbose and less flexible (React components were not supported at all, for instance). This API is still supported, but from v2.1 is marked as deprecated and will be removed in a future major version.
+Prior to Novara Commerce v2.1.0, the API for extending the Admin UI was more verbose and less flexible (React components were not supported at all, for instance). This API is still supported, but from v2.1 is marked as deprecated and will be removed in a future major version.
 
 This section describes the legacy API.
 

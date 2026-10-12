@@ -1,6 +1,6 @@
 # Failed or pending migrations
 
-Applies to: Vendure 3.x. `vendure migrate --from-empty` and the startup
+Applies to: Novara Commerce 3.x. `vendure migrate --from-empty` and the startup
 diagnostics below need the versions given in the notes.
 
 ## Symptoms
@@ -16,7 +16,7 @@ diagnostics below need the versions given in the notes.
 
 ## Checks
 
-1. **synchronize.** Find `dbConnectionOptions.synchronize` in the Vendure
+1. **synchronize.** Find `dbConnectionOptions.synchronize` in the Novara Commerce
    config. It must be `false` in production.
    `vendure doctor --profile production --check project config` reports `synchronize is enabled` as a
    failure.
@@ -74,5 +74,5 @@ Notes for the remedies:
   `no-migrations-matched` conditions. Older versions print only the
   out-of-sync message.
 
-All references are paths under `https://docs.vendure.io/current/core/`, or
+All references are paths under `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/`, or
 files in this repository's `skills/` directory.

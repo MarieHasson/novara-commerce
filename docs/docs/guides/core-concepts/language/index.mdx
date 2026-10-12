@@ -1,10 +1,10 @@
 ---
 title: "Language & Translations"
-metaTitle: "Multi-Language Content and Translations in Vendure"
-metaDescription: "How Vendure handles multi-language content using the Translatable entity pattern, channel language settings, and API language resolution."
+metaTitle: "Multi-Language Content and Translations in Novara Commerce"
+metaDescription: "How Novara Commerce handles multi-language content using the Translatable entity pattern, channel language settings, and API language resolution."
 ---
 
-Vendure has built-in support for multi-language content, allowing you to serve a fully localized storefront
+Novara Commerce has built-in support for multi-language content, allowing you to serve a fully localized storefront
 without any third-party translation services. The approach is based on a **Translatable entity pattern**,
 where translatable fields are stored in a dedicated translations relation rather than directly on the entity.
 
@@ -48,12 +48,12 @@ which language the API falls back to when a requested translation is not availab
 
 ## How the API resolves language
 
-When a client makes a GraphQL API request, Vendure determines the language to use via the `languageCode`
+When a client makes a GraphQL API request, Novara Commerce determines the language to use via the `languageCode`
 query parameter. For example, appending `?languageCode=de` to the API URL will cause the response to
 return German translations where available.
 
 If no `languageCode` parameter is provided, the channel's `defaultLanguageCode` is used. If a translation
-for the requested language does not exist on a given entity, Vendure falls back to the default language
+for the requested language does not exist on a given entity, Novara Commerce falls back to the default language
 translation.
 
 This resolution happens transparently — the API consumer always receives a flat object with the translated
@@ -62,7 +62,7 @@ fields, rather than the underlying translations array.
 ## Custom field translations
 
 The Translatable pattern extends to [custom fields](/developer-guide/custom-fields/) as well. When you
-define a custom field with the `localeString` type, Vendure stores translations for that field in the same
+define a custom field with the `localeString` type, Novara Commerce stores translations for that field in the same
 way it handles built-in translatable fields. This allows plugins and custom extensions to be fully
 multi-language without additional effort.
 

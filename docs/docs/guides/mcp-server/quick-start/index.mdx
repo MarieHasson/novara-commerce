@@ -1,16 +1,16 @@
 ---
 title: 'MCP Server Quick Start'
-metaTitle: 'MCP Server Quick Start | Vendure'
-metaDescription: 'Install and configure the Vendure MCP plugin to expose your store to AI agents over the Model Context Protocol, connect a client, and debug with the MCP Inspector.'
+metaTitle: 'MCP Server Quick Start | Novara Commerce'
+metaDescription: 'Install and configure the Novara Commerce MCP plugin to expose your store to AI agents over the Model Context Protocol, connect a client, and debug with the MCP Inspector.'
 order: 1
 ---
 
-The MCP plugin exposes your Vendure store to AI agents over the
+The MCP plugin exposes your Novara Commerce store to AI agents over the
 [Model Context Protocol](https://modelcontextprotocol.io/) (MCP). Agents such as Claude, Cursor and ChatGPT use
 that open standard to discover and call tools on a server.
 
 The plugin ships built-in shop tools for the catalog, the cart and checkout. It also ships admin tools for
-products, orders, customers and stock. Any Vendure plugin can add its own with the
+products, orders, customers and stock. Any Novara Commerce plugin can add its own with the
 [`@McpTool`](/reference/mcp-sdk/mcp-tool/) decorator.
 
 ## The two endpoints
@@ -39,10 +39,10 @@ To get a server running and confirm it works:
 npm install @vendure/mcp-plugin
 ```
 
-The plugin requires Vendure 3.8.0 or later. On an older version the server refuses to boot with a compatibility
+The plugin requires Novara Commerce 3.8.0 or later. On an older version the server refuses to boot with a compatibility
 error.
 
-Add the plugin to your Vendure config. It needs no configuration to start:
+Add the plugin to your Novara Commerce config. It needs no configuration to start:
 
 ```ts title="src/vendure-config.ts"
 import { McpPlugin } from '@vendure/mcp-plugin';
@@ -74,7 +74,7 @@ tables are created. See [Migrations](/developer-guide/migrations/) for the workf
 
 ## Test & debug with the MCP Inspector
 
-Start your Vendure server. Then start the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), a
+Start your Novara Commerce server. Then start the [MCP Inspector](https://github.com/modelcontextprotocol/inspector), a
 browser-based tool for exploring an MCP server, without installing it globally:
 
 ```sh

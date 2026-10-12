@@ -1,7 +1,7 @@
 ---
 title: "Add a REST endpoint"
-metaTitle: "Adding REST Endpoints to a Vendure Plugin"
-metaDescription: "Define REST-style HTTP endpoints in Vendure plugins using NestJS controllers, with access to Vendure services and the RequestContext."
+metaTitle: "Adding REST Endpoints to a Novara Commerce Plugin"
+metaDescription: "Define REST-style HTTP endpoints in Novara Commerce plugins using NestJS controllers, with access to Novara Commerce services and the RequestContext."
 ---
 
 REST-style endpoints can be defined as part of a [plugin](/developer-guide/plugins/).
@@ -53,7 +53,7 @@ export class RestPlugin {}
 ```
 
 :::info
-**Note:** [The `PluginCommonModule`](/reference/typescript-api/plugin/plugin-common-module/) should be imported to gain access to Vendure core providers - in this case it is required in order to be able to inject `ProductService` into our controller.
+**Note:** [The `PluginCommonModule`](/reference/typescript-api/plugin/plugin-common-module/) should be imported to gain access to Novara Commerce core providers - in this case it is required in order to be able to inject `ProductService` into our controller.
 :::
 
 The plugin can then be added to the `VendureConfig`:
@@ -92,7 +92,7 @@ export class ProductsController {
 ```
 
 :::tip
-The following Vendure [API decorators](/developer-guide/the-api-layer/#api-decorators) can also be used with NestJS controllers: `@Allow()`, `@Transaction()`, `@Ctx()`.
+The following Novara Commerce [API decorators](/developer-guide/the-api-layer/#api-decorators) can also be used with NestJS controllers: `@Allow()`, `@Transaction()`, `@Ctx()`.
 
 Additionally, NestJS supports a number of other REST decorators detailed in the [NestJS controllers guide](https://docs.nestjs.com/controllers#request-object)
 :::

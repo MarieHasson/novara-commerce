@@ -114,7 +114,7 @@ describe('Asset resolver', () => {
     });
 
     /**
-     * https://github.com/vendurehq/vendure/issues/459
+     * https://github.com/MarieHasson/novara-commerce/issues/459
      */
     it('transforms URL when fragment defined before query (GH issue #459)', async () => {
         const result = await adminClient.query(getAssetFragmentFirstDocument, {
@@ -210,7 +210,7 @@ describe('Asset resolver', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/727
+        // https://github.com/MarieHasson/novara-commerce/issues/727
         it('file extension with shared type', async () => {
             const filesToUpload = [path.join(__dirname, 'fixtures/assets/dummy.zip')];
             const { createAssets } = await adminClient.fileUploadMutation({
@@ -393,7 +393,7 @@ describe('Asset resolver', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/990
+        // https://github.com/MarieHasson/novara-commerce/issues/990
         it('errors if the filesize is too large', async () => {
             /**
              * Based on https://stackoverflow.com/a/49433633/772859
@@ -641,7 +641,7 @@ describe('Asset resolver', () => {
     });
 
     // Guards against the default translation being saved with a null languageCode when no
-    // RequestContext is passed. https://github.com/vendurehq/vendure/issues/4651
+    // RequestContext is passed. https://github.com/MarieHasson/novara-commerce/issues/4651
     describe('createFromFileStream without a RequestContext', () => {
         const assetGuard: ErrorResultGuard<Asset> = createErrorResultGuard(input => input.id != null);
 

@@ -6,7 +6,7 @@ import { defineDashboardExtension } from '@vendure/dashboard';
 // `defineDashboardExtension` independently — when alerts live in their own
 // plugin and another plugin (`FormInputsTestPlugin`) also registers
 // extensions, the original `AlertsProvider` would snapshot an empty registry
-// and never poll. See vendurehq/vendure#4729.
+// and never poll. See MarieHasson/novara-commerce#4729.
 defineDashboardExtension({
     alerts: [
         {

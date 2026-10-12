@@ -581,7 +581,7 @@ describe('Customer resolver', () => {
             expect(updateCustomer.emailAddress).toBe('unique-email@test.com');
         });
 
-        // https://github.com/vendurehq/vendure/issues/1071
+        // https://github.com/MarieHasson/novara-commerce/issues/1071
         it('updates the associated User email address', async () => {
             await shopClient.asUserWithCredentials('unique-email@test.com', 'test');
             const { me } = await shopClient.query(MeDocument);
@@ -589,7 +589,7 @@ describe('Customer resolver', () => {
             expect(me?.identifier).toBe('unique-email@test.com');
         });
 
-        // https://github.com/vendurehq/vendure/issues/2449
+        // https://github.com/MarieHasson/novara-commerce/issues/2449
         it('normalizes email address on update', async () => {
             const { updateCustomer } = await adminClient.query(updateCustomerDocument, {
                 input: {
@@ -658,7 +658,7 @@ describe('Customer resolver', () => {
             expect(createCustomer.user?.identifier).toBe(thirdCustomer.emailAddress);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1960
+        // https://github.com/MarieHasson/novara-commerce/issues/1960
         it('delete a guest Customer', async () => {
             const orderErrorGuard: ErrorResultGuard<ActiveOrderCustomerFragment> = createErrorResultGuard(
                 input => !!input.lines,

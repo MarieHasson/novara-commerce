@@ -1,25 +1,25 @@
 ---
 title: 'OAuth & Consent Integration'
-metaTitle: 'MCP OAuth & Consent Integration | Vendure'
-metaDescription: 'How AI clients get approved to act on the Vendure MCP server: admin consent through the dashboard, and the customer consent page you build on your storefront.'
+metaTitle: 'MCP OAuth & Consent Integration | Novara Commerce'
+metaDescription: 'How AI clients get approved to act on the Novara Commerce MCP server: admin consent through the dashboard, and the customer consent page you build on your storefront.'
 order: 2
 ---
 
-Approve AI clients to act on someone's behalf: administrators on a page Vendure
+Approve AI clients to act on someone's behalf: administrators on a page Novara Commerce
 ships, customers on a consent page you build on your storefront.
 
 ## Which of these are you doing?
 
 - **Staff tools only.** Your team queries the store with an AI client such as Claude
-  Desktop or Cursor. Vendure ships the approval page: read
+  Desktop or Cursor. Novara Commerce ships the approval page: read
   [Approve a client as an administrator](#approve-a-client-as-an-administrator) and
   skip the rest of this page.
-- **A chat assistant you build as a Vendure plugin.** It runs the tools directly, with
+- **A chat assistant you build as a Novara Commerce plugin.** It runs the tools directly, with
   no browser, consent page, popup, or token. See
-  [Assistant inside Vendure](/mcp-server/assistant-inside-vendure/).
-- **A chat assistant you run outside Vendure**, as a separate service with its own
+  [Assistant inside Novara Commerce](/mcp-server/assistant-inside-vendure/).
+- **A chat assistant you run outside Novara Commerce**, as a separate service with its own
   front end. You need the full OAuth round trip and the consent page built below. See
-  [Assistant outside Vendure](/mcp-server/assistant-outside-vendure/) for the
+  [Assistant outside Novara Commerce](/mcp-server/assistant-outside-vendure/) for the
   client side.
 - **Shoppers bringing their own AI client**, such as Claude Desktop, ChatGPT, or
   Cursor. Each shopper approves once, on the consent page you build below.
@@ -131,7 +131,7 @@ These helpers hold the calls, so they work whether your page renders in the brow
 on your server:
 
 ```ts title="src/mcp-consent/mcp-consent.ts"
-// Where your Vendure server lives, and where its Shop API is.
+// Where your Novara Commerce server lives, and where its Shop API is.
 const VENDURE_URL = 'https://my-store.example.com';
 const SHOP_API_URL = `${VENDURE_URL}/shop-api`;
 
@@ -195,7 +195,7 @@ export async function isSignedIn(): Promise<boolean> {
 async function shopApi<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
     const response = await fetch(SHOP_API_URL, {
         method: 'POST',
-        // Sends the shopper's Vendure session cookie. If your storefront authenticates with
+        // Sends the shopper's Novara Commerce session cookie. If your storefront authenticates with
         // a bearer token instead, set `Authorization: Bearer <token>` here as it does
         // everywhere else.
         credentials: 'include',
@@ -386,7 +386,7 @@ A signed-in customer can list and end their own grants on the Shop API, which su
   the client name, and its timestamps. It spans every channel the grants were made on,
   because the consent belongs to the person rather than the storefront they used.
 - `revokeMcpClientGrant(id: ID!)` — Ends one of those grants. Its tokens stop working
-  immediately and its dedicated Vendure session is deleted. This is the same effect as
+  immediately and its dedicated Novara Commerce session is deleted. This is the same effect as
   the dashboard's admin-side revoke.
 
 Both operations require a signed-in customer. Both act only on that customer's own
@@ -418,7 +418,7 @@ origin the page is served from. Any other value makes your own page's approvals 
 ### How the channel is recorded
 
 The mutation takes the channel from the request, exactly like every other Shop API
-call. Without the `vendure-token` header, Vendure resolves the request to the default
+call. Without the `vendure-token` header, Novara Commerce resolves the request to the default
 channel, with two effects:
 
 - the authorization is recorded against the default channel
@@ -442,7 +442,7 @@ The lookup call never needs the token, because it reads nothing channel-specific
 ## See also
 
 - [OAuth Protocol Reference](/mcp-server/oauth-reference/) — endpoints, the `client_id` metadata document, token lifetimes, sessions, and refusals
-- [Assistant inside Vendure](/mcp-server/assistant-inside-vendure/) — a chat assistant built as a Vendure plugin, with no browser round trip at all
-- [Assistant outside Vendure](/mcp-server/assistant-outside-vendure/) — a chat assistant in its own service, running the OAuth flow invisibly
+- [Assistant inside Novara Commerce](/mcp-server/assistant-inside-vendure/) — a chat assistant built as a Novara Commerce plugin, with no browser round trip at all
+- [Assistant outside Novara Commerce](/mcp-server/assistant-outside-vendure/) — a chat assistant in its own service, running the OAuth flow invisibly
 - [Production Hardening](/mcp-server/production/) — the issuer guard, token secret rotation, and rate limits
 - [Built-in Tool Reference](/mcp-server/built-in-tools/) — what the shop and admin toolsets expose once a grant is in place

@@ -39,7 +39,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=./_vendure-packages.sh
 source "$SCRIPT_DIR/_vendure-packages.sh"
 
-REPO="vendurehq/vendure"
+REPO="MarieHasson/novara-commerce"
 WORKFLOW_FILE="publish_to_npm.yml"
 # GitHub Actions environment the publish job runs in. Binding the trust to this
 # environment means npm only accepts OIDC tokens carrying this `environment`

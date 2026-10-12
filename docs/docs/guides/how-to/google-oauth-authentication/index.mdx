@@ -1,24 +1,24 @@
 ---
 title: "Google OAuth Authentication"
-metaTitle: "Setting Up Google OAuth Authentication in Vendure"
-metaDescription: "Add Google sign-in to your Vendure storefront with a custom AuthenticationStrategy using Google Identity Services and ID token verification."
+metaTitle: "Setting Up Google OAuth Authentication in Novara Commerce"
+metaDescription: "Add Google sign-in to your Novara Commerce storefront with a custom AuthenticationStrategy using Google Identity Services and ID token verification."
 ---
 
 :::info
-The complete source of the following example plugin can be found here: [example-plugins/google-auth-plugin](https://github.com/vendurehq/examples/tree/publish/examples/shop-google-auth)
+The complete source of the following example plugin can be found here: [example-plugins/google-auth-plugin](https://github.com/MarieHasson/examples/tree/publish/examples/shop-google-auth)
 :::
 
 **Google OAuth authentication** allows customers to sign in using their Google accounts, providing a seamless experience that eliminates the need for password-based registration.
 
 This is particularly valuable for **consumer-facing stores** where users prefer the convenience and security of Google's authentication system, or for **B2B platforms** where organizations use Google Workspace.
 
-This guide shows you how to **add Google OAuth support** to your Vendure store using a custom [AuthenticationStrategy](/reference/typescript-api/auth/authentication-strategy/) and Google Identity Services.
+This guide shows you how to **add Google OAuth support** to your Novara Commerce store using a custom [AuthenticationStrategy](/reference/typescript-api/auth/authentication-strategy/) and Google Identity Services.
 
-An **AuthenticationStrategy** in Vendure defines how users can log in to your store. Learn more about [authentication in Vendure](/core-concepts/auth/).
+An **AuthenticationStrategy** in Novara Commerce defines how users can log in to your store. Learn more about [authentication in Novara Commerce](/core-concepts/auth/).
 
 ## Creating the Plugin
 
-**First, use the Vendure CLI** to create a new plugin for Google authentication:
+**First, use the Novara Commerce CLI** to create a new plugin for Google authentication:
 
 ```bash
 npx vendure add -p GoogleAuthPlugin
@@ -106,7 +106,7 @@ export class GoogleAuthStrategy implements AuthenticationStrategy<GoogleAuthData
         return false;
       }
 
-      // Step 2: Check if this Google user already has a Vendure account
+      // Step 2: Check if this Google user already has a Novara Commerce account
       const existingUser = await this.externalAuthenticationService.findCustomerUser(
         ctx,
         this.name,
@@ -141,7 +141,7 @@ export class GoogleAuthStrategy implements AuthenticationStrategy<GoogleAuthData
 }
 ```
 
-The strategy uses Google's [OAuth2Client](https://googleapis.dev/nodejs/google-auth-library/latest/classes/OAuth2Client.html) to verify ID tokens and Vendure's [ExternalAuthenticationService](/reference/typescript-api/auth/external-authentication-service/) to handle customer creation.
+The strategy uses Google's [OAuth2Client](https://googleapis.dev/nodejs/google-auth-library/latest/classes/OAuth2Client.html) to verify ID tokens and Novara Commerce's [ExternalAuthenticationService](/reference/typescript-api/auth/external-authentication-service/) to handle customer creation.
 
 Key differences from other OAuth flows:
 - **ID Token Verification**: Google provides signed JWT tokens that we verify directly
@@ -185,9 +185,9 @@ export class GoogleAuthPlugin {
 }
 ```
 
-## Adding to Vendure Config
+## Adding to Novara Commerce Config
 
-**Add the plugin** to your Vendure configuration:
+**Add the plugin** to your Novara Commerce configuration:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -215,7 +215,7 @@ export const config: VendureConfig = {
 4. **Click** **"Create Credentials" → "OAuth 2.0 Client ID"**
 5. **Select** **"Web application"** as the application type
 6. **Configure the client:**
-   - **Name**: Your app name (e.g., "My Vendure Store")
+   - **Name**: Your app name (e.g., "My Novara Commerce Store")
    - **Authorized JavaScript origins**: `http://localhost:3001`
    - **Authorized redirect URIs**: `http://localhost:3001/sign-in`
 
@@ -406,8 +406,8 @@ VENDURE_API_ENDPOINT=http://localhost:3000/shop-api
 
 1. **User clicks "Continue with Google"** → Google popup appears
 2. **User signs in with Google** → Google returns an ID token
-3. **Frontend sends the token to Vendure** → Vendure verifies token with Google
-4. **If valid, Vendure creates/finds customer** → User is logged in
+3. **Frontend sends the token to Novara Commerce** → Novara Commerce verifies token with Google
+4. **If valid, Novara Commerce creates/finds customer** → User is logged in
 
 ## Using the GraphQL API
 
@@ -471,7 +471,7 @@ mutation AuthenticateWithGoogle {
 
 ## Customer Data Management
 
-**Google-authenticated customers** are managed like any other Vendure [Customer](/reference/typescript-api/entities/customer/):
+**Google-authenticated customers** are managed like any other Novara Commerce [Customer](/reference/typescript-api/entities/customer/):
 
 - **Email**: Uses the user's actual Google email address
 - **Verification**: Inherits Google's email verification status
@@ -479,14 +479,14 @@ mutation AuthenticateWithGoogle {
 - **Profile**: First and last names from Google profile, with fallbacks
 - **Security**: No password stored - authentication handled entirely by Google
 
-This means **Google users work seamlessly** with Vendure's [order management](/core-concepts/orders/), [promotions](/core-concepts/promotions/), and all customer workflows.
+This means **Google users work seamlessly** with Novara Commerce's [order management](/core-concepts/orders/), [promotions](/core-concepts/promotions/), and all customer workflows.
 
 ## Testing the Integration
 
 **To test your Google OAuth integration:**
 
-1. **Start your Vendure server** with the plugin configured
+1. **Start your Novara Commerce server** with the plugin configured
 2. **Navigate to your storefront** and click "Continue with Google"
 3. **Complete the Google OAuth flow** when prompted
-4. **Verify customer creation** in the Vendure Dashboard
+4. **Verify customer creation** in the Novara Commerce Dashboard
 5. **Test repeat logins** to ensure existing customers are found correctly

@@ -2,8 +2,8 @@ import { type Page, expect, test } from '@playwright/test';
 
 import { BaseDetailPage } from '../../page-objects/detail-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4155
-// Fix PR: https://github.com/vendurehq/vendure/pull/4339
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4155
+// Fix PR: https://github.com/MarieHasson/novara-commerce/pull/4339
 //
 // Creating an entity with nullable non-string custom fields (Int, Float, DateTime)
 // failed because getDefaultValueFromField() returned '' instead of null for these types.

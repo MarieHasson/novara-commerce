@@ -1,6 +1,6 @@
 # vendure doctor
 
-Runs diagnostic checks against a Vendure project and prints an actionable
+Runs diagnostic checks against a Novara Commerce project and prints an actionable
 report. Use it for broken projects, upgrade verification, new-machine setup, or
 CI guard rails.
 
@@ -19,7 +19,7 @@ Default checks run in dependency order:
 | Check          | Description                                                                     |
 | -------------- | ------------------------------------------------------------------------------- |
 | `project`      | Project structure, config discovery, package manager and lockfile consistency   |
-| `dependencies` | Vendure package version alignment, singleton duplicates and database driver deps |
+| `dependencies` | Novara Commerce package version alignment, singleton duplicates and database driver deps |
 | `config`       | Config loading, `preBootstrapConfig()` validation and plugin compatibility      |
 | `schema`       | Admin and Shop GraphQL schema generation                                        |
 | `database`     | Database connectivity using safe read-only overrides                            |
@@ -31,7 +31,7 @@ If `project` or `config` fails, dependent checks are skipped.
 
 | Option              | Description                                                                   |
 | ------------------- | ----------------------------------------------------------------------------- |
-| `--config <path>`   | Path to a custom Vendure config file                                          |
+| `--config <path>`   | Path to a custom Novara Commerce config file                                          |
 | `--check <names...>` | Run only selected checks: `project`, `dependencies`, `config`, `schema`, `database` |
 | `--profile <name>`  | Run profile-specific checks; currently `production`                           |
 | `--format <type>`   | Output format: `text` (default) or `json`                                     |
@@ -39,7 +39,7 @@ If `project` or `config` fails, dependent checks are skipped.
 
 ## Notes
 
-- Run from the Vendure project root, or pass `--config` when the config is not
+- Run from the Novara Commerce project root, or pass `--config` when the config is not
   in a standard location.
 - The production profile adds checks for unsafe deployment settings such as
   disabled auth, default superadmin credentials, missing cookie secret,

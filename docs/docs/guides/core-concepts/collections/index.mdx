@@ -1,6 +1,6 @@
 ---
 title: 'Collections'
-metaTitle: "Organizing Products with Collections in Vendure"
+metaTitle: "Organizing Products with Collections in Novara Commerce"
 metaDescription: "Collections group product variants for navigation, promotions, and storefront display. Covers built-in filters and filter inheritance."
 ---
 
@@ -20,7 +20,7 @@ for many purposes, such as:
 ## Collection filters
 
 The specific product variants that belong to a collection are determined by the collection's [`CollectionFilters`](/reference/typescript-api/configuration/collection-filter/).
-A collection filter is a piece of logic which is used to determine whether a product variant should be included in the collection. By default, Vendure
+A collection filter is a piece of logic which is used to determine whether a product variant should be included in the collection. By default, Novara Commerce
 includes a number of collection filters:
 
 - **Filter by facet values**: Include all product variants which have a specific set of facet values.
@@ -123,5 +123,5 @@ export const config: VendureConfig = {
 
 :::info
 To see some more advanced collection filter examples, you can look at the source code of the
-[default collection filters](https://github.com/vendurehq/vendure/blob/master/packages/core/src/config/catalog/default-collection-filters.ts).
+[default collection filters](https://github.com/MarieHasson/novara-commerce/blob/master/packages/core/src/config/catalog/default-collection-filters.ts).
 :::

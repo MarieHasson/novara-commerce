@@ -1,9 +1,9 @@
 ---
 name: vendure-dashboard-migration
-description: Migrates Vendure Admin UI extensions (legacy Angular-based) to the new React Dashboard.
+description: Migrates Novara Commerce Admin UI extensions (legacy Angular-based) to the new React Dashboard.
 ---
 
-# Vendure Dashboard Migration
+# Novara Commerce Dashboard Migration
 
 ## Instructions
 

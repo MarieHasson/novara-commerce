@@ -244,7 +244,7 @@ describe('Custom field permissions', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/2031
+    // https://github.com/MarieHasson/novara-commerce/issues/2031
     describe('relation id fields', () => {
         const productWithRestrictedRelationIdQuery = gql`
             query {

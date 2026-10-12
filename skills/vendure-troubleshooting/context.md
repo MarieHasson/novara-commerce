@@ -4,7 +4,7 @@ Collect this context before you ask the docs MCP or a human for help. All
 steps read local files or run static checks. Do not start the server or the
 worker, and do not connect to the database.
 
-Run the steps from the Vendure project root: the directory whose
+Run the steps from the Novara Commerce project root: the directory whose
 `package.json` has `@vendure/core`. In a monorepo, the lockfile is usually in
 the workspace root.
 
@@ -20,7 +20,7 @@ the workspace root.
 - Values from `vendure-config.ts`. You can read the file to find plugin class
   names, but do not copy option values. The file can contain inline secrets.
 
-## 1. Vendure versions
+## 1. Novara Commerce versions
 
 1. Read `package.json`. Write down the version range of each `@vendure/*`
    dependency (`dependencies`, `devDependencies`, `optionalDependencies`).
@@ -43,10 +43,10 @@ is a finding for `cases/version-mismatch.md`.
 
 ## 2. Plugin inventory
 
-1. From `package.json`, list each dependency that is a Vendure plugin: a
+1. From `package.json`, list each dependency that is a Novara Commerce plugin: a
    `@vendure/*-plugin` package, or a package whose name or description refers
-   to Vendure. Write down the resolved version from the lockfile.
-2. Read the `plugins` array in the Vendure config (usually
+   to Novara Commerce. Write down the resolved version from the lockfile.
+2. Read the `plugins` array in the Novara Commerce config (usually
    `src/vendure-config.ts`). For each entry, find the import:
    - Import from a package: link the class name to that package.
    - Import from a relative path (`./plugins/…`): mark it as a local plugin.
@@ -58,9 +58,9 @@ is a finding for `cases/version-mismatch.md`.
 
 ## 3. Console link
 
-Read `.vendure/project.json` in the Vendure project root, if it exists. You
+Read `.vendure/project.json` in the Novara Commerce project root, if it exists. You
 can also run `vendure console status`. It reads local state only and does not
-contact Vendure Console.
+contact Novara Commerce Console.
 
 | State    | How to tell                                                      | What to record                                |
 | -------- | ---------------------------------------------------------------- | --------------------------------------------- |
@@ -76,7 +76,7 @@ The file has this shape. The `console` block is optional.
   "project": { "id": "<uuid>", "name": "<display name>" },
   "account": { "id": "<uuid>", "name": "<display name>" },
   "link": { "id": "<uuid>", "protocolVersion": 1 },
-  "console": { "appOrigin": "https://console.vendure.io", "apiOrigin": "https://api.vendure.io" }
+  "console": { "appOrigin": "https://example.com", "apiOrigin": "https://example.com" }
 }
 ```
 
@@ -86,7 +86,7 @@ docs MCP. Do not send the IDs or names.
 
 ## 4. Runtime and tools
 
-- Node.js: `node --version`. Vendure supports Node.js v20, v22 and v24.
+- Node.js: `node --version`. Novara Commerce supports Node.js v20, v22 and v24.
 - Package manager: the `packageManager` field in `package.json`, then
   `<manager> --version`.
 
@@ -106,7 +106,7 @@ database. Run it only when a support case needs it and the user agrees.
 
 Notes:
 
-- The `config` check loads the Vendure config the same way the CLI does. This
+- The `config` check loads the Novara Commerce config the same way the CLI does. This
   loads `.env` into the doctor process. You do not read the file, but error
   text in `details` can contain values. Remove host names, user names,
   passwords, tokens and connection strings before you send the report.
@@ -118,7 +118,7 @@ Notes:
   result, not a tool error.
 
 See `skills/vendure-cli/commands/doctor.md` and
-https://docs.vendure.io/current/core/developer-guide/cli#the-doctor-command
+https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/developer-guide/cli#the-doctor-command
 
 ## 6. Context summary
 
@@ -126,7 +126,7 @@ Write the summary in this format. Show it to the user before you send it.
 Send it with each question to the docs MCP or a human. Do not store it.
 
 ```text
-Vendure context (collected locally for this question)
+Novara Commerce context (collected locally for this question)
 - @vendure/core: 3.7.4 (range ^3.7.0, source: pnpm-lock.yaml)
 - Other @vendure/* packages: all 3.7.4
 - Plugins:

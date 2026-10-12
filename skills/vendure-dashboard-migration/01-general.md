@@ -121,7 +121,7 @@ custom design system based on Clarity UI
 
 ### New
 
-Tailwind + Vendure Design System (Base UI). All UI components import from `@vendure/dashboard`
+Tailwind + Novara Commerce Design System (Base UI). All UI components import from `@vendure/dashboard`
 
 ```tsx
 import { Button, DetailPageButton, VendureImage } from '@vendure/dashboard';
@@ -134,19 +134,19 @@ export function MyComponent() {
         <Button variant="outline">Outline</Button>
         <Button variant="destructive">Danger</Button>
         <Button variant="ghost">Ghost</Button>
-        
+
         <DetailPageButton id="123" label="John Smith" />
         <DetailPageButton href="/affiliates/my-custom-route" label="John Smith" />
-        
+
         <Star />
-        
+
         <VendureImage
             src={entity.product.featuredAsset}
             alt={entity.product.name}
             preset='small'
         />
     )
-} 
+}
 ```
 
 Important:
@@ -178,52 +178,52 @@ Important:
 
 ```ts
 import { DataService } from '@vendure/admin-ui/core';
-import { graphql } from "../gql";  
-  
-export const GET_CUSTOMER_NAME = graphql(`  
-    query GetCustomerName($id: ID!) {  
-        customer(id: $id) {  
-            id  
-            firstName            
+import { graphql } from "../gql";
+
+export const GET_CUSTOMER_NAME = graphql(`
+    query GetCustomerName($id: ID!) {
+        customer(id: $id) {
+            id
+            firstName
             lastName
             addresses {
               ...AddressFragment
             }
-        }    
+        }
 	}
 `);
 
-this.dataService.query(GET_CUSTOMER_NAME, {  
-    id: customerId,  
+this.dataService.query(GET_CUSTOMER_NAME, {
+    id: customerId,
 }),
 ```
 
 ### New
 
 ```ts
-import { useQuery } from '@tanstack/react-query';  
-import { api } from '@vendure/dashboard';  
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@vendure/dashboard';
 import { graphql } from '@/gql';
 
 const addressFragment = graphql(`
    # ...
 `);
 
-const getCustomerNameDocument = graphql(`  
-    query GetCustomerName($id: ID!) {  
-        customer(id: $id) {  
-            id  
-            firstName            
-            lastName              
+const getCustomerNameDocument = graphql(`
+    query GetCustomerName($id: ID!) {
+        customer(id: $id) {
+            id
+            firstName
+            lastName
             addresses {
               ...AddressFragment
             }
-        }    
+        }
 	}
 `, [addressFragment]);  // Fragments MUST be explicitly referenced
 
-const { data, isLoading, error } = useQuery({  
-	queryKey: ['customer-name', customerId],  
+const { data, isLoading, error } = useQuery({
+	queryKey: ['customer-name', customerId],
 	queryFn: () => api.query(getCustomerNameDocument, { id: customerId }),
 });
 ```

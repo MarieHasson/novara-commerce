@@ -22,7 +22,7 @@ const SECRET = 'vcli_access-token';
 const directories: string[] = [];
 const manifest = {
     ...legacyManifest,
-    console: { appOrigin: 'https://console.vendure.io', apiOrigin: 'https://api.vendure.io' },
+    console: { appOrigin: 'https://console.example.com', apiOrigin: 'https://api.example.com' },
 };
 beforeEach(() => {
     // Commands that read the CLI login from `process.env` read an empty one, never the real one.
@@ -315,7 +315,7 @@ describe('EE-388 structured Console linking', () => {
     it('keeps the docs MCP guidance out of a JSON link result and its stderr', async () => {
         const root = createVendureProject(directories, 'console-result-');
         const env = { VENDURE_CLI_CONFIG_DIR: createCliConfigDir(directories) };
-        storeLogin(env, 'https://api.vendure.io');
+        storeLogin(env, 'https://api.example.com');
         const stdout = vi.spyOn(process.stdout, 'write').mockReturnValue(true);
         const stderr = vi.spyOn(process.stderr, 'write').mockReturnValue(true);
         const code = await consoleCommand(
@@ -337,7 +337,7 @@ describe('EE-388 structured Console linking', () => {
             nextSteps: [],
         });
         expect(stderr.mock.calls.join('\n')).toContain('Linked Storefront to Acme');
-        expect(stderr.mock.calls.join('\n')).not.toContain('https://docs.vendure.io/mcp');
+        expect(stderr.mock.calls.join('\n')).not.toContain('https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp');
     });
 
     it('does not report success when a hook stops JSON setup with exit code zero', async () => {

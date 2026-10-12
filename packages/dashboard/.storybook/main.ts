@@ -51,7 +51,7 @@ const config: StorybookConfig = {
                 vendureDashboardPlugin({
                     vendureConfigPath,
                     api: {
-                        host: 'https://demo.vendure.io',
+                        host: 'https://demo.example.com',
                         port: 443,
                     },
                     gqlOutputPath: resolve(__dirname, '../src/lib/graphql/'),

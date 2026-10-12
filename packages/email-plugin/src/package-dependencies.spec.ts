@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-// https://github.com/vendurehq/vendure/issues/4920
+// https://github.com/MarieHasson/novara-commerce/issues/4920
 //
 // The public transport-option types re-exported from `types.ts` extend types from
 // `@types/nodemailer` (e.g. `SMTPTransportOptions extends SMTPTransport.Options`), and

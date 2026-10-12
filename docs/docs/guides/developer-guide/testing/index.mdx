@@ -1,17 +1,17 @@
 ---
 title: "Testing"
-metaTitle: "Writing E2E Tests for Vendure Plugins"
-metaDescription: "Set up end-to-end testing for Vendure plugins using the @vendure/testing package and Vitest, with real API requests against a test server and database."
+metaTitle: "Writing E2E Tests for Novara Commerce Plugins"
+metaDescription: "Set up end-to-end testing for Novara Commerce plugins using the @vendure/testing package and Vitest, with real API requests against a test server and database."
 ---
 
-Vendure plugins allow you to extend all aspects of the standard Vendure server. When a plugin gets somewhat complex (defining new entities, extending the GraphQL schema, implementing custom resolvers), you may wish to create automated tests to ensure your plugin is correct.
+Novara Commerce plugins allow you to extend all aspects of the standard Novara Commerce server. When a plugin gets somewhat complex (defining new entities, extending the GraphQL schema, implementing custom resolvers), you may wish to create automated tests to ensure your plugin is correct.
 
-The `@vendure/testing` package gives you some simple but powerful tooling for creating end-to-end tests for your custom Vendure code.
+The `@vendure/testing` package gives you some simple but powerful tooling for creating end-to-end tests for your custom Novara Commerce code.
 
 By "end-to-end" we mean we are testing the _entire server stack_ - from API, to services, to database - by making a real API request, and then making assertions about the response. This is a very effective way to ensure that _all_ parts of your plugin are working correctly together.
 
 :::info
-For a working example of a Vendure plugin with e2e testing, see the [real-world-vendure Reviews plugin](https://github.com/vendurehq/real-world-vendure/tree/master/src/plugins/reviews)
+For a working example of a Novara Commerce plugin with e2e testing, see the [real-world-vendure Reviews plugin](https://github.com/MarieHasson/real-world-vendure/tree/master/src/plugins/reviews)
 :::
 
 ## Usage
@@ -19,7 +19,7 @@ For a working example of a Vendure plugin with e2e testing, see the [real-world-
 ### Install dependencies
 
 * [`@vendure/testing`](https://www.npmjs.com/package/@vendure/testing)
-* [`vitest`](https://vitest.dev/) You'll need to install a testing framework. In this example, we will use [Vitest](https://vitest.dev/) as it has very good support for the modern JavaScript features that Vendure uses, and is very fast.
+* [`vitest`](https://vitest.dev/) You'll need to install a testing framework. In this example, we will use [Vitest](https://vitest.dev/) as it has very good support for the modern JavaScript features that Novara Commerce uses, and is very fast.
 * [`graphql-tag`](https://www.npmjs.com/package/graphql-tag) This is not strictly required but makes it much easier to create the DocumentNodes needed to query your server.
 * We also need to install some packages to allow us to compile TypeScript code that uses decorators:
   - `@swc/core`
@@ -52,7 +52,7 @@ export default defineConfig({
         swc.vite({
             jsc: {
                 transform: {
-                    // See https://github.com/vendurehq/vendure/issues/2099
+                    // See https://github.com/MarieHasson/novara-commerce/issues/2099
                     useDefineForClassFields: false,
                 },
             },
@@ -107,7 +107,7 @@ Note re. the `sqliteDataDir`: The first time this test suite is run with the `Sq
 
 ### Create a test environment
 
-The `@vendure/testing` package exports a [`createTestEnvironment` function](/reference/typescript-api/testing/create-test-environment/) which is used to set up a Vendure server and GraphQL clients to interact with both the Shop and Admin APIs:
+The `@vendure/testing` package exports a [`createTestEnvironment` function](/reference/typescript-api/testing/create-test-environment/) which is used to set up a Novara Commerce server and GraphQL clients to interact with both the Shop and Admin APIs:
 
 ```ts title="src/plugins/my-plugin/e2e/my-plugin.e2e-spec.ts"
 import { createTestEnvironment, testConfig } from '@vendure/testing';
@@ -124,7 +124,7 @@ describe('my plugin', () => {
 });
 ```
 
-Notice that we pass a [`VendureConfig`](/reference/typescript-api/configuration/vendure-config/) object into the `createTestEnvironment` function. The testing package provides a special [`testConfig`](/reference/typescript-api/testing/test-config/) which is pre-configured for e2e tests, but any aspect can be overridden for your tests. Here we are configuring the server to load the plugin under test, `MyPlugin`. 
+Notice that we pass a [`VendureConfig`](/reference/typescript-api/configuration/vendure-config/) object into the `createTestEnvironment` function. The testing package provides a special [`testConfig`](/reference/typescript-api/testing/test-config/) which is pre-configured for e2e tests, but any aspect can be overridden for your tests. Here we are configuring the server to load the plugin under test, `MyPlugin`.
 
 :::caution
 **Note**: If you need to deeply merge in some custom configuration, use the [`mergeConfig` function](/reference/typescript-api/configuration/merge-config/) which is provided by `@vendure/core`.
@@ -156,8 +156,8 @@ afterAll(async () => {
 
 An explanation of the options:
 
-* `productsCsvPath` This is a path to an optional CSV file containing product data. See [Product Import Format](/developer-guide/importing-data/#product-import-format). You can see [an example used in the Vendure e2e tests](https://github.com/vendurehq/vendure/blob/master/packages/core/e2e/fixtures/e2e-products-full.csv) to get an idea of how it works. To start with you can just copy this file directly and use it as-is.
-* `initialData` This is an object which defines how other non-product data (Collections, ShippingMethods, Countries etc.) is populated. See [Initial Data Format](/developer-guide/importing-data/#initial-data). You can [copy this example from the Vendure e2e tests](https://github.com/vendurehq/vendure/blob/master/e2e-common/e2e-initial-data.ts)
+* `productsCsvPath` This is a path to an optional CSV file containing product data. See [Product Import Format](/developer-guide/importing-data/#product-import-format). You can see [an example used in the Novara Commerce e2e tests](https://github.com/MarieHasson/novara-commerce/blob/master/packages/core/e2e/fixtures/e2e-products-full.csv) to get an idea of how it works. To start with you can just copy this file directly and use it as-is.
+* `initialData` This is an object which defines how other non-product data (Collections, ShippingMethods, Countries etc.) is populated. See [Initial Data Format](/developer-guide/importing-data/#initial-data). You can [copy this example from the Novara Commerce e2e tests](https://github.com/MarieHasson/novara-commerce/blob/master/e2e-common/e2e-initial-data.ts)
 * `customerCount` Specifies the number of fake Customers to create. Defaults to 10 if not specified.
 
 ### Write your tests
@@ -217,7 +217,7 @@ describe('my plugin', () => {
 
 ## Accessing internal services
 
-It is possible to access any internal service of the Vendure server via the `server.app` object, which is an instance of the NestJS `INestApplication`.
+It is possible to access any internal service of the Novara Commerce server via the `server.app` object, which is an instance of the NestJS `INestApplication`.
 
 For example, to access the `ProductService`:
 
@@ -227,14 +227,14 @@ import { describe, beforeAll } from 'vitest';
 import { MyPlugin } from '../my-plugin.ts';
 
 describe('my plugin', () => {
-    
+
     const { server, adminClient, shopClient } = createTestEnvironment({
         ...testConfig,
         plugins: [MyPlugin],
     });
-    
+
     let productService: ProductService; // [!code highlight]
-    
+
     beforeAll(async () => {
         await server.init({
             productsCsvPath: path.join(__dirname, 'fixtures/e2e-products.csv'),

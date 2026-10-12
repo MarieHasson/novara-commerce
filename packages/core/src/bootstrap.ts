@@ -518,7 +518,7 @@ function arrangeCliGreetingsInColumns(lines: Array<readonly [string, string]>): 
 
 /**
  * Fix race condition when modifying DB
- * See: https://github.com/vendurehq/vendure/issues/152
+ * See: https://github.com/MarieHasson/novara-commerce/issues/152
  */
 function disableSynchronize(userConfig: Readonly<RuntimeVendureConfig>): Readonly<RuntimeVendureConfig> {
     const config = {

@@ -1,7 +1,7 @@
 ---
 title: "Breaking API Changes"
-metaTitle: "Vendure v1 to v2 Breaking API Changes"
-metaDescription: "Detailed list of breaking API changes in Vendure v2, including TypeScript, TypeORM, Apollo Server, and GraphQL updates that affect custom code and plugins."
+metaTitle: "Novara Commerce v1 to v2 Breaking API Changes"
+metaDescription: "Detailed list of breaking API changes in Novara Commerce v2, including TypeScript, TypeORM, Apollo Server, and GraphQL updates that affect custom code and plugins."
 order: 3
 ---
 
@@ -10,7 +10,7 @@ order: 3
 ### TypeScript
 - v2 is built on TypeScript **v4.9.5**. You should update your TypeScript version to match this. Doing so is quite likely to reveal new compiler errors (as is usual with TypeScript minor release updates).
 - If you are using `ts-node`, update it to the latest version
-- If you are targeting `ES2022` or `ESNEXT` in your `tsconfig.json`, you'll need to set `"useDefineForClassFields": false`. See [this issue](https://github.com/vendurehq/vendure/issues/2099) for more context.
+- If you are targeting `ES2022` or `ESNEXT` in your `tsconfig.json`, you'll need to set `"useDefineForClassFields": false`. See [this issue](https://github.com/MarieHasson/novara-commerce/issues/2099) for more context.
 
 ### Apollo Server & GraphQL
 If you have any custom ApolloServerPlugins, the plugin methods must now return a Promise. Example:
@@ -41,7 +41,7 @@ With the update to GraphQL v16, you might run into issues with other packages in
 For instance, if you are using the "typescript-compatibility" plugin to generate namespaced types, you'll need to drop this, as it is [no longer maintained](https://the-guild.dev/blog/whats-new-in-graphql-codegen-v2#typescript-compatibility).
 
 ### TypeORM
-TypeORM 0.3.x introduced a large number of breaking changes. For a complete guide, see the [TypeORM v0.3.0 release notes](https://github.com/typeorm/typeorm/releases/tag/0.3.0). 
+TypeORM 0.3.x introduced a large number of breaking changes. For a complete guide, see the [TypeORM v0.3.0 release notes](https://github.com/typeorm/typeorm/releases/tag/0.3.0).
 
 Here are the main API changes you'll likely need to make:
 
@@ -71,7 +71,7 @@ Here are the main API changes you'll likely need to make:
     + .find({ where: { id: In(ids) } })
     ```
 
-## Vendure TypeScript API Changes
+## Novara Commerce TypeScript API Changes
 
 ### Custom Order / Fulfillment / Payment processes
 
@@ -92,7 +92,7 @@ Also note that `shippingOptions.customFulfillmentProcess` and `paymentOptions.cu
 
 ### OrderItem no longer exists
 
-As a result of [#1981](https://github.com/vendurehq/vendure/issues/1981), the `OrderItem` entity no longer exists. The function and data of `OrderItem` is now transferred to `OrderLine`. As a result, the following APIs which previously used OrderItem arguments have now changed:
+As a result of [#1981](https://github.com/MarieHasson/novara-commerce/issues/1981), the `OrderItem` entity no longer exists. The function and data of `OrderItem` is now transferred to `OrderLine`. As a result, the following APIs which previously used OrderItem arguments have now changed:
 
 - `FulfillmentHandler`
 - `ChangedPriceHandlingStrategy`
@@ -112,7 +112,7 @@ const order = await this.connection
 - .leftJoinAndSelect('line.items', 'items')
 ```
 
-or 
+or
 
 ```diff
 const order = await this.connection
@@ -125,18 +125,18 @@ const order = await this.connection
 
 ### ProductVariant stock changes
 
-With [#1545](https://github.com/vendurehq/vendure/issues/1545) we have changed the way we model stock levels in order to support multiple stock locations. This means that the `ProductVariant.stockOnHand` and `ProductVariant.stockAllocated` properties no longer exist on the `ProductVariant` entity in TypeScript.
+With [#1545](https://github.com/MarieHasson/novara-commerce/issues/1545) we have changed the way we model stock levels in order to support multiple stock locations. This means that the `ProductVariant.stockOnHand` and `ProductVariant.stockAllocated` properties no longer exist on the `ProductVariant` entity in TypeScript.
 
 Instead, this information is now located at `ProductVariant.stockLevels`, which is an array of [StockLevel](/reference/typescript-api/entities/stock-level) entities.
 
 ### New return type for Channel, TaxCategory & Zone lists
 
-- The `ChannelService.findAll()` method now returns a `PaginatedList<Channel>` instead of `Channel[]`. 
+- The `ChannelService.findAll()` method now returns a `PaginatedList<Channel>` instead of `Channel[]`.
 - The `channels` GraphQL query now returns a `PaginatedList` rather than a simple array of Channels.
 - The `TaxCategoryService.findAll()` method now returns a `PaginatedList<TaxCategory>` instead of `TaxCategory[]`.
 - The `taxCategories` GraphQL query now returns a `PaginatedList` rather than a simple array of TaxCategories.
 - The `ZoneService.findAll()` method now returns a `PaginatedList<Zone>` instead of `Zone[]`. The old behaviour of `ZoneService.findAll()` (all Zones, cached for rapid access) can now be found under the new `ZoneService.getAllWithMembers()` method.
-- The `zones` GraphQL query now returns a `PaginatedList` rather than a simple array of Zones. 
+- The `zones` GraphQL query now returns a `PaginatedList` rather than a simple array of Zones.
 
 ### Admin UI changes
 
@@ -171,7 +171,7 @@ If you are using the `@vendure/ui-devkit` package to generate custom ui extensio
 - All monetary values are now represented in the GraphQL APIs with a new `Money` scalar type. If you use [graphql-code-generator](https://the-guild.dev/graphql/codegen), you'll want to tell it to treat this scalar as a number:
     ```ts
     import { CodegenConfig } from '@graphql-codegen/cli'
- 
+
     const config: CodegenConfig = {
       schema: 'http://localhost:3000/shop-api',
       documents: ['src/**/*graphql.ts'],
@@ -181,7 +181,7 @@ If you are using the `@vendure/ui-devkit` package to generate custom ui extensio
         },
       },
       generates: {
-        // .. 
+        // ..
       }
     };
     ```
@@ -210,4 +210,4 @@ If you are using the `@vendure/ui-devkit` package to generate custom ui extensio
 - If you are using the **BullMQJobQueuePlugin**, the minimum Redis recommended version is 6.2.0.
 - The `WorkerHealthIndicator` which was deprecated in v1.3.0 has been removed, as well as the `jobQueueOptions.enableWorkerHealthCheck` config option.
 - The `CustomerGroupEntityEvent` (fired on creation, update or deletion of a CustomerGroup) has been renamed to `CustomerGroupEvent`, and the former `CustomerGroupEvent` (fired when Customers are added to or removed from a group) has been renamed to `CustomerGroupChangeEvent`.
-- We introduced the [plugin compatibility API](/developer-guide/plugins/#step-7-specify-compatibility) to allow plugins to indicate what version of Vendure they are compatible with. To avoid bootstrap messages you should add this property to your plugins.
+- We introduced the [plugin compatibility API](/developer-guide/plugins/#step-7-specify-compatibility) to allow plugins to indicate what version of Novara Commerce they are compatible with. To avoid bootstrap messages you should add this property to your plugins.

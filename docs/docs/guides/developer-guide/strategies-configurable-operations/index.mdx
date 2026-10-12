@@ -1,16 +1,16 @@
 ---
 title: 'Strategies & Configurable Operations'
-metaTitle: "Strategies and Configurable Operations in Vendure"
-metaDescription: "Understand how Vendure uses the strategy pattern and configurable operations to provide extensible, pluggable behavior for orders, taxes, shipping, and more."
+metaTitle: "Strategies and Configurable Operations in Novara Commerce"
+metaDescription: "Understand how Novara Commerce uses the strategy pattern and configurable operations to provide extensible, pluggable behavior for orders, taxes, shipping, and more."
 order: 4
 ---
 
-Vendure is built to be highly configurable and extensible. Two methods of providing this extensibility are **strategies** and **configurable operations**.
+Novara Commerce is built to be highly configurable and extensible. Two methods of providing this extensibility are **strategies** and **configurable operations**.
 
 ## Strategies
 
 A strategy is named after the [Strategy Pattern](https://en.wikipedia.org/wiki/Strategy_pattern), and is a way of providing
-a pluggable implementation of a particular feature. Vendure makes heavy use of this pattern to delegate the implementation
+a pluggable implementation of a particular feature. Novara Commerce makes heavy use of this pattern to delegate the implementation
 of key points of extensibility to the developer.
 
 Examples of strategies include:
@@ -24,7 +24,7 @@ Examples of strategies include:
 - [`TaxLineCalculationStrategy`](/reference/typescript-api/tax/tax-line-calculation-strategy/) - determines how tax is calculated for an order line
 
 As an example, let's take the [`OrderCodeStrategy`](/reference/typescript-api/orders/order-code-strategy/). This strategy
-determines how codes are generated when new orders are created. By default, Vendure will use the built-in `DefaultOrderCodeStrategy`
+determines how codes are generated when new orders are created. By default, Novara Commerce will use the built-in `DefaultOrderCodeStrategy`
 which generates a random 16-character string.
 
 What if you need to change this behavior? For instance, you might have an existing back-office system that is responsible
@@ -129,7 +129,7 @@ behavior of the system without having to restart the server.
 So they are typically used to supply some custom logic that needs to accept configurable arguments which can change
 at runtime.
 
-Vendure uses the following configurable operations:
+Novara Commerce uses the following configurable operations:
 
 - [`CollectionFilter`](/reference/typescript-api/configuration/collection-filter/) - determines which products are included in a collection
 - [`PaymentMethodHandler`](/reference/typescript-api/payment/payment-method-handler/) - determines how payments are processed
@@ -141,7 +141,7 @@ Vendure uses the following configurable operations:
 Whereas strategies are typically used to provide a single implementation of a particular feature, configurable operations
 are used to provide a set of implementations which can be selected from at runtime.
 
-For example, Vendure ships with a set of default CollectionFilters:
+For example, Novara Commerce ships with a set of default CollectionFilters:
 
 ```ts title="default-collection-filters.ts"
 export const defaultCollectionFilters = [
@@ -205,7 +205,7 @@ The `args` property is an object which defines the arguments which can be config
 object is a key-value pair, where the key is the name of the argument, and the value is an object which defines the type of the argument
 and any additional configuration.
 
-As an example let's look at the `dummyPaymentMethodHandler`, a test payment method which we ship with Vendure core:
+As an example let's look at the `dummyPaymentMethodHandler`, a test payment method which we ship with Novara Commerce core:
 
 ```ts title="dummy-payment-method.ts"
 import { PaymentMethodHandler, LanguageCode } from '@vendure/core';

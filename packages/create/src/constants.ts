@@ -67,9 +67,9 @@ export const AUTO_RUN_DELAY_MS = 10_000;
 export const DEFAULT_PROJECT_VERSION = '0.1.0';
 export const TIPS_WHILE_WAITING = [
     '☕ This can take a minute or two, so grab a coffee',
-    `✨ We'd love it if you drop us a star on GitHub: https://github.com/vendurehq/vendure`,
-    `📖 Check out the Vendure documentation at https://docs.vendure.io`,
-    `💬 Join our Discord community to chat with other Vendure developers: https://vendure.io/community`,
+    `✨ We'd love it if you drop us a star on GitHub: https://github.com/MarieHasson/novara-commerce`,
+    `📖 Check out the Vendure documentation at https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs`,
+    `💬 Join our Discord community to chat with other Vendure developers: https://github.com/MarieHasson/novara-commerce/community`,
     '💡 In the mean time, here are some tips to get you started',
     `Vendure provides dedicated GraphQL APIs for both the Admin and Shop`,
     `Almost every aspect of Vendure is customizable via plugins`,
@@ -86,5 +86,5 @@ export const TIPS_WHILE_WAITING = [
     `Order flows are fully customizable to suit your business requirements`,
     `Role-based permissions allow you to control access to every part of the system`,
     `Customers can be grouped for targeted promotions & custom pricing`,
-    `You can find integrations in the Vendure Hub: https://vendure.io/hub`,
+    `You can find integrations in the Vendure Hub: https://github.com/MarieHasson/novara-commerce/hub`,
 ];

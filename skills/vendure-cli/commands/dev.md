@@ -1,6 +1,6 @@
 # vendure dev
 
-Runs Vendure in development mode. By default it starts three processes: the
+Runs Novara Commerce in development mode. By default it starts three processes: the
 GraphQL **server** (`ts-node ./src/index.ts`), the **worker**
 (`ts-node ./src/index-worker.ts`), and the **dashboard** (a Vite dev server).
 

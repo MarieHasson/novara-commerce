@@ -732,7 +732,7 @@ describe('Facet resolver', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/715
+    // https://github.com/MarieHasson/novara-commerce/issues/715
     describe('code conflicts', () => {
         function createFacetWithCode(code: string) {
             return adminClient.query(createFacetDocument, {
@@ -745,7 +745,7 @@ describe('Facet resolver', () => {
             });
         }
 
-        // https://github.com/vendurehq/vendure/issues/831
+        // https://github.com/MarieHasson/novara-commerce/issues/831
         it('updateFacet with unchanged code', async () => {
             const { createFacet } = await createFacetWithCode('some-new-facet');
             const result = await adminClient.query(updateFacetDocument, {

@@ -37,7 +37,7 @@ export interface WhereCondition {
      * JOIN + WHERE semantics cannot correctly express AND logic across multiple
      * related rows.
      *
-     * @see https://github.com/vendurehq/vendure/issues/3267
+     * @see https://github.com/MarieHasson/novara-commerce/issues/3267
      */
     isExistsCondition?: {
         /**
@@ -187,7 +187,7 @@ export function parseFilterParams<T extends VendureEntity>(
  * These fields require EXISTS subqueries for correct AND semantics when filtering across
  * multiple related rows.
  *
- * @see https://github.com/vendurehq/vendure/issues/3267
+ * @see https://github.com/MarieHasson/novara-commerce/issues/3267
  */
 function getToManyRelationCustomProperties<T extends VendureEntity>(
     connection: DataSource,
@@ -374,7 +374,7 @@ function buildWhereCondition(
 
 /**
  * Converts a JS Date object to a string format recognized by all DB engines.
- * See https://github.com/vendurehq/vendure/issues/251
+ * See https://github.com/MarieHasson/novara-commerce/issues/251
  */
 function convertDate(input: Date | string | number): string | number {
     if (input instanceof Date) {

@@ -1,6 +1,6 @@
 # vendure migrate
 
-Generates, runs or reverts TypeORM database migrations for a Vendure project.
+Generates, runs or reverts TypeORM database migrations for a Novara Commerce project.
 
 ## Usage
 
@@ -21,11 +21,11 @@ Exactly one operation flag:
 | Option                    | Description                                |
 | ------------------------- | ------------------------------------------ |
 | `-o, --output-dir <path>` | Output directory for a generated migration |
-| `--config <path>`         | Path to a custom Vendure config file       |
+| `--config <path>`         | Path to a custom Novara Commerce config file       |
 
 ## Notes
 
-- Migrations run against the database configured in the project's Vendure
+- Migrations run against the database configured in the project's Novara Commerce
   config — confirm the intended DB (env vars / config) before running.
 - Generate against an up-to-date schema: build the project first if entities
   changed.

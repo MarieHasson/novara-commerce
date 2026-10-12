@@ -1,6 +1,6 @@
 # vendure add
 
-Scaffolds a feature into a Vendure project — a new plugin or a piece of an
+Scaffolds a feature into a Novara Commerce project — a new plugin or a piece of an
 existing plugin.
 
 ## Interactive vs non-interactive
@@ -40,7 +40,7 @@ vendure add <feature-flag> [value] [sub-options]
 | `--selected-service <name>` | `-j`, `-a` | Service to attach the job queue / API extension to    |
 | `--query-name <name>`       | `-a`       | Name for the generated query                          |
 | `--mutation-name <name>`    | `-a`       | Name for the generated mutation                       |
-| `--config <path>`           | any        | Path to a custom Vendure config file                  |
+| `--config <path>`           | any        | Path to a custom Novara Commerce config file                  |
 
 ## Notes
 

@@ -60,7 +60,7 @@ describe('VendureEntity', () => {
         expect(child2.nameLoud).toBe('FOO');
     });
 
-    // https://github.com/vendurehq/vendure/issues/5040
+    // https://github.com/MarieHasson/novara-commerce/issues/5040
     it('clones customFields rather than sharing the input reference', () => {
         const input = { customFields: { relatedId: 1 } };
         const child = new ChildEntityWithCustomFields(input);

@@ -1,6 +1,6 @@
 ---
 title: 'Public API & Imports'
-metaTitle: "Vendure Dashboard Public API — What to Import and From Where"
+metaTitle: "Novara Commerce Dashboard Public API — What to Import and From Where"
 metaDescription: "Learn why all dashboard extension imports should come from @vendure/dashboard, which exceptions exist, and how this protects your code against breaking changes."
 ---
 
@@ -10,7 +10,7 @@ and the few exceptions to the rule.
 
 ## Why a Single Import Source?
 
-The Vendure Dashboard is built on top of several third-party libraries — Base UI, TanStack Router, TanStack Query,
+The Novara Commerce Dashboard is built on top of several third-party libraries — Base UI, TanStack Router, TanStack Query,
 React Hook Form, and others. Over time, these libraries may be replaced, upgraded, or wrapped with custom behavior.
 
 To protect your extensions from breaking when that happens, the `@vendure/dashboard` package **re-exports** everything
@@ -40,11 +40,11 @@ All design-system components (buttons, inputs, dialogs, cards, selectors, etc.) 
 import { Button, Card, Input, Dialog, Select, Badge, Tabs } from '@vendure/dashboard';
 ```
 
-These are the same components used internally by the Dashboard itself, styled with the Vendure design tokens.
+These are the same components used internally by the Dashboard itself, styled with the Novara Commerce design tokens.
 
 ### Data Display & Input Components
 
-Vendure-specific components for displaying and editing data:
+Novara Commerce-specific components for displaying and editing data:
 
 ```tsx
 import {
@@ -270,10 +270,10 @@ import { graphql } from '@/gql';
 
 This is because gql.tada needs to be initialized against _your_ project's GraphQL schema, which includes
 any custom fields, custom types, or API extensions defined by your plugins. The `@/gql` path points to
-the types that the Vendure Vite plugin generates from your specific schema during development.
+the types that the Novara Commerce Vite plugin generates from your specific schema during development.
 
 If you were to import `graphql` from `@vendure/dashboard`, it would be initialized against the base
-Vendure schema only — your queries would compile, but the types would not reflect your custom schema
+Novara Commerce schema only — your queries would compile, but the types would not reflect your custom schema
 extensions, leading to silent type errors.
 
 All other GraphQL utilities (`api`, `ResultOf`, `FragmentOf`, `VariablesOf`, `readFragment`) are correctly

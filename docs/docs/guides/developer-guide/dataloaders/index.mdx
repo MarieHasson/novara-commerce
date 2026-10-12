@@ -1,7 +1,7 @@
 ---
 title: "GraphQL Dataloaders"
-metaTitle: "Solving the N+1 Problem with Dataloaders in Vendure"
-metaDescription: "Optimize GraphQL field resolvers in Vendure using dataloaders to batch database queries and eliminate the N+1 performance problem."
+metaTitle: "Solving the N+1 Problem with Dataloaders in Novara Commerce"
+metaDescription: "Optimize GraphQL field resolvers in Novara Commerce using dataloaders to batch database queries and eliminate the N+1 performance problem."
 ---
 
 [Dataloaders](https://github.com/graphql/dataloader) are used in GraphQL to solve the so called N+1 problem. This is an advanced performance optimization technique you may
@@ -25,7 +25,7 @@ A Dataloader can return anything: `boolean`, `ProductVariant`, `string`, etc.
 
 Dataloaders can have a huge impact on performance. If your `fieldResolver` executes queries, and you log these queries, you should see a cascade of queries before the implementation of the dataloader, change to a single query using multiple `ids` after you implement it.
 
-## Do I need this for `CustomField` relations? 
+## Do I need this for `CustomField` relations?
 
 No, not normally. `CustomField` relations are automatically added to the root query for the `entity` that they are part of. So, they are loaded as part of the query that loads that entity.
 
@@ -69,7 +69,7 @@ export class DataloaderService {
 
   getLoader(ctx: RequestContext, dataloaderKey: string) {
     const token = ctx.channel?.code ?? `${ctx.channelId}`
-    
+
     Logger.debug(`Dataloader retrieval: ${token}, ${dataloaderKey}`, LoggerCtx)
 
     if (!this.loaders.has(token)) {
@@ -130,8 +130,8 @@ export class MyPluginOrderLineEntityResolver {
 To make it all work, ensure that the `DataLoaderService` is loaded in your `plugin` as a provider.
 
 :::tip
-Dataloaders map the result in the same order as the `ids` you send to the dataloader. 
-Dataloaders expect the same order and array size in the return result. 
+Dataloaders map the result in the same order as the `ids` you send to the dataloader.
+Dataloaders expect the same order and array size in the return result.
 
 In other words: ensure that the order of your returned result is the same as the incoming `ids` and don't omit values!
 :::

@@ -1,7 +1,7 @@
 ---
 title: Connect to the API
-metaTitle: "Connecting Your Storefront to the Vendure Shop API"
-metaDescription: "Configure a GraphQL client to connect to Vendure's Shop API with session management, channel tokens, and language settings. Includes Fetch, Apollo, and TanStack examples."
+metaTitle: "Connecting Your Storefront to the Novara Commerce Shop API"
+metaDescription: "Configure a GraphQL client to connect to Novara Commerce's Shop API with session management, channel tokens, and language settings. Includes Fetch, Apollo, and TanStack examples."
 ---
 
 The first thing you'll need to do is to connect your storefront app to the **Shop API**. The Shop API is a GraphQL API
@@ -10,7 +10,7 @@ the cart, checkout, manage customer accounts, and more.
 
 :::tip
 You can explore the Shop API by opening the GraphQL Playground in your browser at
-[`http://localhost:3000/shop-api`](http://localhost:3000/shop-api) when your Vendure
+[`http://localhost:3000/shop-api`](http://localhost:3000/shop-api) when your Novara Commerce
 server is running locally.
 :::
 
@@ -26,7 +26,7 @@ GraphQL requests are made over HTTP, so you can use any HTTP client such as the 
 
 ## Managing Sessions
 
-Vendure supports two ways to manage user sessions: **cookies** and **bearer token**. The method you choose depends on your requirements, and is specified by the [`authOptions.tokenMethod` property](/reference/typescript-api/auth/auth-options/#tokenmethod) of the VendureConfig. By default, both are enabled on the server:
+Novara Commerce supports two ways to manage user sessions: **cookies** and **bearer token**. The method you choose depends on your requirements, and is specified by the [`authOptions.tokenMethod` property](/reference/typescript-api/auth/auth-options/#tokenmethod) of the VendureConfig. By default, both are enabled on the server:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -66,7 +66,7 @@ Using cookies is the simpler approach for browser-based applications, since the 
 :::caution
 **SameSite cookies**
 
-When using cookies to manage sessions, you need to be aware of the SameSite cookie policy. This policy is designed to prevent cross-site request forgery (CSRF) attacks, but can cause problems when using a headless storefront app which is hosted on a different domain to the Vendure server. See [this article](https://web.dev/samesite-cookies-explained/) for more information.
+When using cookies to manage sessions, you need to be aware of the SameSite cookie policy. This policy is designed to prevent cross-site request forgery (CSRF) attacks, but can cause problems when using a headless storefront app which is hosted on a different domain to the Novara Commerce server. See [this article](https://web.dev/samesite-cookies-explained/) for more information.
 :::
 
 ### Bearer-token sessions
@@ -91,7 +91,7 @@ export async function request(query: string, variables: any) {
 
      const response = await someGraphQlClient(query, variables, headers);
 
-     // Check the response headers to see if Vendure has set the
+     // Check the response headers to see if Novara Commerce has set the
      // auth token. The header key "vendure-auth-token" may be set to
      // a custom value with the authOptions.authTokenHeaderKey config option.
      const authToken = response.headers.get('vendure-auth-token');
@@ -182,7 +182,7 @@ import { useState, useEffect } from 'react';
 // in localStorage using this key.
 const AUTH_TOKEN_KEY = 'auth_token';
 
-const API_URL = 'https://readonlydemo.vendure.io/shop-api';
+const API_URL = 'https://example.com/shop-api';
 
 let languageCode: string | undefined;
 let channelToken: string | undefined;
@@ -351,7 +351,7 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
-const API_URL = `https://demo.vendure.io/shop-api`;
+const API_URL = `https://example.com/shop-api`;
 
 // If using bearer-token based session management, we'll store the token
 // in localStorage using this key.
@@ -380,7 +380,7 @@ const afterwareLink = new ApolloLink((operation, forward) => {
         const context = operation.getContext();
         const authHeader = context.response.headers.get('vendure-auth-token');
         if (authHeader) {
-            // If the auth token has been returned by the Vendure
+            // If the auth token has been returned by the Novara Commerce
             // server, we store it in localStorage
             localStorage.setItem(AUTH_TOKEN_KEY, authHeader);
         }
@@ -535,7 +535,7 @@ const responseMiddleware: ResponseMiddleware = (response) => {
     if (!(response instanceof Error) && !response.errors) {
         const authHeader = response.headers.get('vendure-auth-token');
         if (authHeader) {
-            // If the session token has been returned by the Vendure
+            // If the session token has been returned by the Novara Commerce
             // server, we store it in localStorage
             localStorage.setItem(AUTH_TOKEN_KEY, authHeader);
         }

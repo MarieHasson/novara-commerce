@@ -2,7 +2,7 @@
 
 This is an example implementation which adds support for product bundles.
 
-This plugin uses a couple of features added in Vendure v3.1:
+This plugin uses a couple of features added in Novara Commerce v3.1:
 
 - Custom field "struct" types
 - The OrderInterceptor API

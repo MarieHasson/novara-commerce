@@ -1577,7 +1577,7 @@ export class OrderService implements OnApplicationBootstrap {
      * Do not "fix" the resolution into first-wins without re-deriving the
      * count semantics from scratch.
      *
-     * See https://github.com/vendurehq/vendure/pull/4660
+     * See https://github.com/MarieHasson/novara-commerce/pull/4660
      */
     private async revalidateCouponCodesForOrder(ctx: RequestContext, order: Order): Promise<string[]> {
         const removedCodes: string[] = [];
@@ -2208,7 +2208,7 @@ export class OrderService implements OnApplicationBootstrap {
                       relations: { lines: true, shippingLines: true },
                   });
         // If there is a Session referencing the Order to be deleted, we must first remove that
-        // reference in order to avoid a foreign key error. See https://github.com/vendurehq/vendure/issues/1454
+        // reference in order to avoid a foreign key error. See https://github.com/MarieHasson/novara-commerce/issues/1454
         const sessions = await this.connection
             .getRepository(ctx, Session)
             .find({ where: { activeOrderId: orderToDelete.id } });
@@ -2237,13 +2237,13 @@ export class OrderService implements OnApplicationBootstrap {
     ): Promise<Order | undefined> {
         if (guestOrder && guestOrder.customer) {
             // In this case the "guest order" is actually an order of an existing Customer,
-            // so we do not want to merge at all. See https://github.com/vendurehq/vendure/issues/263
+            // so we do not want to merge at all. See https://github.com/MarieHasson/novara-commerce/issues/263
             return existingOrder;
         }
         try {
             return await this.connection.withTransaction(ctx, async txCtx => {
                 // Acquire a pessimistic lock on the existing order to prevent concurrent merges
-                // from interleaving their DB operations. See https://github.com/vendurehq/vendure/issues/4481
+                // from interleaving their DB operations. See https://github.com/MarieHasson/novara-commerce/issues/4481
                 // Note: SQLite does not support pessimistic locks — the try-catch ensures we
                 // degrade gracefully (SQLite serializes writes at the engine level anyway).
                 if (existingOrder) {

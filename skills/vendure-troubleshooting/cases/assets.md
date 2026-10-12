@@ -1,6 +1,6 @@
 # Asset serving and storage problems
 
-Applies to: Vendure 3.x with `@vendure/asset-server-plugin`. The `format`
+Applies to: Novara Commerce 3.x with `@vendure/asset-server-plugin`. The `format`
 query parameter needs v1.7.0 or later. The `q` parameter needs v2.2.0 or
 later.
 
@@ -50,4 +50,4 @@ later.
 | No storage or preview strategy           | Add `AssetServerPlugin` with a storage strategy          | `core-concepts/images-assets#assetserverplugin`                                  |
 | Unsupported transform parameter          | Use the documented parameters and presets                | `reference/core-plugins/asset-server-plugin#image-transformation`                |
 
-All references are paths under `https://docs.vendure.io/current/core/`.
+All references are paths under `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/`.

@@ -1,11 +1,11 @@
 ---
 title: 'Production configuration'
-metaTitle: "Production Configuration for Vendure: Security, API Hardening, and More"
-metaDescription: "Recommended production settings for Vendure including environment variables, superadmin credentials, the HardenPlugin, UUID strategies, and database timezone."
+metaTitle: "Production Configuration for Novara Commerce: Security, API Hardening, and More"
+metaDescription: "Recommended production settings for Novara Commerce including environment variables, superadmin credentials, the HardenPlugin, UUID strategies, and database timezone."
 order: 0
 ---
 
-This is a guide to the recommended configuration for a production Vendure application.
+This is a guide to the recommended configuration for a production Novara Commerce application.
 
 ## Environment variables
 
@@ -63,7 +63,7 @@ export const config: VendureConfig = {
 };
 ```
 
-Vendure logs a warning at startup if it finds the reflect-any-origin default in place. The warning is
+Novara Commerce logs a warning at startup if it finds the reflect-any-origin default in place. The warning is
 most important when you also set `authOptions.cookieOptions.sameSite` to `'none'` or when you use
 `tokenMethod: 'bearer'`, because neither of those relies on the `SameSite` cookie rules that otherwise
 limit the impact. See the [Security guide](/developer-guide/security/#configure-cors) for the
@@ -73,7 +73,7 @@ full explanation.
 
 It is recommended that you install and configure the [HardenPlugin](/reference/core-plugins/harden-plugin/) for all production deployments. This plugin locks down your schema (disabling introspection and field suggestions) and protects your Shop API against malicious queries that could otherwise overwhelm your server.
 
-Install the plugin: 
+Install the plugin:
 
 ```bash
 npm install @vendure/harden-plugin
@@ -105,7 +105,7 @@ For a detailed explanation of how to best configure this plugin, see the [Harden
 
 ## ID Strategy
 
-By default, Vendure uses auto-increment integer IDs as entity primary keys. While easier to work with in development, sequential primary keys can leak information such as the number of orders or customers in the system.
+By default, Novara Commerce uses auto-increment integer IDs as entity primary keys. While easier to work with in development, sequential primary keys can leak information such as the number of orders or customers in the system.
 
 For this reason you should consider using the UuidIdStrategy for production.
 
@@ -124,7 +124,7 @@ Another option, if you wish to stick with integer IDs, is to create a custom [En
 
 ## Database Timezone
 
-Vendure internally treats all dates & times as UTC. However, you may sometimes run into issues where dates are offset by some fixed amount of hours. E.g. you place an order at 17:00, but it shows up in the Dashboard as being placed at 19:00. Typically, this is caused by the timezone of your database not being set to UTC.
+Novara Commerce internally treats all dates & times as UTC. However, you may sometimes run into issues where dates are offset by some fixed amount of hours. E.g. you place an order at 17:00, but it shows up in the Dashboard as being placed at 19:00. Typically, this is caused by the timezone of your database not being set to UTC.
 
 You can check the timezone in **MySQL/MariaDB** by executing:
 
@@ -141,7 +141,7 @@ and you should expect to see `UTC` or `Etc/UTC`.
 
 ## Trust proxy
 
-When deploying your Vendure application behind a reverse proxy (usually the case with most hosting services), consider configuring Express's `trust proxy` setting. This allows you to retrieve the original IP address from the `X-Forwarded-For` header, which proxies use to forward the client's IP address.
+When deploying your Novara Commerce application behind a reverse proxy (usually the case with most hosting services), consider configuring Express's `trust proxy` setting. This allows you to retrieve the original IP address from the `X-Forwarded-For` header, which proxies use to forward the client's IP address.
 
 You can set the `trustProxy` option in your `VendureConfig`:
 
@@ -159,4 +159,4 @@ For more details on configuring `trust proxy`, refer to the [Express documentati
 
 ## Security Considerations
 
-Please read over the [Security](/developer-guide/security) section of the Developer Guide for more information on how to secure your Vendure application.
+Please read over the [Security](/developer-guide/security) section of the Developer Guide for more information on how to secure your Novara Commerce application.

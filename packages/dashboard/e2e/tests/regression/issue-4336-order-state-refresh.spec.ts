@@ -2,8 +2,8 @@ import { expect, test } from '@playwright/test';
 
 import { BaseListPage } from '../../page-objects/list-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4336
-// Fix PR: https://github.com/vendurehq/vendure/pull/4338
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4336
+// Fix PR: https://github.com/MarieHasson/novara-commerce/pull/4338
 //
 // On the order detail page, using the state transition dropdown successfully
 // transitions the order on the server, but the UI does not refresh to show

@@ -1,13 +1,13 @@
-# Vendure Dashboard
+# Novara Commerce Dashboard
 
-This is a React-based admin dashboard for Vendure. It is a standalone application that can be extended to suit the
-needs of any Vendure project.
+This is a React-based admin dashboard for Novara Commerce. It is a standalone application that can be extended to suit the
+needs of any Novara Commerce project.
 
 The package consists of three main components:
 
 - `@vendure/dashboard`: Dashboard source code
 - `@vendure/dashboard/vite`: A Vite plugin that is used to compile the dashboard in your project
-- `@vendure/dashboard/plugin`: A Vendure plugin that provides backend functionality used by the dashboard app.
+- `@vendure/dashboard/plugin`: A Novara Commerce plugin that provides backend functionality used by the dashboard app.
 
 ## DashboardPlugin
 
@@ -50,7 +50,7 @@ import { DashboardPlugin } from '@vendure/dashboard-plugin';
 
 const config: VendureConfig = {
   plugins: [
-    DashboardPlugin.init({ 
+    DashboardPlugin.init({
       route: 'dashboard',
       app: path.join(__dirname, 'custom-dashboard-build'),
     }),
@@ -71,7 +71,7 @@ Run `bunx vite` to start Vite in dev mode.
 
 ### Note on internal `@/vdb` imports
 
-You will notice that the dashboard uses internal Vendure Dashboard imports prefixed with `@/vdb`. This is adapted from the
+You will notice that the dashboard uses internal Novara Commerce Dashboard imports prefixed with `@/vdb`. This is adapted from the
 convention of Shadcn which uses a `@/*` path alias for internal imports.
 
 **Why not just use relative imports?**
@@ -81,11 +81,11 @@ manifests as things like React Context not working correctly. The underlying rea
 pre-compile source code and mixing the imports between alias and relative can result in 2 "versions" of the same code
 being loaded, which causes issues with React Context and other things that rely on a single instance of a module.
 
-For this reason, try to use the `@/vdb` alias for all internal Vendure Dashboard imports to the "src/lib" directory.
+For this reason, try to use the `@/vdb` alias for all internal Novara Commerce Dashboard imports to the "src/lib" directory.
 
 This is especially import for hooks (since many of them use React Context) and there is even a pre-commit hook
 that will run [a script](./scripts/check-internal-imports.js) to ensure that you are not using relative imports for
-internal Vendure Dashboard code.
+internal Novara Commerce Dashboard code.
 
 **Type Safety for Consumers**
 

@@ -428,7 +428,7 @@ export class ListQueryBuilder implements OnApplicationBootstrap {
      * - ManyToMany relations (uses junction table)
      * - OneToMany relations (direct foreign key on the related table)
      *
-     * @see https://github.com/vendurehq/vendure/issues/3267
+     * @see https://github.com/MarieHasson/novara-commerce/issues/3267
      */
     private buildExistsSubquery<T extends VendureEntity>(
         condition: WhereCondition,

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4437
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4437
 //
 // When the sidebar is collapsed, nav items with sub-items (e.g. Catalog)
 // were not accessible. The fix shows a HoverCard popover on hover so

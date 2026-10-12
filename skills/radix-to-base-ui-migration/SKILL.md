@@ -1,6 +1,6 @@
 ---
 name: radix-to-base-ui-migration
-description: Migrates Vendure Dashboard extensions from Radix UI patterns to Base UI patterns (@vendure-io/ui).
+description: Migrates Novara Commerce Dashboard extensions from Radix UI patterns to Base UI patterns (@vendure-io/ui).
 ---
 
 # Radix to Base UI Migration

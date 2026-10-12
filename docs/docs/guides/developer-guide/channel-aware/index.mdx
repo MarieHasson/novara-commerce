@@ -1,7 +1,7 @@
 ---
 title: "Implementing ChannelAware"
-metaTitle: "Making Custom Entities Channel-Aware in Vendure"
-metaDescription: "Scope custom entities to specific Vendure channels by implementing the ChannelAware interface for multi-tenant and multi-store data isolation."
+metaTitle: "Making Custom Entities Channel-Aware in Novara Commerce"
+metaDescription: "Scope custom entities to specific Novara Commerce channels by implementing the ChannelAware interface for multi-tenant and multi-store data isolation."
 ---
 
 ## Defining channel-aware entities
@@ -30,7 +30,7 @@ class ProductRequest extends VendureEntity implements ChannelAware {
 
     @Column()
     text: string;
-    
+
     @ManyToMany(() => Channel) // [!code highlight]
     @JoinTable() // [!code highlight]
     channels: Channel[]; // [!code highlight]
@@ -40,7 +40,7 @@ class ProductRequest extends VendureEntity implements ChannelAware {
 ## Creating channel-aware entities
 
 Creating a channel-aware entity is similar to creating a regular entity. The only difference is that you need to assign the entity to the current channel.
-This can be done by using the `ChannelService` which provides the `assignToCurrentChannel` helper function. 
+This can be done by using the `ChannelService` which provides the `assignToCurrentChannel` helper function.
 
 :::info
 The `assignToCurrentChannel` function will only assign the `channels` property of the entity. You will still need to save the entity to the database.
@@ -57,7 +57,7 @@ export class RequestService {
         const request = new ProductRequest(input);
         // Now we need to assign the request to the current channel (+ default channel)
         await this.channelService.assignToCurrentChannel(input, ctx); // [!code highlight]
-        
+
         return await this.connection.getRepository(ProductRequest).save(request);
     }
 }

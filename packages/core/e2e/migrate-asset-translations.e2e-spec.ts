@@ -103,7 +103,7 @@ describe('migrateAssetTranslationData()', () => {
         await migrateAssetTranslationData(queryRunner);
     });
 
-    // Reproduces https://github.com/vendurehq/vendure/issues/4647 (OSS-496):
+    // Reproduces https://github.com/MarieHasson/novara-commerce/issues/4647 (OSS-496):
     // on a fresh install with no asset data and no default channel yet,
     // the migration should be a no-op rather than throwing.
     it('should skip if there are no assets to migrate, even without a default channel', async () => {

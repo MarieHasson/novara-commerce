@@ -1,12 +1,12 @@
 ---
-title: "Deploy Vendure to Render"
-metaTitle: "Deploying Vendure to Render with Postgres and Persistent Disk"
-metaDescription: "Complete walkthrough for deploying Vendure on Render, including Postgres setup, persistent disk for assets, environment groups, and a background worker."
+title: "Deploy Novara Commerce to Render"
+metaTitle: "Deploying Novara Commerce to Render with Postgres and Persistent Disk"
+metaDescription: "Complete walkthrough for deploying Novara Commerce on Render, including Postgres setup, persistent disk for assets, environment groups, and a background worker."
 ---
 
 ![Deploy to Render](./deploy-to-render.webp)
 
-[Render](https://render.com/) is a managed hosting platform which allows you to deploy and scale your Vendure server and infrastructure with ease.
+[Render](https://render.com/) is a managed hosting platform which allows you to deploy and scale your Novara Commerce server and infrastructure with ease.
 
 :::note
 The configuration in this guide will cost from around $12 per month to run.
@@ -17,11 +17,11 @@ The configuration in this guide will cost from around $12 per month to run.
 First of all you'll need to [create a new Render account](https://dashboard.render.com/register) if you
 don't already have one.
 
-For this guide you'll need to have your Vendure project in a git repo on either GitHub or GitLab.
+For this guide you'll need to have your Novara Commerce project in a git repo on either GitHub or GitLab.
 
 :::info
-If you'd like to quickly get started with a ready-made Vendure project which includes sample data, you can use our
-[Vendure one-click-deploy repo](https://github.com/vendurehq/one-click-deploy), which means you won't have
+If you'd like to quickly get started with a ready-made Novara Commerce project which includes sample data, you can use our
+[Novara Commerce one-click-deploy repo](https://github.com/MarieHasson/one-click-deploy), which means you won't have
 to set up your own git repo.
 :::
 
@@ -29,7 +29,7 @@ to set up your own git repo.
 
 ### Port
 
-Render defines the port via the `PORT` environment variable and [defaults to `10000`](https://docs.render.com/web-services#host-and-port-configuration), so make sure your Vendure Config uses this variable:
+Render defines the port via the `PORT` environment variable and [defaults to `10000`](https://docs.render.com/web-services#host-and-port-configuration), so make sure your Novara Commerce Config uses this variable:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -100,18 +100,18 @@ From the Render dashboard, click the "New" button and select "PostgreSQL" from t
 Give the database a name (e.g. "postgres"), select a region close to you, select an appropriate plan
 and click "Create Database".
 
-## Create the Vendure server
+## Create the Novara Commerce server
 
 Click the "New" button again and select "Web Service" from the list of services. Choose the "Build and deploy from a Git repository" option.
 
 In the next step you will be prompted to connect to either GitHub or GitLab. Select the appropriate option and follow the instructions
-to connect your account and grant access to the repository containing your Vendure project.
+to connect your account and grant access to the repository containing your Novara Commerce project.
 
 :::info
 If you are using the one-click-deploy repo, you should instead use the "Public Git repository" option and enter the URL of the repo:
 
 ```
-https://github.com/vendurehq/one-click-deploy
+https://github.com/MarieHasson/one-click-deploy
 ```
 :::
 
@@ -123,7 +123,7 @@ In the next step you will configure the server:
 - **Region**: Select a region close to you
 - **Branch**: Select the branch you want to deploy, usually "main" or "master"
 - **Runtime**: If you have a Dockerfile then it should be auto-detected. If not you should select "Node" and enter the appropriate build and start commands. For a
-typical Vendure project these would be:
+typical Novara Commerce project these would be:
   - **Build Command**: `yarn; yarn build` or `npm install; npm run build`
   - **Start Command**: `node ./dist/index.js`
 - **Instance Type**: Select the appropriate instance type. Since we want to use a persistent volume to store our assets, we need to
@@ -171,7 +171,7 @@ Next, click the "vendure-server" service and go to the "Environment" tab to link
 
 ![Link environment group](./04-link-env-group.webp)
 
-## Create the Vendure worker
+## Create the Novara Commerce worker
 
 Finally, we need to define the worker process which will run the background tasks. Click the "New" button and select
 "Background Worker".
@@ -182,7 +182,7 @@ Select the same git repo as before, and in the next step configure the worker:
 - **Region**: Same as the server
 - **Branch**: Select the branch you want to deploy, usually "main" or "master"
 - **Runtime**: If you have a Dockerfile then it should be auto-detected. If not you should select "Node" and enter the appropriate build and start commands. For a
-  typical Vendure project these would be:
+  typical Novara Commerce project these would be:
   - **Build Command**: `yarn; yarn build` or `npm install; npm run build`
   - **Start Command**: `node ./dist/index-worker.js`
 - **Instance Type**: Select the appropriate instance type. The Starter size is fine to get started.
@@ -195,7 +195,7 @@ Click "Create Background Worker" to create the worker.
 
 Finally, click the "Environment" tab and link the "vendure configuration" environment group to the worker.
 
-## Test your Vendure server
+## Test your Novara Commerce server
 
 Navigate back to the dashboard, click the "vendure-server" service, and you should see a link to the temporary domain:
 
@@ -206,7 +206,7 @@ environment variables.
 
 ## Next Steps
 
-This setup gives you a basic Vendure server to get started with. When moving to a more production-ready setup, you'll
+This setup gives you a basic Novara Commerce server to get started with. When moving to a more production-ready setup, you'll
 want to consider the following:
 
 - Use MinIO for asset storage. This is a more robust and scalable solution than the local disk storage used here.
@@ -215,5 +215,5 @@ want to consider the following:
 - Use Redis to power the job queue and session cache. This is not only more performant, but will enable horizontal scaling of your
   server and worker instances.
   - [Render Redis docs](https://docs.render.com/redis#creating-a-redis-instance)
-  - [Vendure horizontal scaling docs](/deployment/horizontal-scaling)
-  
+  - [Novara Commerce horizontal scaling docs](/deployment/horizontal-scaling)
+

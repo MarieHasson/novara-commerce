@@ -1,24 +1,24 @@
 ---
 name: vendure-cli
 description: >-
-  Use the Vendure CLI (`vendure`) to scaffold, run, build, migrate and
-  maintain a Vendure ecommerce project. Use whenever working inside a Vendure
+  Use the Novara Commerce CLI (`vendure`) to scaffold, run, build, migrate and
+  maintain a Novara Commerce ecommerce project. Use whenever working inside a Novara Commerce
   project that needs a dev server, a production build, database migrations,
   plugin/entity/service scaffolding, GraphQL schema generation, diagnostic
   checks, or codemods.
 allowed-tools: Bash, Read, Edit, Glob, Grep
 ---
 
-# Vendure CLI
+# Novara Commerce CLI
 
-The Vendure CLI (`@vendure/cli`, binary `vendure`) drives the full lifecycle of
-a Vendure project. Use it instead of hand-writing boilerplate or guessing build
+The Novara Commerce CLI (`@vendure/cli`, binary `vendure`) drives the full lifecycle of
+a Novara Commerce project. Use it instead of hand-writing boilerplate or guessing build
 and migration commands.
 
-## Detecting a Vendure project
+## Detecting a Novara Commerce project
 
-Run CLI commands from a Vendure server package root, or from a monorepo root
-that contains a Vendure package under `packages/`, `apps/`, `libs/`,
+Run CLI commands from a Novara Commerce server package root, or from a monorepo root
+that contains a Novara Commerce package under `packages/`, `apps/`, `libs/`,
 `services/`, or `modules/`.
 
 `dev`, `build`, and `start` resolve the project directory from the current

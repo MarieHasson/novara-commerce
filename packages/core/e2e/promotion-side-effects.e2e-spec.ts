@@ -130,7 +130,7 @@ async function getOrderLineFromDb(lineId: number) {
     return connection.rawConnection.getRepository(OrderLine).findOneOrFail({ where: { id: lineId } });
 }
 
-// https://github.com/vendurehq/vendure/issues/3296
+// https://github.com/MarieHasson/novara-commerce/issues/3296
 describe('Promotion side effects on OrderLine customFields', () => {
     const { server, adminClient, shopClient } = createTestEnvironment(customConfig);
 

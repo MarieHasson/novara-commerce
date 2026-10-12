@@ -1,11 +1,11 @@
 ---
 title: 'Worker & Job Queue'
-metaTitle: "Worker and Job Queue Configuration in Vendure"
-metaDescription: "Run background tasks in Vendure using the Worker process and job queue system. Covers setup, job queue strategies, custom job processors, and BullMQ integration."
+metaTitle: "Worker and Job Queue Configuration in Novara Commerce"
+metaDescription: "Run background tasks in Novara Commerce using the Worker process and job queue system. Covers setup, job queue strategies, custom job processors, and BullMQ integration."
 order: 5
 ---
 
-The Vendure Worker is a Node.js process responsible for running computationally intensive
+The Novara Commerce Worker is a Node.js process responsible for running computationally intensive
 or otherwise long-running tasks in the background. For example, updating a
 search index or sending emails. Running such tasks in the background allows
 the server to stay responsive, since a response can be returned immediately
@@ -18,7 +18,7 @@ Put another way, the Worker executes **jobs** which have been placed in the **jo
 ## The worker
 
 The worker is started by calling the [`bootstrapWorker()`](/reference/typescript-api/worker/bootstrap-worker/) function with the same
-configuration as is passed to the main server `bootstrap()`. In a standard Vendure installation, this is found
+configuration as is passed to the main server `bootstrap()`. In a standard Novara Commerce installation, this is found
 in the `index-worker.ts` file:
 
 ```ts title="src/index-worker.ts"
@@ -106,7 +106,7 @@ export class MyService implements OnApplicationBootstrap {
 
 ## The job queue
 
-Vendure uses a [job queue](https://en.wikipedia.org/wiki/Job_queue) to handle the processing of certain tasks which are typically too slow to run in the
+Novara Commerce uses a [job queue](https://en.wikipedia.org/wiki/Job_queue) to handle the processing of certain tasks which are typically too slow to run in the
 normal request-response cycle. A normal request-response looks like this:
 
 ![Regular request response](./Vendure_docs-job-queue.webp)
@@ -120,9 +120,9 @@ until that processing has completed. That’s where a job queue comes in:
 
 ![Request response with job queue](./Vendure_docs-job-queue-2.webp)
 
-### What does Vendure use the job queue for?
+### What does Novara Commerce use the job queue for?
 
-By default, Vendure uses the job queue for the following tasks:
+By default, Novara Commerce uses the job queue for the following tasks:
 
 - Re-building the search index
 - Updating the search index when changes are made to Products, ProductVariants, Assets etc.
@@ -143,15 +143,15 @@ of a single worker).
 
 The actual queue part is defined by the configured [`JobQueueStrategy`](/reference/typescript-api/job-queue/job-queue-strategy/).
 
-If no strategy is defined, Vendure uses an [in-memory store](/reference/typescript-api/job-queue/in-memory-job-queue-strategy/)
+If no strategy is defined, Novara Commerce uses an [in-memory store](/reference/typescript-api/job-queue/in-memory-job-queue-strategy/)
 of the contents of each queue. While this has the advantage
 of requiring no external dependencies, it is not suitable for production because when the server is stopped, the entire
 queue will be lost and any pending jobs will never be processed. Moreover, it cannot be used when running the worker
 as a separate process.
 
 A better alternative is to use the [DefaultJobQueuePlugin](/reference/typescript-api/job-queue/default-job-queue-plugin/)
-(which will be used in a standard `@vendure/create` installation), which configures Vendure to use the [SqlJobQueueStrategy](/reference/typescript-api/job-queue/sql-job-queue-strategy).
-This strategy uses the database as a queue, and means that even if the Vendure server stops, pending jobs will be persisted and upon re-start, they will be processed.
+(which will be used in a standard `@vendure/create` installation), which configures Novara Commerce to use the [SqlJobQueueStrategy](/reference/typescript-api/job-queue/sql-job-queue-strategy).
+This strategy uses the database as a queue, and means that even if the Novara Commerce server stops, pending jobs will be persisted and upon re-start, they will be processed.
 
 It is also possible to implement your own JobQueueStrategy to take advantage of other technologies.
 Examples include RabbitMQ, Google Cloud Pub Sub & Amazon SQS. It may make sense to implement a custom strategy based on
@@ -159,7 +159,7 @@ one of these if the default database-based approach does not meet your performan
 
 ### Job Queue Performance
 
-It is common for larger Vendure projects to define multiple custom job queues, When using the [DefaultJobQueuePlugin](/reference/typescript-api/job-queue/default-job-queue-plugin/)
+It is common for larger Novara Commerce projects to define multiple custom job queues, When using the [DefaultJobQueuePlugin](/reference/typescript-api/job-queue/default-job-queue-plugin/)
 with many queues, performance may be impacted. This is because the `SqlJobQueueStrategy` uses polling to check for
 new jobs in the database. Each queue will (by default) query the database every 200ms. So if there are 10 queues,
 this will result in a constant 50 queries/second.
@@ -172,7 +172,7 @@ which uses an efficient push-based strategy built on Redis.
 If your plugin involves long-running tasks, you can also make use of the job queue.
 
 :::info
-A real example of this can be seen in the [EmailPlugin source](https://github.com/vendurehq/vendure/blob/master/packages/email-plugin/src/plugin.ts)
+A real example of this can be seen in the [EmailPlugin source](https://github.com/MarieHasson/novara-commerce/blob/master/packages/email-plugin/src/plugin.ts)
 :::
 
 Let's say you are building a plugin which allows a video URL to be specified, and then that video gets transcoded into a format suitable for streaming on the storefront. This is a long-running task which should not block the main thread, so we will use the job queue to run the task on the worker.
@@ -326,7 +326,7 @@ export class ProductVideoPlugin {}
 
 ### Passing the RequestContext
 
-Sometimes you need to pass the [RequestContext object](/reference/typescript-api/request/request-context) to the `process` function of a job, since `ctx` is required by many Vendure
+Sometimes you need to pass the [RequestContext object](/reference/typescript-api/request/request-context) to the `process` function of a job, since `ctx` is required by many Novara Commerce
 service methods that you may be using inside your `process` function. However, the `RequestContext` object itself is not serializable,
 so it cannot be passed directly to the `JobQueue.add()` method. Instead, you can serialize the `RequestContext` using the [`ctx.serialize()` method](/reference/typescript-api/request/request-context/#serialize),
  and then deserialize it in the `process` function using the static `deserialize` method.

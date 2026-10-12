@@ -1,15 +1,15 @@
 ---
 title: Migrating from Admin UI
-metaTitle: "Migrating from Angular Admin UI to the Vendure Dashboard"
-metaDescription: "Step-by-step guide to migrate your Angular Admin UI extensions to the new React-based Vendure Dashboard, including AI-assisted migration and manual approaches."
+metaTitle: "Migrating from Angular Admin UI to the Novara Commerce Dashboard"
+metaDescription: "Step-by-step guide to migrate your Angular Admin UI extensions to the new React-based Novara Commerce Dashboard, including AI-assisted migration and manual approaches."
 order: 1
 ---
 
 If you have existing extensions to the legacy Angular-based Admin UI, you will want to migrate to the new Dashboard to enjoy
-an improved developer experience, many more customization options, and ongoing support from the Vendure team.
+an improved developer experience, many more customization options, and ongoing support from the Novara Commerce team.
 
 :::warning
-The Angular Admin UI will not be maintained after **July 2026**. Until then, we will continue patching critical bugs and security issues. 
+The Angular Admin UI will not be maintained after **July 2026**. Until then, we will continue patching critical bugs and security issues.
 Community contributions will always be merged and released.
 :::
 
@@ -45,7 +45,7 @@ in around 20-30 minutes.
 Give a prompt like this to your AI assistant and make sure to specify the plugin by path, i.e.:
 
 ```
-Migrate the plugin at @src/plugins/my-plugin/ 
+Migrate the plugin at @src/plugins/my-plugin/
 to use the new dashboard.
 ```
 
@@ -203,7 +203,7 @@ custom design system based on Clarity UI
 
 ### New
 
-Tailwind + Vendure Design System. Components import from `@vendure/dashboard`
+Tailwind + Novara Commerce Design System. Components import from `@vendure/dashboard`
 
 ```tsx
 import { Button, DetailPageButton, VendureImage } from '@vendure/dashboard';
@@ -217,19 +217,19 @@ export function MyComponent() {
         <Button variant="outline">Outline</Button>
         <Button variant="destructive">Danger</Button>
         <Button variant="ghost">Ghost</Button>
-        
+
         <DetailPageButton id="123" label="John Smith" />
         <DetailPageButton href="/affiliates/my-custom-route" label="John Smith" />
-        
+
         <Star />
-        
+
         <VendureImage
             src={entity.product.featuredAsset}
             alt={entity.product.name}
             preset='small'
         />
     )
-} 
+}
 ```
 
 Important:
@@ -261,23 +261,23 @@ Important:
 
 ```ts
 import { DataService } from '@vendure/admin-ui/core';
-import { graphql } from "../gql";  
-  
-export const GET_CUSTOMER_NAME = graphql(`  
-    query GetCustomerName($id: ID!) {  
-        customer(id: $id) {  
-            id  
-            firstName            
+import { graphql } from "../gql";
+
+export const GET_CUSTOMER_NAME = graphql(`
+    query GetCustomerName($id: ID!) {
+        customer(id: $id) {
+            id
+            firstName
             lastName
             addresses {
               ...AddressFragment
             }
-        }    
+        }
 	}
 `);
 
-this.dataService.query(GET_CUSTOMER_NAME, {  
-    id: customerId,  
+this.dataService.query(GET_CUSTOMER_NAME, {
+    id: customerId,
 }),
 ```
 
@@ -291,21 +291,21 @@ const addressFragment = graphql(`
    # ...
 `);
 
-const getCustomerNameDocument = graphql(`  
-    query GetCustomerName($id: ID!) {  
-        customer(id: $id) {  
-            id  
-            firstName            
-            lastName              
+const getCustomerNameDocument = graphql(`
+    query GetCustomerName($id: ID!) {
+        customer(id: $id) {
+            id
+            firstName
+            lastName
             addresses {
               ...AddressFragment
             }
-        }    
+        }
 	}
 `, [addressFragment]);  // Fragments MUST be explicitly referenced
 
-const { data, isLoading, error } = useQuery({  
-	queryKey: ['customer-name', customerId],  
+const { data, isLoading, error } = useQuery({
+	queryKey: ['customer-name', customerId],
 	queryFn: () => api.query(getCustomerNameDocument, { id: customerId }),
 });
 ```
@@ -391,7 +391,7 @@ If not already set up, we need to make sure we have configured tsconfig with:
         // so will vary depending on project structure
         "@/gql": ["./apps/server/src/gql/graphql.ts"],
         // This line allows TypeScript to properly resolve internal
-        // Vendure Dashboard imports, which is necessary for
+        // Novara Commerce Dashboard imports, which is necessary for
         // type safety in your dashboard extensions.
         // This path assumes a root-level tsconfig.json file.
         // You may need to adjust it if your project structure is different.
@@ -700,13 +700,13 @@ export class ReviewListComponent extends TypedBaseListComponent<typeof getReview
             [hostComponent]="this"
             [selectionManager]="selectionManager"
     />
-    
+
     <!-- Adds a search bar -->
     <vdr-dt2-search
             [searchTermControl]="searchTermControl"
             searchTermPlaceholder="Filter by title"
     />
-    
+
     <!-- Here we define all the available columns -->
     <vdr-dt2-column id="id" [heading]="'common.id' | translate" [hiddenByDefault]="true">
         <ng-template let-review="item">
@@ -1369,7 +1369,7 @@ import { CmsDataService } from '../../providers/cms-data.service';
     imports: [SharedModule],
 })
 export class ProductInfoComponent implements CustomDetailComponent, OnInit {
-    // These two properties are provided by Vendure and will vary
+    // These two properties are provided by Novara Commerce and will vary
     // depending on the particular detail page you are embedding this
     // component into. In this case, it will be a "product" entity.
     entity$: Observable<any>
@@ -1564,15 +1564,15 @@ This has the advantage that you do not need to continually paste in the full pro
 To set up the skill, run this from the root of your project:
 
 ```
-npx skills add vendurehq/vendure --skill vendure-dashboard-migration
+npx skills add MarieHasson/novara-commerce --skill vendure-dashboard-migration
 ```
 
-This installs the `vendure-dashboard-migration` skill from the Vendure repository into your selected agent's skills directory.
+This installs the `vendure-dashboard-migration` skill from the Novara Commerce repository into your selected agent's skills directory.
 
 You can then have your coding agent use the skill with a prompt like:
 
 ```
-Use the vendure-dashboard-migration skill to migrate 
+Use the vendure-dashboard-migration skill to migrate
 @src/plugins/my-plugin to use the dashboard
 ```
 

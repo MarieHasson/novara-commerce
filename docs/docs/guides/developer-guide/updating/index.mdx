@@ -1,17 +1,17 @@
 ---
-title: "Updating Vendure"
-metaTitle: "Updating Vendure - Versioning Policy and Upgrade Steps"
-metaDescription: "Safely update your Vendure installation to newer versions. Covers the versioning policy, breaking change expectations, and the recommended upgrade workflow."
+title: "Updating Novara Commerce"
+metaTitle: "Updating Novara Commerce - Versioning Policy and Upgrade Steps"
+metaDescription: "Safely update your Novara Commerce installation to newer versions. Covers the versioning policy, breaking change expectations, and the recommended upgrade workflow."
 ---
 
-This guide provides guidance for updating the Vendure core framework to a newer version.
+This guide provides guidance for updating the Novara Commerce core framework to a newer version.
 
 ## How to update
 
-First, check the [changelog](https://github.com/vendurehq/vendure/blob/master/CHANGELOG.md) for an overview of the changes and any breaking changes in the next version.
+First, check the [changelog](https://github.com/MarieHasson/novara-commerce/blob/master/CHANGELOG.md) for an overview of the changes and any breaking changes in the next version.
 
 In your project's `package.json` file, find all the `@vendure/...` packages and change the version
-to the latest. All the Vendure packages have the same version, and are all released together.
+to the latest. All the Novara Commerce packages have the same version, and are all released together.
 
 ```diff
 {
@@ -30,14 +30,14 @@ Then run `npm install` or `yarn install` depending on which package manager you 
 
 ## Versioning Policy & Breaking changes
 
-Vendure generally follows the [SemVer convention](https://semver.org/) for version numbering. This means that breaking API changes will only be introduced with changes to the major version (the first of the 3 digits in the version).
+Novara Commerce generally follows the [SemVer convention](https://semver.org/) for version numbering. This means that breaking API changes will only be introduced with changes to the major version (the first of the 3 digits in the version).
 
 However, there are some exceptions to this rule:
 
 - In minor versions, (e.g. v2.0 to v2.1) we may update underlying dependencies to new major versions, which may in turn introduce breaking changes. These will be clearly noted in the changelog.
 - In minor versions we may also occasionally introduce non-destructive changes to the database schema. For instance, we may add a new column which would then require a database migration. We will _not_ introduce database schema changes that could potentially result in data loss in a minor version.
 
-Any instances of these exceptions will be clearly indicated in the [Changelog](https://github.com/vendurehq/vendure/blob/master/CHANGELOG.md). The reasoning for these exceptions is discussed in the [Versioning policy RFC](https://github.com/vendurehq/vendure/issues/1846).
+Any instances of these exceptions will be clearly indicated in the [Changelog](https://github.com/MarieHasson/novara-commerce/blob/master/CHANGELOG.md). The reasoning for these exceptions is discussed in the [Versioning policy RFC](https://github.com/MarieHasson/novara-commerce/issues/1846).
 
 ### What kinds of breaking changes can be expected?
 
@@ -47,7 +47,7 @@ Major version upgrades (e.g. v1.x to v2.x) can include:
 * Changes to the GraphQL schema
 * Updates of major underlying libraries, such as upgrading NestJS to a new major version
 
-Every release will be accompanied by an entry in the [changelog](https://github.com/vendurehq/vendure/blob/master/CHANGELOG.md), listing the changes in that release. And breaking changes are clearly listed under a **BREAKING CHANGE** heading.
+Every release will be accompanied by an entry in the [changelog](https://github.com/MarieHasson/novara-commerce/blob/master/CHANGELOG.md), listing the changes in that release. And breaking changes are clearly listed under a **BREAKING CHANGE** heading.
 
 ### Database migrations
 
@@ -72,7 +72,7 @@ If you are using a code-generation tool (such as [graphql-code-generator](https:
 
 ### TypeScript API changes
 
-If you are using Vendure providers (services, JobQueue, EventBus etc.) in your custom plugins, you should look out for breakages caused by changes to those services. Major changes will be listed in the changelog, but occasionally internal changes may also impact your code. 
+If you are using Novara Commerce providers (services, JobQueue, EventBus etc.) in your custom plugins, you should look out for breakages caused by changes to those services. Major changes will be listed in the changelog, but occasionally internal changes may also impact your code.
 
 The best way to check whether this is the case is to build your entire project after upgrading, to see if any new TypeScript compiler errors emerge.
 

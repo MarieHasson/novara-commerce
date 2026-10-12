@@ -49,7 +49,7 @@ const PROJECTS_PATH = '/v1/projects';
 const REQUEST_TIMEOUT_MS = 10_000;
 /** The project list grows with the account, so the cap is wider than one manifest needs. */
 const MAX_RESPONSE_BYTES = 1024 * 1024;
-const DOCS_MCP_URL = 'https://docs.vendure.io/mcp';
+const DOCS_MCP_URL = 'https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/mcp';
 
 export interface ConsoleCommandOptions {
     json?: boolean;
@@ -891,7 +891,7 @@ function reportCodingAssistantSetup(
  */
 function codingAssistantGuideUrl(endpoints: ConsoleEndpoints): string {
     const host = officialConsoleEnvironment(endpoints) === 'production' ? 'docs' : 'staging.docs';
-    return `https://${host}.vendure.io/how-to-use`;
+    return `https://${host}.example.com/how-to-use`;
 }
 
 /**

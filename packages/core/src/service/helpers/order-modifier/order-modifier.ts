@@ -114,7 +114,7 @@ export class OrderModifier {
      * - `quantityInOtherOrderLines` is used when we have more than 1 OrderLine containing the same
      * ProductVariant. This occurs when there are custom fields defined on the OrderLine and the lines
      * have differing values for one or more custom fields. In this case, we need to take _all_ of these
-     * OrderLines into account when constraining the quantity. See https://github.com/vendurehq/vendure/issues/2702
+     * OrderLines into account when constraining the quantity. See https://github.com/MarieHasson/novara-commerce/issues/2702
      * for more on this.
      * - `options.lockStockLevels` must be `true` when the caller allocates stock in the same
      * transaction based on the result, so that the check and the allocation cannot be interleaved

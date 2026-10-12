@@ -222,7 +222,7 @@ describe('EmailPlugin', () => {
         /**
          * Intended to test the ability for Handlebars to interpolate
          * getters on the Order entity prototype.
-         * See https://github.com/vendurehq/vendure/issues/259
+         * See https://github.com/MarieHasson/novara-commerce/issues/259
          */
         it('interpolates body with property from entity', async () => {
             const handler = new EmailEventListener('test')
@@ -302,7 +302,7 @@ describe('EmailPlugin', () => {
             expect(onSend.mock.calls[0][0].from).toBe('"test from baz" <noreply@test.com>');
         });
 
-        // Test fix for https://github.com/vendurehq/vendure/issues/363
+        // Test fix for https://github.com/MarieHasson/novara-commerce/issues/363
         it('does not escape HTML chars when interpolating "from"', async () => {
             const handler = new EmailEventListener('test')
                 .on(MockEvent)

@@ -1,7 +1,7 @@
 ---
 title: 'Scheduled Tasks'
-metaTitle: "Scheduled Tasks in Vendure - Cron-Style Job Scheduling"
-metaDescription: "Define recurring background tasks in Vendure v3.3+ using the DefaultSchedulerPlugin for sitemaps, data sync, abandoned cart emails, and cleanup routines."
+metaTitle: "Scheduled Tasks in Novara Commerce - Cron-Style Job Scheduling"
+metaDescription: "Define recurring background tasks in Novara Commerce v3.3+ using the DefaultSchedulerPlugin for sitemaps, data sync, abandoned cart emails, and cleanup routines."
 ---
 
 Scheduled tasks are a way of executing some code at pre-defined intervals. There are many examples of work that can be done using scheduled tasks,
@@ -12,10 +12,10 @@ such as:
 - Sending abandoned cart emails
 - Cleaning up old data
 
-Since Vendure v3.3, there is a built-in mechanism which allows you to define scheduled tasks in a convenient and powerful way.
+Since Novara Commerce v3.3, there is a built-in mechanism which allows you to define scheduled tasks in a convenient and powerful way.
 
 :::info
-All the information on page applies to Vendure v3.3+
+All the information on page applies to Novara Commerce v3.3+
 
 For older versions, there is no built-in support for scheduled tasks, but you can
 instead use a [stand-alone script](/developer-guide/stand-alone-scripts/) triggered by a cron job.
@@ -23,7 +23,7 @@ instead use a [stand-alone script](/developer-guide/stand-alone-scripts/) trigge
 
 ## Setting up the DefaultSchedulerPlugin
 
-In your Vendure config, import and add the [DefaultSchedulerPlugin](/reference/typescript-api/scheduled-tasks/default-scheduler-plugin) to your
+In your Novara Commerce config, import and add the [DefaultSchedulerPlugin](/reference/typescript-api/scheduled-tasks/default-scheduler-plugin) to your
 plugins array. If you created your project with a version newer than v3.3, this should already be configured.
 
 ```ts title="vendure-config.ts"
@@ -38,7 +38,7 @@ export const config: VendureConfig = {
 When you first add this plugin to your config, you'll need to [generate a migration](/developer-guide/migrations/) because the
 plugin will make use of a new database table in order to guarantee only-once execution of tasks.
 
-You can then start adding tasks. Vendure ships with a task that will clean up old sessions from the database.
+You can then start adding tasks. Novara Commerce ships with a task that will clean up old sessions from the database.
 
 :::note
 The `cleanSessionsTask` task is actually configured by default from v3.3+, so normally you won't have to specify this
@@ -101,7 +101,7 @@ export const generateSitemapTask = new ScheduledTask({
     // This is the function that will be executed per the schedule.
     async execute({injector, params}) {
         // Using `injector.get()` we can grab an instance of _any_ provider defined in the
-        // Vendure core as well as by our plugins.
+        // Novara Commerce core as well as by our plugins.
         const sitemapService = injector.get(SitemapService);
 
         // For most service methods, we'll need to pass a RequestContext object.
@@ -122,13 +122,13 @@ export const generateSitemapTask = new ScheduledTask({
 
 ## Using a task
 
-Now that the task has been defined, we need to tell Vendure to use it.
+Now that the task has been defined, we need to tell Novara Commerce to use it.
 
 To do so we need to add it to the [schedulerOptions.tasks](/reference/typescript-api/scheduled-tasks/scheduler-options#tasks) array.
 
-### Adding directly in Vendure config
+### Adding directly in Novara Commerce config
 
-This can be done directly in your Vendure config file:
+This can be done directly in your Novara Commerce config file:
 
 ```ts title="vendure-config.ts"
 import { cleanSessionsTask, DefaultSchedulerPlugin, VendureConfig } from '@vendure/core';
@@ -159,7 +159,7 @@ export const config: VendureConfig = {
 ### Adding in plugin configuration function
 
 An alternative is that a plugin can automatically add the task to the config using the
-plugin's [configuration function](/reference/typescript-api/plugin/vendure-plugin-metadata#configuration), which allows plugins to alter the Vendure config.
+plugin's [configuration function](/reference/typescript-api/plugin/vendure-plugin-metadata#configuration), which allows plugins to alter the Novara Commerce config.
 
 This allows a plugin to encapsulate any scheduled tasks so that the plugin consumer only needs to add the plugin, and not worry about
 separately adding the task to the tasks array.
@@ -263,13 +263,13 @@ export const config: VendureConfig = {
 
 With a timezone configured, schedules follow wall-clock time in that timezone, including daylight saving time
 transitions. The process timezone does not affect when a task runs. The process can therefore stay on `TZ=UTC`,
-which Vendure needs for correct timestamp persistence, while tasks run at a fixed local time.
+which Novara Commerce needs for correct timestamp persistence, while tasks run at a fixed local time.
 
 An invalid identifier throws at startup. The error names the option or task holding it.
 
 ## How scheduled tasks work
 
-The key problems solved by Vendure's task scheduler are:
+The key problems solved by Novara Commerce's task scheduler are:
 
 - Ensuring that a task is only run a single time per scheduled execution, even when you have multiple instances of servers and workers running.
 - Keeping scheduled task work away from the server instances, so that it does not affect API responsiveness.

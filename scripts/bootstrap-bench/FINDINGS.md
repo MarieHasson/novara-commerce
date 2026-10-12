@@ -14,7 +14,7 @@ GET /health round-trip after bootstrap resolves.
 | server-heavy bootstrap phase | 521ms | 418ms (-19.8%) | — |
 
 ¹ "heavy" = 20 synthetic plugins modeled on a survey of two production codebases
-(two real-world production Vendure codebases): entities, admin+shop API extensions, custom
+(two real-world production Novara Commerce codebases): entities, admin+shop API extensions, custom
 fields, 30 job queues, 20 event-bus subscriptions, strategy-init fan-outs, DB
 queries in lifecycle hooks. The schema-build fixes scale with plugin count, so
 real ~50-plugin deployments should see gains at least in the heavy row's range.
@@ -22,7 +22,7 @@ real ~50-plugin deployments should see gains at least in the heavy row's range.
 ## Where the time goes (baseline attribution)
 
 Roughly two-thirds of bootstrap was loading and compiling JavaScript, not running
-Vendure logic: ~3,390 modules required before the first line of app code, then
+Novara Commerce logic: ~3,390 modules required before the first line of app code, then
 NestJS DI construction, TypeORM metadata, and GraphQL schema building. The
 GraphQL schema build (done twice: shop + admin) consumed 55-62% of the whole
 `NestFactory.create()` window. TypeORM metadata (~13-27ms) and Nest DI (~11-19ms)
@@ -85,7 +85,7 @@ separately and is not part of this change.
 
 ## Remaining opportunities (not implemented)
 
-- **Double schema build (~50ms/boot)**: Vendure hands Apollo `typeDefs:
+- **Double schema build (~50ms/boot)**: Novara Commerce hands Apollo `typeDefs:
   printSchema(builtSchema)`, which `@nestjs/graphql` re-parses and rebuilds via
   `makeExecutableSchema` in `app.init()`. Passing `schema:` instead silently
   DROPS all explored decorator resolvers (verified in `graphql.factory.js`) — do

@@ -6,13 +6,13 @@ import { VendureImage } from './vendure-image.js';
 // Mock asset data for demonstrations
 const mockAsset: AssetLike = {
     id: '1',
-    preview: 'https://demo.vendure.io/assets/preview/ed/chuttersnap-584518-unsplash__preview.jpg',
+    preview: 'https://demo.example.com/assets/preview/ed/chuttersnap-584518-unsplash__preview.jpg',
     name: 'Sample Image',
 };
 
 const mockAssetWithFocalPoint: AssetLike = {
     id: '2',
-    preview: 'https://demo.vendure.io/assets/preview/ed/chuttersnap-584518-unsplash__preview.jpg',
+    preview: 'https://demo.example.com/assets/preview/ed/chuttersnap-584518-unsplash__preview.jpg',
     name: 'Image with Focal Point',
     focalPoint: { x: 0.75, y: 0.25 },
 };

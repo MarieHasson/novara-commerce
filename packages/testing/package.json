@@ -7,8 +7,8 @@
         "testing",
         "e2e"
     ],
-    "author": "Michael Bromley <michael@michaelbromley.co.uk>",
-    "homepage": "https://www.vendure.io/",
+    "author": "Marie Hasson <mariehasson15@gmail.com>",
+    "homepage": "https://github.com/MarieHasson/novara-commerce",
     "license": "GPL-3.0-or-later",
     "directories": {
         "lib": "lib"
@@ -23,10 +23,10 @@
     "types": "lib/index.d.ts",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vendurehq/vendure.git",
+        "url": "git+https://github.com/MarieHasson/novara-commerce.git",
         "directory": "packages/testing"
     },
-    "funding": "https://github.com/sponsors/michaelbromley",
+    "funding": "https://github.com/sponsors/MarieHasson",
     "scripts": {
         "build": "tsc -p ./tsconfig.build.json",
         "watch": "tsc -p ./tsconfig.build.json -w",
@@ -35,7 +35,7 @@
         "test": "vitest --config vitest.config.mts --run"
     },
     "bugs": {
-        "url": "https://github.com/vendurehq/vendure/issues"
+        "url": "https://github.com/MarieHasson/novara-commerce/issues"
     },
     "dependencies": {
         "@graphql-typed-document-node/core": "^3.2.0",

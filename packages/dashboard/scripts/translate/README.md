@@ -1,4 +1,4 @@
-# Vendure Dashboard Translation Tooling
+# Novara Commerce Dashboard Translation Tooling
 
 The script in this dir allow the efficient addition of new translations to the dashboard.
 
@@ -27,7 +27,7 @@ in each supported language like this:
 1. **Preserve Technical Terms**: Keep terms like "API", "GraphQL", "JSON", "SKU" untranslated
 2. **Maintain Placeholders**: Never modify placeholders like `{0}`, `{formattedDiff}`, `{entityName}`
 3. **Use Formal Address**: Use formal addressing appropriate for business software
-4. **Brand Names**: Keep "Vendure" and other brand names untranslated
+4. **Brand Names**: Keep "Novara Commerce" and other brand names untranslated
 5. **Context Awareness**: Consider the UI context when translating
 
 ### Critical Lingui-Specific Rules

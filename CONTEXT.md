@@ -1,6 +1,6 @@
-# Vendure
+# Novara Commerce
 
-Vendure models commerce configuration and operational data shared by its Admin and Shop APIs.
+Novara Commerce models commerce configuration and operational data shared by its Admin and Shop APIs.
 
 ## Language
 

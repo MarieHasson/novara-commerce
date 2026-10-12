@@ -74,7 +74,7 @@ describe('Translation', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/4823
+    // https://github.com/MarieHasson/novara-commerce/issues/4823
     describe('unsupported language codes', () => {
         it('falls back to English for arbitrary language codes', async () => {
             const { customErrorMessage } = await adminClient.query(
@@ -86,7 +86,7 @@ describe('Translation', () => {
         });
     });
 
-    // https://github.com/vendurehq/vendure/issues/4820
+    // https://github.com/MarieHasson/novara-commerce/issues/4820
     describe('configurable operation translations', () => {
         const de = shippingCalculatorTranslations.de;
 

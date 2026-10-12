@@ -278,7 +278,7 @@ export function vendureDashboardPlugin(options: VitePluginVendureDashboardOption
             // This runs BEFORE the react plugin to ensure macros are transformed first.
             // Using Babel eliminates the SWC binary compatibility issues that caused
             // "failed to invoke plugin" errors in external projects.
-            // See: https://github.com/vendurehq/vendure/issues/3929
+            // See: https://github.com/MarieHasson/novara-commerce/issues/3929
             key: 'linguiBabel',
             plugin: () => linguiBabelPlugin(),
         },

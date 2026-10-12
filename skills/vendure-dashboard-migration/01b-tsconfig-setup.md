@@ -38,7 +38,7 @@ If not already set up, we need to make sure we have configured tsconfig with:
         // so will vary depending on project structure
         "@/gql": ["./apps/server/src/gql/graphql.ts"],
         // This line allows TypeScript to properly resolve internal
-        // Vendure Dashboard imports, which is necessary for
+        // Novara Commerce Dashboard imports, which is necessary for
         // type safety in your dashboard extensions.
         // This path assumes a root-level tsconfig.json file.
         // You may need to adjust it if your project structure is different.

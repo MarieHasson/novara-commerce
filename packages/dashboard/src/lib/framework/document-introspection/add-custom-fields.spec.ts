@@ -812,7 +812,7 @@ describe('addCustomFields()', () => {
     });
 
     describe('Empty custom fields handling', () => {
-        // https://github.com/vendurehq/vendure/issues/4650
+        // https://github.com/MarieHasson/novara-commerce/issues/4650
         // When all custom fields have ui.dashboard: false, the server returns an empty array
         // for that entity. The dashboard should remove the bare `customFields` field from the
         // query to avoid a GraphQL error ("must have a selection of subfields").
@@ -843,7 +843,7 @@ describe('addCustomFields()', () => {
             expect(printed).toContain('code');
         });
 
-        // https://github.com/vendurehq/vendure/issues/4650
+        // https://github.com/MarieHasson/novara-commerce/issues/4650
         it('Should remove bare customFields field when entity has no custom fields in the map at all', () => {
             const documentNode = graphql(`
                 query GetOrder($id: ID!) {
@@ -972,7 +972,7 @@ describe('addCustomFieldsToFragment()', () => {
             );
         });
 
-        // https://github.com/vendurehq/vendure/issues/4650
+        // https://github.com/MarieHasson/novara-commerce/issues/4650
         it('Removes bare customFields from fragment when entity has empty custom fields array', () => {
             const fragmentDocument = graphql(`
                 fragment Order on Order {
@@ -998,7 +998,7 @@ describe('addCustomFieldsToFragment()', () => {
             );
         });
 
-        // https://github.com/vendurehq/vendure/issues/4650
+        // https://github.com/MarieHasson/novara-commerce/issues/4650
         it('Removes bare customFields from fragment when entity is not in custom fields map', () => {
             const fragmentDocument = graphql(`
                 fragment Order on Order {

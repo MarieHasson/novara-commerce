@@ -559,7 +559,7 @@ export class IndexerController {
      * or synthetic variant-less product rows, which all share `productVariantId: 0`) converge
      * on the latest state rather than throwing a duplicate-key error, as the non-atomic
      * check-then-insert of `save()` does.
-     * See https://github.com/vendurehq/vendure/issues/4805
+     * See https://github.com/MarieHasson/novara-commerce/issues/4805
      */
     private async upsertSearchIndexItems(ctx: RequestContext, items: SearchIndexItem[]) {
         // The primary key is derived from the entity metadata because it is dynamic:
@@ -650,7 +650,7 @@ export class IndexerController {
 
     /**
      * Prevent postgres errors from too-long indices
-     * https://github.com/vendurehq/vendure/issues/745
+     * https://github.com/MarieHasson/novara-commerce/issues/745
      */
     private constrainDescription(description: string): string {
         const { type } = this.connection.rawConnection.options;

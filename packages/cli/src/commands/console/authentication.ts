@@ -126,8 +126,8 @@ function trustedApiOrigin(value: string): string {
     let appOrigin = DEFAULT_CONSOLE_URL;
     if (loopback) {
         appOrigin = url.origin;
-    } else if (url.hostname === 'staging.api.vendure.io') {
-        appOrigin = 'https://staging.console.vendure.io';
+    } else if (url.hostname === 'staging.api.example.com') {
+        appOrigin = 'https://staging.console.example.com';
     }
     return trustedConsoleOrigins({
         appOrigin,

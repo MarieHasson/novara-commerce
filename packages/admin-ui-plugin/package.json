@@ -8,7 +8,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vendurehq/vendure.git",
+        "url": "git+https://github.com/MarieHasson/novara-commerce.git",
         "directory": "packages/admin-ui-plugin"
     },
     "license": "GPL-3.0-or-later",
@@ -18,8 +18,8 @@
         "lint": "eslint --fix .",
         "compile": "tsc -p ./tsconfig.build.json"
     },
-    "homepage": "https://www.vendure.io",
-    "funding": "https://github.com/sponsors/michaelbromley",
+    "homepage": "https://github.com/MarieHasson/novara-commerce",
+    "funding": "https://github.com/sponsors/MarieHasson",
     "publishConfig": {
         "access": "public"
     },

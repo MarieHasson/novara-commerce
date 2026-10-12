@@ -1,10 +1,10 @@
 ---
 title: "Define custom permissions"
-metaTitle: "Defining Custom Permissions for Vendure Plugins"
-metaDescription: "Create fine-grained custom permissions in Vendure plugins using PermissionDefinition to control access to new mutations, queries, and features."
+metaTitle: "Defining Custom Permissions for Novara Commerce Plugins"
+metaDescription: "Create fine-grained custom permissions in Novara Commerce plugins using PermissionDefinition to control access to new mutations, queries, and features."
 ---
 
-Vendure uses a fine-grained access control system based on roles & permissions. This is described in detail in the [Auth guide](/core-concepts/auth/). The built-in [`Permission` enum](/reference/typescript-api/common/permission/) includes a range of permissions to control create, read, update, and delete access to the built-in entities.
+Novara Commerce uses a fine-grained access control system based on roles & permissions. This is described in detail in the [Auth guide](/core-concepts/auth/). The built-in [`Permission` enum](/reference/typescript-api/common/permission/) includes a range of permissions to control create, read, update, and delete access to the built-in entities.
 
 When building plugins, you may need to define new permissions to control access to new functionality. This guide explains how to do so.
 
@@ -39,7 +39,7 @@ export class InventorySyncResolver {
 }
 ```
 
-Finally, the `sync` PermissionDefinition must be passed into the VendureConfig so that Vendure knows about this new custom permission:
+Finally, the `sync` PermissionDefinition must be passed into the VendureConfig so that Novara Commerce knows about this new custom permission:
 
 ```ts title="src/plugins/inventory-sync/inventory-sync.plugin.ts"
 import gql from 'graphql-tag';
@@ -54,7 +54,7 @@ import { sync } from './constants';
             input InventoryDataInput {
               # omitted for brevity
             }
-        
+
             extend type Mutation {
               syncInventory(input: InventoryDataInput!): Boolean!
             }
@@ -69,11 +69,11 @@ import { sync } from './constants';
 export class InventorySyncPlugin {}
 ```
 
-On starting the Vendure server, this custom permission will now be visible in the Role detail view of the Dashboard, and can be assigned to Roles.
+On starting the Novara Commerce server, this custom permission will now be visible in the Role detail view of the Dashboard, and can be assigned to Roles.
 
 ## Custom CRUD permissions
 
-Quite often your plugin will define a new entity on which you must perform create, read, update and delete (CRUD) operations. In this case, you can use the [CrudPermissionDefinition](/reference/typescript-api/auth/permission-definition/#crudpermissiondefinition) which simplifies the creation of the set of 4 CRUD permissions. 
+Quite often your plugin will define a new entity on which you must perform create, read, update and delete (CRUD) operations. In this case, you can use the [CrudPermissionDefinition](/reference/typescript-api/auth/permission-definition/#crudpermissiondefinition) which simplifies the creation of the set of 4 CRUD permissions.
 
 For example, let's imagine we are creating a plugin which adds a new entity called `ProductReview`. We can define the CRUD permissions like so:
 
@@ -98,21 +98,21 @@ export class ProductReviewResolver {
     productReviews(/* ... */) {
         // ...
     }
-    
+
     @Allow(productReviewPermission.Create) // [!code highlight]
     @Mutation()
     @Transaction()
     createProductReview(/* ... */) {
         // ...
     }
-    
+
     @Allow(productReviewPermission.Update) // [!code highlight]
     @Mutation()
     @Transaction()
     updateProductReview(/* ... */) {
         // ...
     }
-    
+
     @Allow(productReviewPermission.Delete) // [!code highlight]
     @Mutation()
     @Transaction()
@@ -122,7 +122,7 @@ export class ProductReviewResolver {
 }
 ```
 
-Finally, the `productReview` CrudPermissionDefinition must be passed into the VendureConfig so that Vendure knows about this new custom permission:
+Finally, the `productReview` CrudPermissionDefinition must be passed into the VendureConfig so that Novara Commerce knows about this new custom permission:
 
 ```ts title="src/plugins/product-review/product-review.plugin.ts"
 import gql from 'graphql-tag';
@@ -148,9 +148,9 @@ export class ProductReviewPlugin {}
 
 ## Custom permissions for custom fields
 
-Since Vendure v2.2.0, it is possible to define custom permissions for custom fields. This is useful when you want to 
+Since Novara Commerce v2.2.0, it is possible to define custom permissions for custom fields. This is useful when you want to
 control access to specific custom fields on an entity. For example, imagine a "product reviews" plugin which adds a
-`rating` custom field to the `Product` entity. 
+`rating` custom field to the `Product` entity.
 
 You may want to restrict access to this custom field to only those roles which have permissions on the product review
 plugin.
@@ -162,7 +162,7 @@ import { productReviewPermission } from './constants';
 @VendurePlugin({
     configuration: config => {
         config.authOptions.customPermissions.push(productReviewPermission);
-        
+
         config.customFields.Product.push({
             name: 'rating',
             type: 'int',

@@ -252,7 +252,7 @@ describe('Multi-vendor order promotions', () => {
         orderId = addPaymentToOrder.id;
     });
 
-    // https://github.com/vendurehq/vendure/issues/4117
+    // https://github.com/MarieHasson/novara-commerce/issues/4117
     it('applies the Promotion only to the seller Order in its own Channel', async () => {
         const { order: aggregate } = await adminClient.query(GET_SELLER_ORDER_IDS, { id: orderId });
         const sellerOrders: Array<{

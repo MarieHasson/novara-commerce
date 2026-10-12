@@ -1,10 +1,10 @@
 ---
 title: "Currency"
-metaTitle: "Currency Handling in Vendure"
-metaDescription: "Vendure stores monetary values as integers in minor units to avoid rounding errors. Covers multi-currency support and how currencies relate to channels."
+metaTitle: "Currency Handling in Novara Commerce"
+metaDescription: "Novara Commerce stores monetary values as integers in minor units to avoid rounding errors. Covers multi-currency support and how currencies relate to channels."
 ---
 
-In Vendure, monetary values are stored as **integers** using the **minor unit** of the selected currency.
+In Novara Commerce, monetary values are stored as **integers** using the **minor unit** of the selected currency.
 For example, if the currency is set to USD, then the integer value `100` would represent $1.00.
 This is a common practice in financial applications, as it avoids the rounding errors that can occur when using floating-point numbers.
 
@@ -47,7 +47,7 @@ For a more in-depth explanation of this issue, see [this StackOverflow answer](h
 
 ## Support for multiple currencies
 
-Vendure supports multiple currencies out-of-the-box. The available currencies must first be set at the Channel level
+Novara Commerce supports multiple currencies out-of-the-box. The available currencies must first be set at the Channel level
 (see the [Channels, Currencies & Prices section](/core-concepts/channels/#channels-currencies--prices)), and then
 a price may be set on a `ProductVariant` in each of the available currencies.
 
@@ -131,9 +131,9 @@ then you should also use the `Money` scalar for any monetary values.
 ### The `@Money()` decorator
 
 When [defining new database entities](/developer-guide/database-entity), if you need to store a monetary value, then rather than using the TypeORM `@Column()`
-decorator, you should use Vendure's [`@Money()` decorator](/reference/typescript-api/money/money-decorator).
+decorator, you should use Novara Commerce's [`@Money()` decorator](/reference/typescript-api/money/money-decorator).
 
-Using this decorator allows Vendure to correctly store the value in the database according to the configured `MoneyStrategy` (see below).
+Using this decorator allows Novara Commerce to correctly store the value in the database according to the configured `MoneyStrategy` (see below).
 
 ```ts title="src/plugins/quote/entities/quote.entity.ts"
 import { DeepPartial } from '@vendure/common/lib/shared-types';
@@ -172,7 +172,7 @@ class Quote extends VendureEntity {
 
 ### MoneyStrategy configuration
 
-For advanced use-cases, it is possible to configure aspects of how Vendure handles monetary values internally by defining
+For advanced use-cases, it is possible to configure aspects of how Novara Commerce handles monetary values internally by defining
 a custom [`MoneyStrategy`](/reference/typescript-api/money/money-strategy/).
 
 The `MoneyStrategy` allows you to define:
@@ -181,7 +181,7 @@ The `MoneyStrategy` allows you to define:
 - How rounding is applied internally
 - The precision represented by the monetary value (since v2.2.0)
 
-For example, in addition to the [`DefaultMoneyStrategy`](/reference/typescript-api/money/default-money-strategy), Vendure
+For example, in addition to the [`DefaultMoneyStrategy`](/reference/typescript-api/money/default-money-strategy), Novara Commerce
 also provides the [`BigIntMoneyStrategy`](/reference/typescript-api/money/big-int-money-strategy) which stores monetary values
 using the `bigint` data type, allowing much larger amounts to be stored.
 

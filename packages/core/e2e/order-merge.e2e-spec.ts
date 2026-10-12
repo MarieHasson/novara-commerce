@@ -333,7 +333,7 @@ describe('Order merging', () => {
         ).toEqual([{ productVariantId: 'T_8', quantity: 1 }]);
     });
 
-    // https://github.com/vendurehq/vendure/issues/1454
+    // https://github.com/MarieHasson/novara-commerce/issues/1454
     it('does not throw FK error when merging with a cart with an existing session', async () => {
         await shopClient.asUserWithCredentials(customers[7].emailAddress, 'test');
         // Create an Order linked with the current session
@@ -352,7 +352,7 @@ describe('Order merging', () => {
         expect(login.id).toBe(customers[7].user?.id);
     });
 
-    // https://github.com/vendurehq/vendure/issues/4481
+    // https://github.com/MarieHasson/novara-commerce/issues/4481
     // When the merge fails mid-operation (e.g. a guest cart item's product has been disabled),
     // the merge should fail gracefully: the login should succeed and the existing order
     // should be preserved unchanged.

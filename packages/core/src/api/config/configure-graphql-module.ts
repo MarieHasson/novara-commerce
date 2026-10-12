@@ -104,7 +104,7 @@ async function createGraphQLOptions(
         fieldResolverEnhancers: ['guards'],
         resolvers,
         // We no longer rely on the upload facility bundled with Apollo Server, and instead
-        // manually configure the graphql-upload package. See https://github.com/vendurehq/vendure/issues/396
+        // manually configure the graphql-upload package. See https://github.com/MarieHasson/novara-commerce/issues/396
         uploads: false,
         // `playground` is a deprecated boolean alias for GraphiQL in @nestjs/apollo v14.
         // The options it used to accept configured the GraphQL Playground, which Apollo

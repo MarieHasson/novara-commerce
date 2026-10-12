@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
 
     loadImage() {
         this.httpClient
-            .get('https://login-image.vendure.io')
+            .get('https://login-image.example.com')
             .toPromise()
             .then(res => {
                 this.updateImage(res);

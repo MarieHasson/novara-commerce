@@ -8,7 +8,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { initialData } from '../../../e2e-common/e2e-initial-data';
 import { TEST_SETUP_TIMEOUT_MS, testConfig } from '../../../e2e-common/test-config';
 
-// https://github.com/vendurehq/vendure/issues/5028
+// https://github.com/MarieHasson/novara-commerce/issues/5028
 //
 // A route-scoped `beforeListen` body-parser must not disable body parsing on other routes.
 // body-parser's `json()` is named `jsonParser`, which is the exact name NestJS's ExpressAdapter

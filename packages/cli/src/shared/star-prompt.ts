@@ -48,7 +48,7 @@ export function renderStarPrompt(color = pc.isColorSupported): string {
         '✨ Thanks for using Vendure.',
         '',
         'If you like the experience, please consider starring us on GitHub',
-        'https://github.com/vendurehq/vendure',
+        'https://github.com/MarieHasson/novara-commerce',
         '',
         'Note: you will not see this message again.',
     ];

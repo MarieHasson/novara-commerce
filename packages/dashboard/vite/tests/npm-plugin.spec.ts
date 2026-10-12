@@ -40,7 +40,7 @@ describe('detecting plugins in npm packages', () => {
         expect(result.pluginInfo[0].pluginPath).toBe(join(fakeNodeModules, 'test-plugin', 'index.js'));
     });
 
-    // https://github.com/vendurehq/vendure/issues/4517
+    // https://github.com/MarieHasson/novara-commerce/issues/4517
     // packages compiled with importHelpers: true use tslib_1.__decorate()
     // instead of a local __decorate(), which is a MemberExpression not an Identifier
     it('should detect plugins compiled with tslib (importHelpers: true)', { timeout: 60_000 }, async () => {

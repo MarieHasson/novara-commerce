@@ -1,16 +1,16 @@
 ---
 title: "Importing Data"
-metaTitle: "Bulk Data Import in Vendure - CSV Product Import Format"
-metaDescription: "Import products, variants, assets, and facets into Vendure using the CSV import format. Includes column reference, custom fields, and the InitialData API."
+metaTitle: "Bulk Data Import in Novara Commerce - CSV Product Import Format"
+metaDescription: "Import products, variants, assets, and facets into Novara Commerce using the CSV import format. Includes column reference, custom fields, and the InitialData API."
 ---
 
-If you have hundreds, thousands or more products, inputting all the data by hand via the Dashboard can be too inefficient. To solve this, Vendure supports bulk-importing product and other data.
+If you have hundreds, thousands or more products, inputting all the data by hand via the Dashboard can be too inefficient. To solve this, Novara Commerce supports bulk-importing product and other data.
 
 Data import is also useful for setting up test or demo environments, and is also used by the `@vendure/testing` package for end-to-end tests.
 
 ## Product Import Format
 
-Vendure uses a flat **.csv** format for importing product data. The format encodes data about:
+Novara Commerce uses a flat **.csv** format for importing product data. The format encodes data about:
 
 * products
 * product variants
@@ -18,14 +18,14 @@ Vendure uses a flat **.csv** format for importing product data. The format encod
 * product & variant facets
 * product & variant custom fields
 
-Here's an example which defines 2 products, "Laptop" and "Clacky Keyboard". The laptop has 4 variants, and the keyboard only a single variant. 
+Here's an example which defines 2 products, "Laptop" and "Clacky Keyboard". The laptop has 4 variants, and the keyboard only a single variant.
 
 ```csv
 name            , slug            , description               , assets                      , facets                              , optionGroups    , optionValues , sku         , price   , taxCategory , stockOnHand , trackInventory , variantAssets , variantFacets
-Laptop          , laptop          , "Description of laptop"   , laptop_01.jpg|laptop_02.jpg , category:electronics|brand:Apple    , screen size|RAM , 13 inch|8GB  , L2201308    , 1299.00 , standard    , 100         , false          ,               , 
-                ,                 ,                           ,                             ,                                     ,                 , 15 inch|8GB  , L2201508    , 1399.00 , standard    , 100         , false          ,               , 
-                ,                 ,                           ,                             ,                                     ,                 , 13 inch|16GB , L2201316    , 2199.00 , standard    , 100         , false          ,               , 
-                ,                 ,                           ,                             ,                                     ,                 , 15 inch|16GB , L2201516    , 2299.00 , standard    , 100         , false          ,               , 
+Laptop          , laptop          , "Description of laptop"   , laptop_01.jpg|laptop_02.jpg , category:electronics|brand:Apple    , screen size|RAM , 13 inch|8GB  , L2201308    , 1299.00 , standard    , 100         , false          ,               ,
+                ,                 ,                           ,                             ,                                     ,                 , 15 inch|8GB  , L2201508    , 1399.00 , standard    , 100         , false          ,               ,
+                ,                 ,                           ,                             ,                                     ,                 , 13 inch|16GB , L2201316    , 2199.00 , standard    , 100         , false          ,               ,
+                ,                 ,                           ,                             ,                                     ,                 , 15 inch|16GB , L2201516    , 2299.00 , standard    , 100         , false          ,               ,
 Clacky Keyboard , clacky-keyboard , "Description of keyboard" , keyboard_01.jpg             , category:electronics|brand:Logitech ,                 ,              , A4TKLA45535 , 74.89   , standard    , 100         , false          ,               ,
 ```
 
@@ -58,11 +58,11 @@ Here's an explanation of each column:
 
 If you have [CustomFields](/developer-guide/custom-fields/) defined on your Product or ProductVariant entities, this data can also be encoded in the import csv:
 
-* `product:<customFieldName>`: The value of this column will populate `Product.customFields[customFieldName]`. 
-* `variant:<customFieldName>`: The value of this column will populate `ProductVariant.customFields[customFieldName]`. 
+* `product:<customFieldName>`: The value of this column will populate `Product.customFields[customFieldName]`.
+* `variant:<customFieldName>`: The value of this column will populate `ProductVariant.customFields[customFieldName]`.
 
-:::info 
-For a real example, see the [products.csv file used to populate the Vendure demo data](https://github.com/vendurehq/vendure/blob/master/packages/core/mock-data/data-sources/products.csv)
+:::info
+For a real example, see the [products.csv file used to populate the Novara Commerce demo data](https://github.com/MarieHasson/novara-commerce/blob/master/packages/core/mock-data/data-sources/products.csv)
 :::
 
 #### Importing `relation` custom fields
@@ -178,15 +178,15 @@ export const initialData: InitialData = {
   * `name`: The name of the country in the language specified by `defaultLanguage`
   * `code`: A standardized code for the country, e.g. [ISO 3166-1](https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes)
   * `zone`: A [Zone](/reference/typescript-api/entities/zone) to which this country belongs.
-* `defaultZone`: Sets the default shipping & tax zone for the default Channel. The zone must correspond to a value of `zone` set in the `countries` array. 
-* `taxRates`: For each item, a new [TaxCategory](/reference/typescript-api/entities/tax-category/) is created, and then a [TaxRate](/reference/typescript-api/entities/tax-rate) is created for each unique zone defined in the `countries` array. 
+* `defaultZone`: Sets the default shipping & tax zone for the default Channel. The zone must correspond to a value of `zone` set in the `countries` array.
+* `taxRates`: For each item, a new [TaxCategory](/reference/typescript-api/entities/tax-category/) is created, and then a [TaxRate](/reference/typescript-api/entities/tax-rate) is created for each unique zone defined in the `countries` array.
 * `shippingMethods`: Allows simple flat-rate [ShippingMethods](/reference/typescript-api/entities/shipping-method) to be defined.
 * `collections`: Allows Collections to be created. Currently, only collections based on facet values can be created (`code: 'facet-value-filter'`). The `assetPaths` and `facetValueNames` values must correspond to a value specified in the products csv file. The name should match the value specified in the product csv file (or can be a normalized - lower-case & hyphenated - version thereof). If there are FacetValues in multiple Facets with the same name, the facet may be specified with a colon delimiter, e.g. `brand:apple`, `flavour: apple`.
 
 ## Populating The Server
 
 ### The `populate()` function
-The `@vendure/core` package exposes a [`populate()` function](/reference/typescript-api/import-export/populate/) which can be used along with the data formats described above to populate your Vendure server:
+The `@vendure/core` package exposes a [`populate()` function](/reference/typescript-api/import-export/populate/) which can be used along with the data formats described above to populate your Novara Commerce server:
 
 ```ts title="src/my-populate-script.ts"
 import { bootstrap, DefaultJobQueuePlugin } from '@vendure/core';
@@ -211,7 +211,7 @@ populate(
     () => bootstrap(populateConfig),
     initialData,
     productsCsvFile,
-    'my-channel-token' // optional - used to assign imported 
+    'my-channel-token' // optional - used to assign imported
 )                      // entities to the specified Channel
 
     .then(app => {
@@ -237,7 +237,7 @@ In the Dashboard, this can be done by navigating to the product list view and cl
 
 When installing with @vendure/create, you have the option of populating test data (products, payment methods, countries, zones, tax rates etc).
 
-This guide illustrates how to populate that test data again on an existing Vendure installation, without needing to re-install from scratch.
+This guide illustrates how to populate that test data again on an existing Novara Commerce installation, without needing to re-install from scratch.
 
 1. `npm install --save-dev @vendure/create`. This installs the "create" package, which contains the test data we will need.
 2. drop all tables from your database, but leave the actual database there.
@@ -270,7 +270,7 @@ populate(
     });
 ```
 
-Running this script will populate the database with the test data like when you first installed Vendure.
+Running this script will populate the database with the test data like when you first installed Novara Commerce.
 
 ### Custom populate scripts
 
@@ -363,21 +363,21 @@ export async function getSuperadminContext(app: INestApplicationContext): Promis
 
 ## Importing from other platforms
 
-If you are migrating from another platform, you can create a custom import script to import your data into Vendure.
+If you are migrating from another platform, you can create a custom import script to import your data into Novara Commerce.
 
 Your existing platform may provide an API which you can use to fetch the data, or it may provide a mechanism for exporting
 the data to a file.
 
 Therefore, you have a couple of options:
 
-1. Export the data to a file, and then transform this into the Vendure CSV format for import as above.
-2. Write a script which import the data via the other platform's API, and then import this data into Vendure using the services described above, or any other of the Vendure core services.
+1. Export the data to a file, and then transform this into the Novara Commerce CSV format for import as above.
+2. Write a script which import the data via the other platform's API, and then import this data into Novara Commerce using the services described above, or any other of the Novara Commerce core services.
 
 The first option is the simplest, but may not be possible if the other platform does not provide a suitable export format.
 
 The second option is more complex, but allows for more flexibility and can be used to import data from any source, as well as allowing the import of other data such as customer and order information.
 
-As an illustrative example, let's imagine we are migrating away from an imaginary commerce platform, "OldCommerce", and we want to import our data into Vendure.
+As an illustrative example, let's imagine we are migrating away from an imaginary commerce platform, "OldCommerce", and we want to import our data into Novara Commerce.
 
 Luckily, OldCommerce provides a client package which allows us to easily interact with their API.
 
@@ -412,7 +412,7 @@ if (require.main === module) {
 }
 
 async function importData() {
-    // We use the bootstrapWorker() function instead of bootstrap() because we don't 
+    // We use the bootstrapWorker() function instead of bootstrap() because we don't
     // need to start the server, we just need access to the services.
     const {app} = await bootstrapWorker(config);
 
@@ -422,7 +422,7 @@ async function importData() {
         // OldCommerce client config
     });
 
-    // Let's grab a reference to each of the Vendure services we'll need.
+    // Let's grab a reference to each of the Novara Commerce services we'll need.
     const importer = app.get(Importer);
 
     // Most service methods require a RequestContext, so we'll create one here.
@@ -474,7 +474,7 @@ async function importData() {
         console.log(`Imported ${progress.imported} of ${importRows.length} products`);
     });
 
-    // Rebuild search index 
+    // Rebuild search index
     await searchService.reindex(ctx);
 
     // Close the app

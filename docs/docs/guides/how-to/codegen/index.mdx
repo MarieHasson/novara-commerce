@@ -1,7 +1,7 @@
 ---
 title: "GraphQL Code Generation"
-metaTitle: "GraphQL Code Generation for Vendure Plugins"
-metaDescription: "Configure GraphQL Code Generator to produce TypeScript types from your Vendure schema, enabling type-safe resolvers, services, and Admin UI extensions."
+metaTitle: "GraphQL Code Generation for Novara Commerce Plugins"
+metaDescription: "Configure GraphQL Code Generator to produce TypeScript types from your Novara Commerce schema, enabling type-safe resolvers, services, and Admin UI extensions."
 ---
 
 Code generation means the automatic generation of TypeScript types based on your GraphQL schema and your GraphQL operations.
@@ -18,12 +18,12 @@ directory.
 :::
 
 :::note
-This guide is for adding codegen to your Vendure plugins. For a guide on adding codegen to your storefront, see the [Storefront Codegen](/storefront/codegen/) guide.
+This guide is for adding codegen to your Novara Commerce plugins. For a guide on adding codegen to your storefront, see the [Storefront Codegen](/storefront/codegen/) guide.
 :::
 
 ## Installation
 
-It is recommended to use the `vendure add` CLI command as detailed above to set up codegen. 
+It is recommended to use the `vendure add` CLI command as detailed above to set up codegen.
 If you prefer to set it up manually, follow the steps below.
 
 First, install the required dependencies:
@@ -233,9 +233,9 @@ export class OrganizationListComponent extends TypedBaseListComponent<
     typeof getOrganizationListDocument, // [!code highlight]
     'organizations' // [!code highlight]
 > {
-    
+
     // Sort & filter definitions omitted for brevity.
-    // For a complete ListComponent example, see the 
+    // For a complete ListComponent example, see the
     // "Creating List Views" guide.
 
     constructor() {

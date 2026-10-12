@@ -1,10 +1,10 @@
 ---
 title: "Health Checks"
-metaTitle: "Health Check Endpoint for Monitoring Vendure"
-metaDescription: "What the Vendure /health endpoint reports and how to use it as a liveness probe."
+metaTitle: "Health Check Endpoint for Monitoring Novara Commerce"
+metaDescription: "What the Novara Commerce /health endpoint reports and how to use it as a liveness probe."
 ---
 
-Vendure exposes a **`/health`** endpoint on the server. It is a plain REST route which returns
+Novara Commerce exposes a **`/health`** endpoint on the server. It is a plain REST route which returns
 `{ "status": "ok" }` as soon as the application is accepting HTTP requests.
 
 The response is unconditional. `/health` does not check the database or any other dependency. It only
@@ -15,7 +15,7 @@ tells you that this process is running and serving HTTP, which is what a livenes
 Before v3.6.0, `/health` ran the strategies configured in `systemOptions.healthChecks` and returned a
 503 if any of them failed. Since v3.6.0 those strategies are not executed. The strategy classes and
 `HealthCheckRegistryService` will be removed in v4.0.0. Remove any custom strategies and set
-`healthChecks: []` to silence the startup warning. See [#4441](https://github.com/vendurehq/vendure/issues/4441) for the reasoning.
+`healthChecks: []` to silence the startup warning. See [#4441](https://github.com/MarieHasson/novara-commerce/issues/4441) for the reasoning.
 
 :::
 

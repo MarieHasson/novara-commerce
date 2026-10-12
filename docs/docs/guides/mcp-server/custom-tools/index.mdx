@@ -1,13 +1,13 @@
 ---
 title: 'Registering Custom MCP Tools'
-metaTitle: 'Registering Custom MCP Tools | Vendure'
-metaDescription: 'Expose your own Vendure operations to AI agents with the @McpTool decorator from @vendure/mcp-sdk — input/output schemas, permissions, destructive confirmation, and discovery keywords.'
+metaTitle: 'Registering Custom MCP Tools | Novara Commerce'
+metaDescription: 'Expose your own Novara Commerce operations to AI agents with the @McpTool decorator from @vendure/mcp-sdk — input/output schemas, permissions, destructive confirmation, and discovery keywords.'
 order: 5
 ---
 
-Any Vendure plugin can add custom MCP tools. Define an injectable service, decorate it with
+Any Novara Commerce plugin can add custom MCP tools. Define an injectable service, decorate it with
 [`@McpTool`](/reference/mcp-sdk/mcp-tool/), and register it as a provider. The MCP plugin
-discovers the tool at bootstrap and exposes it alongside Vendure's built-in tools.
+discovers the tool at bootstrap and exposes it alongside Novara Commerce's built-in tools.
 
 ## Before you start
 
@@ -18,7 +18,7 @@ npm install @vendure/mcp-sdk
 ```
 
 Your tools should import MCP types and decorators from `@vendure/mcp-sdk`, rather than from `@vendure/core` or
-`@vendure/mcp-plugin`. The MCP server itself still requires `@vendure/mcp-plugin` and `McpPlugin` in your Vendure
+`@vendure/mcp-plugin`. The MCP server itself still requires `@vendure/mcp-plugin` and `McpPlugin` in your Novara Commerce
 configuration.
 
 :::warning[Keep a single copy of `@vendure/mcp-sdk`]
@@ -69,7 +69,7 @@ export class FindLowStockVariantsTool implements McpToolHandler<LowStockInput> {
     constructor(private productVariantService: ProductVariantService) {}
 
     async execute(ctx: RequestContext, input: LowStockInput) {
-        // Query Vendure services here, then return a plain serializable object.
+        // Query Novara Commerce services here, then return a plain serializable object.
         // The whole return value is sent to the agent as the tool result.
         return { variants: [] };
     }
@@ -84,12 +84,12 @@ What the agent receives depends on how the tool ends:
 | The tool | The agent receives |
 |---|---|
 | Throws an `I18nError`, apart from the cases in the last row | `isError: true` and the translated message |
-| Returns a Vendure error result, an object with `errorCode`, `message` and `__typename`, such as the `CouponCodeInvalidError` from `OrderService.applyCouponCode` | `isError: true`, the translated message, and the error object as the structured content |
+| Returns a Novara Commerce error result, an object with `errorCode`, `message` and `__typename`, such as the `CouponCodeInvalidError` from `OrderService.applyCouponCode` | `isError: true`, the translated message, and the error object as the structured content |
 | Throws `InternalServerError`, an `I18nError` whose `logLevel` is `LogLevel.Error`, or an error that does not extend `I18nError` | `isError: true` and a fixed message saying the tool failed unexpectedly. The server logs the real error and its stack trace |
 
 Tool names share a flat namespace within each toolset, including built-in tools. Use a plugin-specific prefix
 such as `wishlist_add_item` rather than a generic name such as `add_item`, to avoid colliding with a future
-Vendure release.
+Novara Commerce release.
 
 ## Register it as a provider
 
@@ -351,5 +351,5 @@ A tool never needs to depend on `@vendure/mcp-plugin`. Everything a tool impleme
 ## See also
 
 - [`McpToolMetadata`](/reference/mcp-sdk/mcp-tool-metadata/) — the full field list, types, and defaults.
-- [Built-in Tool Reference](/mcp-server/built-in-tools/) — the tools Vendure ships, behavior values, and exposure modes.
+- [Built-in Tool Reference](/mcp-server/built-in-tools/) — the tools Novara Commerce ships, behavior values, and exposure modes.
 - [Test & debug with the MCP Inspector](/mcp-server/quick-start/#test--debug-with-the-mcp-inspector) — list and call your tool interactively.

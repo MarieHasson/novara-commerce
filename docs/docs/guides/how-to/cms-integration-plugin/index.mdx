@@ -1,12 +1,12 @@
 ---
 title: 'Building a CMS Integration Plugin'
-metaTitle: "Building a CMS Integration Plugin for Vendure"
-metaDescription: "Step-by-step guide to building an event-driven CMS sync plugin for Vendure, with examples for Storyblok, Contentful, Strapi, Sanity, and Payload."
+metaTitle: "Building a CMS Integration Plugin for Novara Commerce"
+metaDescription: "Step-by-step guide to building an event-driven CMS sync plugin for Novara Commerce, with examples for Storyblok, Contentful, Strapi, Sanity, and Payload."
 ---
 
-A CMS integration plugin allows you to automatically synchronize your Vendure product catalog with an external Content Management System.
+A CMS integration plugin allows you to automatically synchronize your Novara Commerce product catalog with an external Content Management System.
 
-This is done in a way that establishes Vendure as the source of truth for the ecommerce's data.
+This is done in a way that establishes Novara Commerce as the source of truth for the ecommerce's data.
 
 This guide demonstrates how to build a production-ready CMS integration plugin. The principles covered here are designed to be CMS-agnostic, however we do have [working examples](/how-to/cms-integration-plugin/#platform-specific-setup) for various platforms.
 
@@ -21,7 +21,7 @@ Platforms covered in the [guide](/how-to/cms-integration-plugin/#platform-specif
 ## Working Example Repository
 
 :::info
-This guide provides a high-level overview of building a CMS integration plugin. For complete implementations, refer to [working examples repository](https://github.com/vendurehq/examples/tree/master/examples/cms-integration-plugin)
+This guide provides a high-level overview of building a CMS integration plugin. For complete implementations, refer to [working examples repository](https://github.com/MarieHasson/examples/tree/master/examples/cms-integration-plugin)
 
 The code examples in this guide are simplified for educational purposes. The actual implementations contain additional features like error handling, retry logic, and performance optimizations.
 :::
@@ -29,16 +29,16 @@ The code examples in this guide are simplified for educational purposes. The act
 ## Prerequisites
 
 - Node.js 20+ with npm package manager
-- An existing Vendure project created with the [Vendure create command](/getting-started/installation/)
+- An existing Novara Commerce project created with the [Novara Commerce create command](/getting-started/installation/)
 - An access key to a CMS platform that provides an API
 
 ## Core Concepts
 
-This [plugin](/developer-guide/plugins/) leverages several key Vendure concepts:
+This [plugin](/developer-guide/plugins/) leverages several key Novara Commerce concepts:
 
 - **[EventBus](/developer-guide/events/)**: Provides real-time notifications when entities are created, updated, or deleted.
 - **[Job Queues](/developer-guide/worker-job-queue/)**: Ensures that synchronization tasks are performed reliably and asynchronously, with retries on failure.
-- **[Plugin API](/developer-guide/plugins/)**: The foundation for extending Vendure with custom capabilities.
+- **[Plugin API](/developer-guide/plugins/)**: The foundation for extending Novara Commerce with custom capabilities.
 
 ## How It Works
 
@@ -77,7 +77,7 @@ This ensures reliable, asynchronous synchronization with built-in retry capabili
 
 ## Plugin Structure and Types
 
-First, let's use the Vendure CLI to scaffold the basic plugin structure:
+First, let's use the Novara Commerce CLI to scaffold the basic plugin structure:
 
 ```bash
 npx vendure add -p CmsPlugin
@@ -163,7 +163,7 @@ export interface SyncResponse {
 
 ## Event-Driven Synchronization
 
-The plugin uses Vendure's [EventBus](/developer-guide/events/) to capture changes in real-time.
+The plugin uses Novara Commerce's [EventBus](/developer-guide/events/) to capture changes in real-time.
 
 In the [onModuleInit](/developer-guide/events/#subscribing-to-events) lifecycle hook, we create job queues and subscribe to entity events.
 
@@ -265,10 +265,10 @@ export class CmsPlugin implements OnModuleInit {
 
 The sync logic is split into two services: a generic service to fetch data, and a specific service to communicate with the CMS.
 
-`CmsSyncService` orchestrates the synchronization logic. It acts as the bridge between Vendure's internal systems and your CMS platform, handling data fetching, relationship resolution, and error management.
+`CmsSyncService` orchestrates the synchronization logic. It acts as the bridge between Novara Commerce's internal systems and your CMS platform, handling data fetching, relationship resolution, and error management.
 
 :::tip
-Separating orchestration logic from CMS-specific API calls allows for better testability and maintainability. The sync service handles Vendure-specific operations while CMS services focus on API communication.
+Separating orchestration logic from CMS-specific API calls allows for better testability and maintainability. The sync service handles Novara Commerce-specific operations while CMS services focus on API communication.
 :::
 
 #### Core Responsibilities
@@ -276,13 +276,13 @@ Separating orchestration logic from CMS-specific API calls allows for better tes
 The sync service handles several critical functions:
 
 - **Entity Data Fetching**: Retrieves complete entity data with necessary relations
-- **Translation Management**: Handles Vendure's multi-language support
+- **Translation Management**: Handles Novara Commerce's multi-language support
 - **Relationship Resolution**: Manages complex entity relationships
 - **Error Handling**: Provides consistent error handling and logging
 
 ### Service Structure and Dependencies
 
-The service follows Vendure's [dependency injection pattern](/developer-guide/the-service-layer/) and requires several core Vendure services:
+The service follows Novara Commerce's [dependency injection pattern](/developer-guide/the-service-layer/) and requires several core Novara Commerce services:
 
 ```ts title="src/plugins/cms/services/cms-sync.service.ts"
 @Injectable()
@@ -299,7 +299,7 @@ export class CmsSyncService implements OnApplicationBootstrap {
     ) {}
 
     async onApplicationBootstrap() {
-        // Ensure this logic only runs on the Vendure worker, and not the server
+        // Ensure this logic only runs on the Novara Commerce worker, and not the server
         if (this.processContext.isWorker) {
             // This is where you would add any necessary setup or initialization logic
             // for example, ensuring that the CMS has compatible content types.
@@ -402,10 +402,10 @@ The service can also includes `syncVariantToCms()` and `syncCollectionToCms()` m
 
 These implementations are omitted from this guide for brevity, but they handle their respective entity types with similar data fetching, relationship resolution, and error handling patterns.
 
-The complete implementations can be found in the working [example repositories](https://github.com/vendurehq/examples/tree/master/examples/cms-integration-plugin).
+The complete implementations can be found in the working [example repositories](https://github.com/MarieHasson/examples/tree/master/examples/cms-integration-plugin).
 :::
 
-This sync service provides the foundation for handling all Vendure-specific complexity while delegating CMS API communication to specialized services.
+This sync service provides the foundation for handling all Novara Commerce-specific complexity while delegating CMS API communication to specialized services.
 
 ## Platform specific setup
 
@@ -413,7 +413,7 @@ This sync service provides the foundation for handling all Vendure-specific comp
 <TabItem value="storyblok" label="Storyblok">
 
 :::tip[Working Example]
-The complete, production-ready Storyblok implementation can be found in the [Storyblok integration example](https://github.com/vendurehq/examples/tree/master/examples/storyblok-cms-integration). Refer to it for a minimal working implementation.
+The complete, production-ready Storyblok implementation can be found in the [Storyblok integration example](https://github.com/MarieHasson/examples/tree/master/examples/storyblok-cms-integration). Refer to it for a minimal working implementation.
 :::
 
 **Setting up Storyblok Space**
@@ -443,7 +443,7 @@ STORYBLOK_SPACE_ID=your_space_id
 
 `StoryblokService` handles all Storyblok-specific operations including API communication, content type management, and data transformation. Key features include:
 
-- **Content Type Management**: Automatically creates Vendure-specific content types (components) in Storyblok
+- **Content Type Management**: Automatically creates Novara Commerce-specific content types (components) in Storyblok
 - **Story Management**: CRUD operations for stories representing products, variants, and collections
 - **Relationship Handling**: Manages references between products, variants, and collections
 
@@ -451,7 +451,7 @@ STORYBLOK_SPACE_ID=your_space_id
 
 **Basic Service Structure**
 
-The service follows Vendure's standard dependency injection pattern and implements OnApplicationBootstrap to ensure Storyblok is properly configured before handling sync operations.
+The service follows Novara Commerce's standard dependency injection pattern and implements OnApplicationBootstrap to ensure Storyblok is properly configured before handling sync operations.
 
 ```ts title="src/plugins/cms/services/storyblok.service.ts"
 // Define component types as constants for consistency and maintainability
@@ -518,12 +518,12 @@ private async makeStoryblokRequest({ method, endpoint, data }) {
 
 **Data Transformation**
 
-Transformation methods convert Vendure entities into the format expected by Storyblok's API. The `content` object structure must match the component schema defined in Storyblok.
+Transformation methods convert Novara Commerce entities into the format expected by Storyblok's API. The `content` object structure must match the component schema defined in Storyblok.
 
 ```ts
 private async transformProductData(product, defaultLanguageCode, productSlug?) {
     // Extract the translation for the default language
-    // Vendure stores translations in an array, so we need to find the correct one
+    // Novara Commerce stores translations in an array, so we need to find the correct one
     const translation = product.translations.find(
         t => t.languageCode === defaultLanguageCode
     );
@@ -545,7 +545,7 @@ private async transformProductData(product, defaultLanguageCode, productSlug?) {
             slug: translation?.slug,  // URL slug for the story
             content: {
                 component: COMPONENT_TYPE.product, // Must match the component name in Storyblok
-                vendureId: product.id.toString(),  // Store Vendure ID for reference
+                vendureId: product.id.toString(),  // Store Novara Commerce ID for reference
                 variants: variantStoryIds, // Array of story UUIDs for product variants
             },
         },
@@ -562,7 +562,7 @@ One of the most important aspects of CMS integration is maintaining relationship
 
 - **Finding Related Entities**
 
-> First, we need methods to query the Vendure database for related entities:
+> First, we need methods to query the Novara Commerce database for related entities:
 
 ```ts
 // Find all product variants for a given product ID from the database
@@ -625,7 +625,7 @@ private async findVariantStoriesForProductUuids(
     productSlug?: string | null,
 ): Promise<string[]> {
     if (!productSlug) return [];
-    // Get all variants for this product from Vendure database
+    // Get all variants for this product from Novara Commerce database
     const variants = await this.findProductVariants(productId);
     // Generate slugs for all variants (convention: product-slug-variant-id)
     const variantSlugs = variants.map(
@@ -685,7 +685,7 @@ These methods handle the basic Create, Read, Update, and Delete operations for s
 ```ts
 // Create a new story in Storyblok
 private async createStoryFromProduct(product, defaultLanguageCode) {
-    // Transform Vendure product data into Storyblok story format
+    // Transform Novara Commerce product data into Storyblok story format
     const data = this.transformProductData(product, defaultLanguageCode);
 
     // POST to the stories endpoint to create a new story
@@ -723,15 +723,15 @@ CmsPlugin.init({
 }),
 ```
 
-This setup provides a complete Storyblok CMS integration that automatically creates the necessary content types and syncs your Vendure catalog with structured content in Storyblok.
+This setup provides a complete Storyblok CMS integration that automatically creates the necessary content types and syncs your Novara Commerce catalog with structured content in Storyblok.
 
-The complete implementations can be found in the working [example repositories](https://github.com/vendurehq/examples/tree/master/examples/storyblok-cms-integration).
+The complete implementations can be found in the working [example repositories](https://github.com/MarieHasson/examples/tree/master/examples/storyblok-cms-integration).
 
 </TabItem>
 <TabItem value="contentful" label="Contentful">
 
 :::tip[Working Example]
-The complete, production-ready Contentful implementation can be found in the [Contentful integration example](https://github.com/vendurehq/examples/tree/master/examples/contentful-cms-integration). It includes advanced features like locale mapping, bulk operations, and a robust setup process.
+The complete, production-ready Contentful implementation can be found in the [Contentful integration example](https://github.com/MarieHasson/examples/tree/master/examples/contentful-cms-integration). It includes advanced features like locale mapping, bulk operations, and a robust setup process.
 :::
 
 **Setting up Contentful Space**
@@ -745,7 +745,7 @@ The complete, production-ready Contentful implementation can be found in the [Co
 
 1.  In your Contentful space, navigate to **Settings** → **API keys**.
 2.  Select the **Content management tokens** tab.
-3.  Click **Generate personal token**. Give it a name (e.g., "Vendure Sync") and copy the token. This token is used to create, edit, and delete content.
+3.  Click **Generate personal token**. Give it a name (e.g., "Novara Commerce Sync") and copy the token. This token is used to create, edit, and delete content.
 4.  Navigate to **Settings** → **General settings** to find your **Space ID**.
 
 **Configure Environment Variables**
@@ -761,7 +761,7 @@ CONTENTFUL_SPACE_ID=your_space_id
 
 **The Contentful Service**
 
-The `ContentfulService` is the heart of the integration. It manages all communication with Contentful's **Content Management API**, transforms Vendure entities into Contentful **Entries**, and handles the relationships between them.
+The `ContentfulService` is the heart of the integration. It manages all communication with Contentful's **Content Management API**, transforms Novara Commerce entities into Contentful **Entries**, and handles the relationships between them.
 
 - **Content Type Management**: On startup, it automatically creates the necessary **Content Types** (e.g., `vendureProduct`, `vendureCollection`) in Contentful to structure your e-commerce data.
 - **Entry Synchronization**: Provides full CRUD (Create, Read, Update, Delete) operations for products, variants, and collections.
@@ -771,7 +771,7 @@ The `ContentfulService` is the heart of the integration. It manages all communic
 
 **Basic Service Structure**
 
-The service follows Vendure's standard dependency injection pattern and implements OnApplicationBootstrap. This lifecycle hook is crucial because it ensures our custom Contentful **Content Types** are created _before_ the application starts trying to sync data, preventing errors.
+The service follows Novara Commerce's standard dependency injection pattern and implements OnApplicationBootstrap. This lifecycle hook is crucial because it ensures our custom Contentful **Content Types** are created _before_ the application starts trying to sync data, preventing errors.
 
 ```ts path=/src/plugins/cms/services/contentful.service.ts start=15
 // Define content type IDs as constants for consistency and easy reference.
@@ -848,14 +848,14 @@ private async makeContentfulRequest({ method, endpoint, data, headers = {} }) {
 
 **Data Transformation**
 
-Before we can send data to Contentful, we must transform our Vendure entities into the format Contentful expects. A Contentful **Entry** consists of a `fields` object where each key corresponds to a field in the **Content Type**. Each field is also localized, so its value is nested within a locale key (e.g., `en-US`).
+Before we can send data to Contentful, we must transform our Novara Commerce entities into the format Contentful expects. A Contentful **Entry** consists of a `fields` object where each key corresponds to a field in the **Content Type**. Each field is also localized, so its value is nested within a locale key (e.g., `en-US`).
 
 ```ts path=/src/plugins/cms/services/contentful.service.ts start=1260
 private async transformProductData(
     product: Product,
     defaultLanguageCode: LanguageCode,
 ) {
-    // Vendure stores translations in an array; we need to find the one
+    // Novara Commerce stores translations in an array; we need to find the one
     // for the store's default language.
     const translation = product.translations.find(
         t => t.languageCode === defaultLanguageCode,
@@ -896,15 +896,15 @@ private async transformProductData(
 
 One of the most important aspects of CMS integration is maintaining relationships between entities. Products have variants, and variants belong to collections. Contentful manages these relationships using **Links**, which are essentially pointers from one entry to another. Our goal is to find the Contentful **Entry ID** of a related entity and embed it as a Link.
 
-**Finding Related Vendure Entities**
+**Finding Related Novara Commerce Entities**
 
-The first step is always to query the Vendure database to find the related entities. We use the injected **TransactionalConnection** to perform efficient database lookups.
+The first step is always to query the Novara Commerce database to find the related entities. We use the injected **TransactionalConnection** to perform efficient database lookups.
 
 ```ts path=/src/plugins/cms/services/contentful.service.ts start=418
 // Finds all ProductVariant entities for a given product ID.
 private async findProductVariants(productId: ID): Promise<ProductVariant[]> {
     try {
-        // Use Vendure's standard pattern for database access in a service.
+        // Use Novara Commerce's standard pattern for database access in a service.
         return await this.connection.rawConnection
             .getRepository(ProductVariant)
             .find({
@@ -922,7 +922,7 @@ private async findProductVariants(productId: ID): Promise<ProductVariant[]> {
 
 **Building the Relationships**
 
-Now we combine these two patterns. We fetch the related Vendure entities, generate their unique identifiers (slugs), use a batch lookup to find their corresponding Contentful entries, and extract their IDs to build the **Link** objects.
+Now we combine these two patterns. We fetch the related Novara Commerce entities, generate their unique identifiers (slugs), use a batch lookup to find their corresponding Contentful entries, and extract their IDs to build the **Link** objects.
 
 ```ts path=/src/plugins/cms/services/contentful.service.ts start=442
 private async findVariantEntriesForProductIds(
@@ -932,7 +932,7 @@ private async findVariantEntriesForProductIds(
 ): Promise<string[]> {
     if (!productSlug) return [];
 
-    // 1. Get all related variants from the Vendure database.
+    // 1. Get all related variants from the Novara Commerce database.
     const variants = await this.findProductVariants(productId);
 
     // 2. Generate the unique slugs for each variant.
@@ -1048,17 +1048,17 @@ export const config: VendureConfig = {
 };
 ```
 
-This configuration provides a complete Contentful CMS integration that automatically creates the necessary content models and syncs your Vendure catalog with structured content in Contentful, ready to be consumed by a headless storefront.
+This configuration provides a complete Contentful CMS integration that automatically creates the necessary content models and syncs your Novara Commerce catalog with structured content in Contentful, ready to be consumed by a headless storefront.
 
 </TabItem>
 
 <TabItem value="strapi" label="Strapi">
 
 :::tip[Working Example]
-The complete, production-ready Strapi implementation can be found in the [Strapi integration example](https://github.com/vendurehq/examples/tree/master/examples/strapi-cms-integration). It includes advanced features like plugin-based content types, batch operations, and relationship management.
+The complete, production-ready Strapi implementation can be found in the [Strapi integration example](https://github.com/MarieHasson/examples/tree/master/examples/strapi-cms-integration). It includes advanced features like plugin-based content types, batch operations, and relationship management.
 :::
 
-This guide provides a complete integration for Vendure with Strapi CMS, including setting up a Strapi application with a custom plugin and implementing the synchronization service.
+This guide provides a complete integration for Novara Commerce with Strapi CMS, including setting up a Strapi application with a custom plugin and implementing the synchronization service.
 
 **Setting up Strapi**
 
@@ -1077,9 +1077,9 @@ Choose the following options when prompted:
 - Database client: **Sqlite** (or your preferred database)
 - Use TypeScript: **Yes**
 
-#### 2. Create a Vendure Integration Plugin
+#### 2. Create a Novara Commerce Integration Plugin
 
-Generate a custom plugin to organize Vendure content types:
+Generate a custom plugin to organize Novara Commerce content types:
 
 ```bash
 npm run strapi generate plugin
@@ -1097,7 +1097,7 @@ STRAPI_BASE_URL=http://localhost:1337
 
 **Defining Content Types**
 
-#### 1. Create Vendure-specific content types
+#### 1. Create Novara Commerce-specific content types
 
 Create the content type schemas in your plugin's `server/content-types` folder:
 
@@ -1108,7 +1108,7 @@ Create the content type schemas in your plugin's `server/content-types` folder:
     "kind": "collectionType",
     "collectionName": "vendure_products",
     "info": {
-        "displayName": "Vendure Product",
+        "displayName": "Novara Commerce Product",
         "singularName": "vendure-product",
         "pluralName": "vendure-products"
     },
@@ -1164,7 +1164,7 @@ After starting Strapi, create an API token:
 
 1. Navigate to **Settings → API Tokens** in the Strapi admin panel
 2. Create a new token with **Full access** or custom permissions
-3. Save the token for use in your Vendure plugin configuration
+3. Save the token for use in your Novara Commerce plugin configuration
 
 **The Strapi Service**
 
@@ -1178,7 +1178,7 @@ The `StrapiService` handles all Strapi-specific operations including API communi
 
 **Basic Service Structure**
 
-The service follows Vendure's standard dependency injection pattern and implements OnApplicationBootstrap to ensure the CMS is properly configured before handling sync operations.
+The service follows Novara Commerce's standard dependency injection pattern and implements OnApplicationBootstrap to ensure the CMS is properly configured before handling sync operations.
 
 ```ts title="src/plugins/cms/services/strapi.service.ts"
 @Injectable()
@@ -1237,7 +1237,7 @@ private async makeStrapiRequest({ method, endpoint, data }) {
 
 **Data Transformation**
 
-Transformation methods convert Vendure entities into the format expected by Strapi's API. The `data` object structure must match the collection schema defined in Strapi.
+Transformation methods convert Novara Commerce entities into the format expected by Strapi's API. The `data` object structure must match the collection schema defined in Strapi.
 
 ```ts
 private async transformProductData(product: Product, defaultLanguageCode: LanguageCode, productSlug?: string | null) {
@@ -1377,18 +1377,18 @@ CmsPlugin.init({
 }),
 ```
 
-This setup provides a complete Strapi CMS integration that automatically creates the necessary content types and syncs your Vendure catalog with structured content in Strapi.
+This setup provides a complete Strapi CMS integration that automatically creates the necessary content types and syncs your Novara Commerce catalog with structured content in Strapi.
 
-The complete implementations can be found in the working [example repositories](https://github.com/vendurehq/examples/tree/master/examples/strapi-cms-integration).
+The complete implementations can be found in the working [example repositories](https://github.com/MarieHasson/examples/tree/master/examples/strapi-cms-integration).
 
 </TabItem>
 <TabItem value="Sanity" label="Sanity">
 
 :::tip[Working Example]
-The complete, production-ready Sanity implementation can be found in the [Sanity integration example](https://github.com/vendurehq/examples/tree/master/examples/sanity-cms-integration). It includes advanced features like content type management and bulk operations.
+The complete, production-ready Sanity implementation can be found in the [Sanity integration example](https://github.com/MarieHasson/examples/tree/master/examples/sanity-cms-integration). It includes advanced features like content type management and bulk operations.
 :::
 
-This section provides an overview of integrating Vendure with Sanity. Refer to the working example for production patterns.
+This section provides an overview of integrating Novara Commerce with Sanity. Refer to the working example for production patterns.
 
 **Setting up Sanity Studio**
 
@@ -1418,7 +1418,7 @@ import { defineField, defineType } from 'sanity';
 
 export const vendureProduct = defineType({
     name: 'vendureProduct',
-    title: 'Vendure Product',
+    title: 'Novara Commerce Product',
     type: 'document',
     fields: [
         defineField({ name: 'vendureId', type: 'number', validation: r => r.required() }),
@@ -1504,7 +1504,7 @@ export class SanityService {
 
 **Data Transformation**
 
-Transformation methods convert Vendure entities into the format expected by Sanity's API. The document structure must match the schema defined in Sanity Studio.
+Transformation methods convert Novara Commerce entities into the format expected by Sanity's API. The document structure must match the schema defined in Sanity Studio.
 
 ```ts
 private async transformProductData(product: Product, defaultLanguageCode: LanguageCode, productSlug?: string | null) {
@@ -1529,7 +1529,7 @@ private async transformProductData(product: Product, defaultLanguageCode: Langua
 
 One of the most important aspects of CMS integration is maintaining relationships between entities. Sanity uses document IDs to create references between content pieces.
 
-- Finding Related Entities (Vendure DB)
+- Finding Related Entities (Novara Commerce DB)
 
 ```ts
 private async findProductVariants(productId: string | number): Promise<ProductVariant[]> {
@@ -1644,16 +1644,16 @@ SANITY_DATASET=production
 
 For the complete implementation (including variants and collections, advanced error handling, and bulk operations), see:
 
-https://github.com/vendurehq/examples/tree/master/examples/sanity-cms-integration
+https://github.com/MarieHasson/examples/tree/master/examples/sanity-cms-integration
 
 </TabItem>
 <TabItem value="payload" label="Payload">
 
 :::tip[Working Example]
-The complete, production-ready Payload implementation can be found in the [Payload integration example](https://github.com/vendurehq/examples/tree/master/examples/payload-cms-integration). It includes advanced features like local API communication, collection management, and relationship handling.
+The complete, production-ready Payload implementation can be found in the [Payload integration example](https://github.com/MarieHasson/examples/tree/master/examples/payload-cms-integration). It includes advanced features like local API communication, collection management, and relationship handling.
 :::
 
-This guide provides a complete integration for Vendure with Payload CMS, including setting up a Payload application and implementing the synchronization service.
+This guide provides a complete integration for Novara Commerce with Payload CMS, including setting up a Payload application and implementing the synchronization service.
 
 **Setting up Payload CMS**
 
@@ -1674,7 +1674,7 @@ Choose the following options when prompted:
 
 #### 2. Configure development server
 
-Update your development script to use port 3001 to avoid conflicts with Vendure:
+Update your development script to use port 3001 to avoid conflicts with Novara Commerce:
 
 ```json title="package.json"
 {
@@ -1687,7 +1687,7 @@ Update your development script to use port 3001 to avoid conflicts with Vendure:
 
 **Defining Collection Schemas**
 
-#### 1. Create Vendure-specific collections
+#### 1. Create Novara Commerce-specific collections
 
 Create the collection configurations in your `collections` folder:
 
@@ -1742,7 +1742,7 @@ export const VendureProduct: CollectionConfig = {
 
 #### 2. Register collections in Payload config
 
-Update your `payload.config.ts` to include the Vendure collections:
+Update your `payload.config.ts` to include the Novara Commerce collections:
 
 ```ts title="src/payload.config.ts"
 import { VendureProduct, VendureProductVariant, VendureCollection } from './collections/VendureEntities';
@@ -1849,7 +1849,7 @@ private async makePayloadRequest({
 
 **Data Transformation**
 
-Transformation methods convert Vendure entities into the format expected by Payload's API. The document structure must match the collection schema defined in Payload.
+Transformation methods convert Novara Commerce entities into the format expected by Payload's API. The document structure must match the collection schema defined in Payload.
 
 ```ts
 private async transformProductData(
@@ -1883,7 +1883,7 @@ One of the most important aspects of CMS integration is maintaining relationship
 
 - Finding Related Entities
 
-> First, we need methods to query the Vendure database for related entities:
+> First, we need methods to query the Novara Commerce database for related entities:
 
 ```ts
 private async findProductVariants(productId: string | number): Promise<ProductVariant[]> {
@@ -1991,7 +1991,7 @@ CmsPlugin.init({
 ```
 
 This section provides a high-level overview. For a complete, production-ready implementation, see the Payload integration example:
-https://github.com/vendurehq/examples/tree/master/examples/payload-cms-integration
+https://github.com/MarieHasson/examples/tree/master/examples/payload-cms-integration
 
 </TabItem>
 </Tabs>
@@ -2076,7 +2076,7 @@ Refer to the platform-specific configuration examples in the tabs above for the 
 
 For complete, production-ready implementations, see the working examples:
 
-- [Storyblok CMS Integration](https://github.com/vendurehq/examples/tree/master/examples/storyblok-cms-integration)
-- [Strapi CMS Integration](https://github.com/vendurehq/examples/tree/master/examples/strapi-cms-integration)
-- [Sanity CMS Integration](https://github.com/vendurehq/examples/tree/master/examples/sanity-cms-integration)
-- [Payload CMS Integration](https://github.com/vendurehq/examples/tree/master/examples/payload-cms-integration)
+- [Storyblok CMS Integration](https://github.com/MarieHasson/examples/tree/master/examples/storyblok-cms-integration)
+- [Strapi CMS Integration](https://github.com/MarieHasson/examples/tree/master/examples/strapi-cms-integration)
+- [Sanity CMS Integration](https://github.com/MarieHasson/examples/tree/master/examples/sanity-cms-integration)
+- [Payload CMS Integration](https://github.com/MarieHasson/examples/tree/master/examples/payload-cms-integration)

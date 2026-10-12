@@ -450,7 +450,7 @@ describe('OrderCalculator', () => {
                 });
             });
 
-            // https://github.com/vendurehq/vendure/issues/5127 (continuation of #3098)
+            // https://github.com/MarieHasson/novara-commerce/issues/5127 (continuation of #3098)
             describe('quantity reduced below orderPlacedQuantity after recalculation (#5127)', () => {
                 const promotion = new Promotion({
                     id: 1,

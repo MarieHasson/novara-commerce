@@ -46,7 +46,7 @@ class FillBufferResolver {
 
 /**
  * Plugin to create a lot of buffered jobs to test help investigate and fix
- * issue https://github.com/vendurehq/vendure/issues/1433
+ * issue https://github.com/MarieHasson/novara-commerce/issues/1433
  */
 @VendurePlugin({
     imports: [PluginCommonModule],

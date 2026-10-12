@@ -88,7 +88,7 @@ describe('Plugins', () => {
         expect(result.composedPluginQuery).toBe('composed');
     });
 
-    // https://github.com/vendurehq/vendure/issues/2906
+    // https://github.com/MarieHasson/novara-commerce/issues/2906
     it('handles plugins that return new config object references', async () => {
         const configService = server.app.get(ConfigService);
         expect(configService.customFields.Customer).toEqual([

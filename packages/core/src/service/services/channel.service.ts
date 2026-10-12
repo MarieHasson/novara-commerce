@@ -190,7 +190,7 @@ export class ChannelService {
         channelIds: ID[],
     ): Promise<T> {
         const relations = [];
-        // This is a work-around for https://github.com/vendurehq/vendure/issues/1391
+        // This is a work-around for https://github.com/MarieHasson/novara-commerce/issues/1391
         // A better API would be to allow the consumer of this method to supply an entity instance
         // so that this join could be done prior to invoking this method.
         // TODO: overload the assignToChannels method to allow it to take an entity instance

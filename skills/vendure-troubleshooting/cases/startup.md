@@ -1,6 +1,6 @@
 # Server and worker startup failures
 
-Applies to: Vendure 3.x. `vendure doctor` needs v3.7 or later. Notes for
+Applies to: Novara Commerce 3.x. `vendure doctor` needs v3.7 or later. Notes for
 other versions are in the checks.
 
 ## Symptoms
@@ -15,17 +15,17 @@ other versions are in the checks.
 
 Do them in this order. Use the context from `context.md`.
 
-1. **Node.js version.** Vendure supports Node.js v20, v22 and v24.
+1. **Node.js version.** Novara Commerce supports Node.js v20, v22 and v24.
    Doc: `getting-started/installation#requirements`
 2. **doctor result.** Read the first `fail` in the report. A failed `project`
-   check means the command did not run in a Vendure project, or no config file
+   check means the command did not run in a Novara Commerce project, or no config file
    was found. Run it again from the project root, or pass `--config <path>`.
 3. **Dependencies.** A `fail` with `DB driver "<pkg>" not installed` means the
    driver for `dbConnectionOptions.type` is missing (`pg` for postgres,
    `mysql2` for mysql and mariadb, `better-sqlite3` for sqlite).
    `node_modules not found` means the install did not run. A version mismatch goes to
    `version-mismatch.md`.
-4. **Config.** `Failed to load Vendure config` has the error in `details`.
+4. **Config.** `Failed to load Novara Commerce config` has the error in `details`.
    `Plugin compatibility issues detected` goes to `version-mismatch.md`.
 5. **Schema.** `Admin API schema failed` or `Shop API schema failed` means a
    plugin's GraphQL extension or a custom field type does not build. The
@@ -39,7 +39,7 @@ Do them in this order. Use the context from `context.md`.
 7. **Startup log.** Ask the user for the startup output. Look for:
    - `Your database schema does not match your current configuration`: go to
      `migrations.md`.
-   - `Plugin "<name>" is not compatible with this version of Vendure`: go to
+   - `Plugin "<name>" is not compatible with this version of Novara Commerce`: go to
      `version-mismatch.md`.
 8. **Production install.** When dev dependencies were pruned, `@vendure/cli`
    is not installed. Then `vendure start` fails. See the `vendure-cli` skill
@@ -76,4 +76,4 @@ Do them in this order. Use the context from `context.md`.
 - Since v3.7.4, `runMigrations()` at startup reports `schema-out-of-sync` and
   `no-migrations-matched`. See `migrations.md`.
 
-All references are paths under `https://docs.vendure.io/current/core/`.
+All references are paths under `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/`.

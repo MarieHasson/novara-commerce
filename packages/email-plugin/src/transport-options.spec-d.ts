@@ -2,7 +2,7 @@ import { assertType, describe, it } from 'vitest';
 
 import { SMTPTransportOptions } from './types';
 
-// https://github.com/vendurehq/vendure/issues/4602
+// https://github.com/MarieHasson/novara-commerce/issues/4602
 // Nodemailer pooled SMTP options (pool, maxConnections, ...) work at runtime because the
 // transport object is forwarded directly to nodemailer.createTransport(), but they were
 // missing from SMTPTransportOptions. These type-level tests fail to compile on master.

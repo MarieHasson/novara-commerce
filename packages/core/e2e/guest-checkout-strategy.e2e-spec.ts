@@ -213,7 +213,7 @@ describe('GuestCheckoutStrategy', () => {
         expect(setCustomerForOrder.customer?.id).not.toBe(customers[0].id);
     });
 
-    // https://github.com/vendurehq/vendure/issues/4026
+    // https://github.com/MarieHasson/novara-commerce/issues/4026
     it('guest customer with same email as registered customer should not show as verified', async () => {
         TestGuestCheckoutStrategy.createNewCustomerOnEmailAddressConflict = true;
 

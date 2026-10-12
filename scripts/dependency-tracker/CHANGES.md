@@ -1,13 +1,13 @@
-# Vendure dependency audit — change log
+# Novara Commerce dependency audit — change log
 
-This document tracks the dependency footprint of Vendure across the stages of the
+This document tracks the dependency footprint of Novara Commerce across the stages of the
 [dependency audit effort](#issue-reference). Each stage records the state of the
 dependency graph after a discrete change (or batch of changes) has landed on this
 branch, so we can quantify the reduction in supply-chain surface area over time.
 
 ## Issue reference
 
-See [#4761](https://github.com/vendurehq/vendure/issues/4761) for the full
+See [#4761](https://github.com/MarieHasson/novara-commerce/issues/4761) for the full
 audit assessment, rationale, and prioritised plan. This document is the
 running ledger of how the dependency footprint shrinks as each stage lands.
 
@@ -44,7 +44,7 @@ diff /tmp/before.json /tmp/after.json
 - **Date:** 2026-05-21T07:20:14.801Z
 - **Total unique production packages:** 1880
 
-### Per-Vendure-package transitive footprint
+### Per-Novara Commerce-package transitive footprint
 
 | Package | Direct deps | Unique transitive (prod) |
 |---------|-------------|--------------------------|
@@ -369,7 +369,7 @@ diff /tmp/before.json /tmp/after.json
 - **Date:** 2026-05-21T07:50:42.183Z
 - **Total unique production packages:** 1807
 
-### Per-Vendure-package transitive footprint
+### Per-Novara Commerce-package transitive footprint
 
 | Package | Direct deps | Unique transitive (prod) |
 |---------|-------------|--------------------------|
@@ -731,7 +731,7 @@ jump straight to v8) to keep the install clean.
 - **Date:** 2026-05-21T08:18:00.680Z
 - **Total unique production packages:** 1807
 
-### Per-Vendure-package transitive footprint
+### Per-Novara Commerce-package transitive footprint
 
 | Package | Direct deps | Unique transitive (prod) |
 |---------|-------------|--------------------------|
@@ -1060,10 +1060,10 @@ instead of `import { json } from 'body-parser'`. Regenerated
 **Why:** `body-parser` was declared as a direct dependency of `@vendure/core`
 but never imported in source. Its only references were in JSDoc / generated
 docs telling users to use `import { json } from 'body-parser'` to override
-the JSON payload size limit. The JSDoc text *"Vendure relies on the
+the JSON payload size limit. The JSDoc text *"Novara Commerce relies on the
 body-parser middleware to parse incoming JSON data"* was true under the
 Express 4 / older NestJS stack but became inaccurate after the
-Express 5 / NestJS 11 / Apollo Server v5 upgrade — Vendure now relies on
+Express 5 / NestJS 11 / Apollo Server v5 upgrade — Novara Commerce now relies on
 Express 5's built-in JSON parser, which re-exports body-parser v2 directly
 (`exports.json = bodyParser.json` in `node_modules/express/lib/express.js`).
 The documented `express.json()` is byte-identical in behaviour to
@@ -1121,7 +1121,7 @@ script: an "additive transitive" column that reports packages reachable
 - **Date:** 2026-05-21T09:02:58.355Z
 - **Total unique production packages:** 1807
 
-### Per-Vendure-package transitive footprint
+### Per-Novara Commerce-package transitive footprint
 
 | Package | Direct deps | Unique transitive (prod) |
 |---------|-------------|--------------------------|
@@ -1479,7 +1479,7 @@ Package-level changes:
 
 So the bulk transitive collapse for both packages is gated on the same
 Apollo Server v5 upgrade noted in the [#4761 Apollo v5
-comment](https://github.com/vendurehq/vendure/issues/4761#issuecomment-4506325570).
+comment](https://github.com/MarieHasson/novara-commerce/issues/4761#issuecomment-4506325570).
 Once `@apollo/server@5` lands (which itself is gated on
 `@nestjs/apollo@14`), `@types/node-fetch`, `node-fetch@2.x`, and a chunk of
 the `form-data` subtree all drop in one cascade alongside `body-parser`.
@@ -1495,7 +1495,7 @@ fixed at the same time.
 - **Date:** 2026-05-22T14:51:59.031Z
 - **Total unique production packages:** 1735
 
-### Per-Vendure-package transitive footprint
+### Per-Novara Commerce-package transitive footprint
 
 | Package | Direct deps | Unique transitive (prod) |
 |---------|-------------|--------------------------|
@@ -1822,15 +1822,15 @@ landed on `minor` between Stage 3 and here:
 
 | PR | Scope |
 |----|-------|
-| [#4762](https://github.com/vendurehq/vendure/pull/4762) | Stages 1–3 bundled: `body-parser` removal, `@types/nodemailer` recategorisation, `node-fetch` + `form-data` → native, `cross-spawn` formalised as a direct dep of `@vendure/cli` |
-| [#4764](https://github.com/vendurehq/vendure/pull/4764) | `@vendure/telemetry-plugin`: replaced `@opentelemetry/auto-instrumentations-node` with eight explicit instrumentations (`http`, `express`, `nestjs-core`, `graphql`, `pg`, `mysql2`, `ioredis`, `runtime-node`). Exposed `getDefaultInstrumentations()` so callers can extend the curated set without re-declaring it |
-| [#4767](https://github.com/vendurehq/vendure/pull/4767) | `@vendure/cli`: vendored `camelCase` / `pascalCase` / `kebabCase` / `constantCase` from `change-case@4.x`, dropped the dep |
-| [#4768](https://github.com/vendurehq/vendure/pull/4768) | `@vendure/create`: replaced `tcp-port-used` with a native `net.Socket` implementation. Added an explicit 2s socket timeout so a DROP-firewalled host can't stall `findAvailablePort` for the OS-level connect timeout × `PORT_SCAN_RANGE` |
-| [#4769](https://github.com/vendurehq/vendure/pull/4769) | `@vendure/core`: vendored `graphqlFields()` (~70 LOC covering fragments, fragment spreads, `@skip`/`@include` with variables, field merging), dropped the `graphql-fields` dep |
-| [#4770](https://github.com/vendurehq/vendure/pull/4770) | `@vendure/core`: vendored a focused `ProgressBar` helper for the importer (silent in non-TTY environments, capped to `stream.columns`), dropped the `progress` dep |
-| [#4771](https://github.com/vendurehq/vendure/pull/4771) | `@vendure/core`: dropped `@nestjs/terminus`. Vendored `HealthCheckError`, `HealthIndicator`, `HealthIndicatorFunction`, `HealthIndicatorResult` as a compat shim. Replaced `TypeOrmHealthIndicator` with a direct `SELECT 1` against the raw `DataSource` |
+| [#4762](https://github.com/MarieHasson/novara-commerce/pull/4762) | Stages 1–3 bundled: `body-parser` removal, `@types/nodemailer` recategorisation, `node-fetch` + `form-data` → native, `cross-spawn` formalised as a direct dep of `@vendure/cli` |
+| [#4764](https://github.com/MarieHasson/novara-commerce/pull/4764) | `@vendure/telemetry-plugin`: replaced `@opentelemetry/auto-instrumentations-node` with eight explicit instrumentations (`http`, `express`, `nestjs-core`, `graphql`, `pg`, `mysql2`, `ioredis`, `runtime-node`). Exposed `getDefaultInstrumentations()` so callers can extend the curated set without re-declaring it |
+| [#4767](https://github.com/MarieHasson/novara-commerce/pull/4767) | `@vendure/cli`: vendored `camelCase` / `pascalCase` / `kebabCase` / `constantCase` from `change-case@4.x`, dropped the dep |
+| [#4768](https://github.com/MarieHasson/novara-commerce/pull/4768) | `@vendure/create`: replaced `tcp-port-used` with a native `net.Socket` implementation. Added an explicit 2s socket timeout so a DROP-firewalled host can't stall `findAvailablePort` for the OS-level connect timeout × `PORT_SCAN_RANGE` |
+| [#4769](https://github.com/MarieHasson/novara-commerce/pull/4769) | `@vendure/core`: vendored `graphqlFields()` (~70 LOC covering fragments, fragment spreads, `@skip`/`@include` with variables, field merging), dropped the `graphql-fields` dep |
+| [#4770](https://github.com/MarieHasson/novara-commerce/pull/4770) | `@vendure/core`: vendored a focused `ProgressBar` helper for the importer (silent in non-TTY environments, capped to `stream.columns`), dropped the `progress` dep |
+| [#4771](https://github.com/MarieHasson/novara-commerce/pull/4771) | `@vendure/core`: dropped `@nestjs/terminus`. Vendored `HealthCheckError`, `HealthIndicator`, `HealthIndicatorFunction`, `HealthIndicatorResult` as a compat shim. Replaced `TypeOrmHealthIndicator` with a direct `SELECT 1` against the raw `DataSource` |
 
-Closed without merging: [#4766](https://github.com/vendurehq/vendure/pull/4766) (`mjml` optional peer). Deferred.
+Closed without merging: [#4766](https://github.com/MarieHasson/novara-commerce/pull/4766) (`mjml` optional peer). Deferred.
 
 ### Results
 
@@ -1838,7 +1838,7 @@ Total unique production packages across the repo: **1,807 → 1,735 (−72)**.
 
 Combined with Stages 0–3 (1,880 → 1,807, −73), the audit removed **145 unique production packages** end-to-end — matching the ≈145 figure quoted in the issue baseline.
 
-Per-Vendure-package transitive footprint (Stage 0 baseline → final):
+Per-Novara Commerce-package transitive footprint (Stage 0 baseline → final):
 
 | Package | Direct deps | Δ direct | Transitive | Δ transitive |
 |---------|------------:|---------:|-----------:|-------------:|
@@ -1851,7 +1851,7 @@ Per-Vendure-package transitive footprint (Stage 0 baseline → final):
 
 Notes:
 
-- `@vendure/telemetry-plugin` gained 7 direct deps (one per curated instrumentation) but shed 62 transitives — the trade is intentional: explicit declarations a maintainer can audit at a glance, in exchange for losing the Mongo / Kafka / Hapi / Cassandra / etc. subtrees that `auto-instrumentations-node` carried for libraries Vendure doesn't use.
+- `@vendure/telemetry-plugin` gained 7 direct deps (one per curated instrumentation) but shed 62 transitives — the trade is intentional: explicit declarations a maintainer can audit at a glance, in exchange for losing the Mongo / Kafka / Hapi / Cassandra / etc. subtrees that `auto-instrumentations-node` carried for libraries Novara Commerce doesn't use.
 - `@vendure/core` only shed 21 transitives despite removing four direct deps (`body-parser`, `@nestjs/terminus`, `graphql-fields`, `progress`). The terminus subtree (~295 packages quoted in the baseline) is mostly reachable through the rest of `@nestjs/*` and `@apollo/server` regardless — same overlap pattern documented for `body-parser` in Stage 2. The win is in *direct attack surface*, not raw transitive count.
 - `@vendure/testing` is the biggest relative win: **34 → 9 unique transitives** (−74%). Plugin authors writing e2e suites pull in dramatically less now.
 
@@ -1866,4 +1866,4 @@ Where the audit considered a dep and decided against removal:
 - `mime-types` — data-bearing (IANA MIME registry snapshot, actively maintained upstream)
 - `cookie-session`, `graphql-upload`, `http-proxy-middleware` — canonical implementations of wire/spec contracts where rolling our own carries security risk for marginal gain
 
-The full reasoning is captured as comments on [#4761](https://github.com/vendurehq/vendure/issues/4761) so future audits don't re-litigate.
+The full reasoning is captured as comments on [#4761](https://github.com/MarieHasson/novara-commerce/issues/4761) so future audits don't re-litigate.

@@ -15,7 +15,7 @@ let dependencies: Partial<AuthCommandDependencies>;
 
 const accessToken = `e30.${Buffer.from(JSON.stringify({ exp: 4_102_444_800 })).toString('base64url')}.sig`;
 
-function storeLogin(consoleApiUrl = 'https://api.vendure.io') {
+function storeLogin(consoleApiUrl = 'https://api.example.com') {
     writeStoredAuth(
         {
             version: 1,
@@ -68,7 +68,7 @@ describe('vendure auth status', () => {
             loggedIn: true,
             organization: { name: 'Bromley Art Supplies' },
             user: { email: 'dev@example.com' },
-            consoleApiUrl: 'https://api.vendure.io',
+            consoleApiUrl: 'https://api.example.com',
             clientId: 'client_01PRODUCTION',
         });
         expect(stdout.join('')).not.toContain('refresh_secret');
@@ -76,7 +76,7 @@ describe('vendure auth status', () => {
     });
 
     it('points out a login stored for another Vendure Console', () => {
-        storeLogin('https://staging.api.vendure.io');
+        storeLogin('https://staging.api.example.com');
 
         expect(authStatusCommand({}, dependencies)).toBe(1);
         expect(messages.join('\n')).toContain('VENDURE_CONSOLE_API_URL');
@@ -120,7 +120,7 @@ describe('vendure auth login', () => {
 
     it('reports a failure to reach Vendure Console', async () => {
         await expect(authLoginCommand({}, dependencies)).resolves.toBe(1);
-        expect(messages.join('\n')).toContain('Could not reach Vendure Console at https://api.vendure.io.');
+        expect(messages.join('\n')).toContain('Could not reach Vendure Console at https://api.example.com.');
     });
 });
 

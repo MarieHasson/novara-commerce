@@ -13,7 +13,7 @@ describe('EntityHydrator', () => {
             return (hydrator as any).getMissingRelations(target, { relations });
         }
 
-        // https://github.com/vendurehq/vendure/issues/4537
+        // https://github.com/MarieHasson/novara-commerce/issues/4537
         it('detects a relation missing from a later array element', () => {
             const order = {
                 lines: [
@@ -29,7 +29,7 @@ describe('EntityHydrator', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/4537
+        // https://github.com/MarieHasson/novara-commerce/issues/4537
         it('detects an intermediate relation missing from a later array element', () => {
             const order = {
                 lines: [{ productVariant: { product: { id: 1 } } }, { productVariant: undefined }],
@@ -103,7 +103,7 @@ describe('EntityHydrator', () => {
             ]);
         });
 
-        // https://github.com/vendurehq/vendure/issues/4955
+        // https://github.com/MarieHasson/novara-commerce/issues/4955
         // Relation arrays can contain `undefined` holes (e.g. payments/surcharges/shippingLines
         // after OrderPlacedEvent). An `undefined` element was never fetched and must be reported
         // missing; only `null` counts as loaded.
@@ -225,7 +225,7 @@ describe('EntityHydrator', () => {
             return (hydrator as any).getRelationEntityAtPath(target, path);
         }
 
-        // https://github.com/vendurehq/vendure/issues/4661
+        // https://github.com/MarieHasson/novara-commerce/issues/4661
         it('treats undefined intermediate relations as terminal values', () => {
             const translation = { languageCode: 'en', name: 'Laptop' };
             const order = {

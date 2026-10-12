@@ -56,11 +56,11 @@ const profileType = gql`
 `;
 
 /**
- * Testing https://github.com/vendurehq/vendure/issues/1636
+ * Testing https://github.com/MarieHasson/novara-commerce/issues/1636
  *
  * and
  *
- * https://github.com/vendurehq/vendure/issues/1664
+ * https://github.com/MarieHasson/novara-commerce/issues/1664
  */
 @VendurePlugin({
     imports: [PluginCommonModule],
@@ -109,7 +109,7 @@ const profileType = gql`
                 nullable: true,
                 type: 'relation',
                 // Using the Channel entity rather than User as in the example comment at
-                // https://github.com/vendurehq/vendure/issues/1664#issuecomment-1293916504
+                // https://github.com/MarieHasson/novara-commerce/issues/1664#issuecomment-1293916504
                 // because using a User causes a recursive infinite loop in TypeORM between
                 // Product > User > Vendor > Product etc.
                 entity: Channel,

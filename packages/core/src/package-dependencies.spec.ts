@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { describe, expect, it } from 'vitest';
 
-// Same bug class as https://github.com/vendurehq/vendure/issues/4920:
+// Same bug class as https://github.com/MarieHasson/novara-commerce/issues/4920:
 //
 // Types from `@types/express` are part of core's PUBLISHED `.d.ts` surface — e.g.
 // `RequestContext.req` (express `Request`), `setSessionToken()` (express

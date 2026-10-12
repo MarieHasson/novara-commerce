@@ -1,6 +1,6 @@
 ---
 title: "API Keys"
-description: "Learn how to create and manage API keys for server-to-server integrations, background jobs, and third-party services in Vendure."
+description: "Learn how to create and manage API keys for server-to-server integrations, background jobs, and third-party services in Novara Commerce."
 keywords:
     - api-key
     - authentication
@@ -9,12 +9,12 @@ keywords:
     - automation
 ---
 
-API keys provide long-lived, non-interactive authentication for machine-to-machine communication. Unlike session tokens that expire and require interactive login, API keys are designed for automated integrations that need persistent access to the Vendure Admin API.
+API keys provide long-lived, non-interactive authentication for machine-to-machine communication. Unlike session tokens that expire and require interactive login, API keys are designed for automated integrations that need persistent access to the Novara Commerce Admin API.
 
 import { Callout } from '@vendure-io/docs-provider/components';
 
 <Callout type="note">
-Support for API Keys was added in Vendure v3.6.0
+Support for API Keys was added in Novara Commerce v3.6.0
 </Callout>
 
 ## When to use API keys
@@ -23,14 +23,14 @@ API keys are the right choice when:
 
 - **Syncing data with external systems** (ERP, PIM, CRM) that need to read or write product data, orders, or inventory on a schedule
 - **Running background scripts** for data imports, bulk updates, or report generation
-- **Integrating CI/CD pipelines** that deploy or configure your Vendure instance
+- **Integrating CI/CD pipelines** that deploy or configure your Novara Commerce instance
 - **Connecting third-party services** like AI agents, analytics platforms, or warehouse management systems
 
 API keys are **not** intended for end-user authentication. For customer-facing authentication, use the standard session-based login flow.
 
 ## Enabling API key authentication
 
-API key authentication is opt-in. To enable it, add `'api-key'` to the `tokenMethod` array in your Vendure config:
+API key authentication is opt-in. To enable it, add `'api-key'` to the `tokenMethod` array in your Novara Commerce config:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -43,7 +43,7 @@ export const config: VendureConfig = {
 };
 ```
 
-With this configuration, Vendure checks incoming requests for authentication in the following order:
+With this configuration, Novara Commerce checks incoming requests for authentication in the following order:
 
 1. **Cookie** — session cookie (browser-based clients)
 2. **Bearer** — `Authorization: Bearer <token>` header (SPAs, mobile apps)
@@ -171,7 +171,7 @@ API keys are **channel-aware**. When you create an API key in a specific channel
 
 ### ERP data sync
 
-A common use case is synchronizing product and inventory data between Vendure and an ERP system:
+A common use case is synchronizing product and inventory data between Novara Commerce and an ERP system:
 
 ```ts title="erp-sync/sync-inventory.ts"
 const VENDURE_API_URL = process.env.VENDURE_API_URL!;
@@ -372,7 +372,7 @@ export const config: VendureConfig = {
 
 If you're testing in a browser-based tool (like the GraphQL playground at `/admin-api`), the browser sends a session cookie automatically. Since cookies are checked before API keys, the cookie wins and the key is ignored.
 
-**Fix:** Use a tool that doesn't send cookies, such as `curl` or a standalone HTTP client. Alternatively, clear your browser cookies for the Vendure domain.
+**Fix:** Use a tool that doesn't send cookies, such as `curl` or a standalone HTTP client. Alternatively, clear your browser cookies for the Novara Commerce domain.
 
 ### "Forbidden" error with valid key
 

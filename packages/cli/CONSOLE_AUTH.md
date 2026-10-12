@@ -39,7 +39,7 @@ the authorization URL.
 | Option | Behavior |
 | --- | --- |
 | `client` | Required. `'cli'` or `'create'` identifies the caller on the approval page. |
-| `appOrigin`, `apiOrigin` | Default to `https://console.vendure.io` and `https://api.vendure.io`. |
+| `appOrigin`, `apiOrigin` | Default to `https://example.com` and `https://example.com`. |
 | `signal` | Cancels login and token exchange. Cancellation rejects with `AbortError`. |
 | `timeoutMs` | Callback deadline in milliseconds. Default is `300_000`, or five minutes. Must be finite, greater than zero, and at most `2_147_483_647`. |
 | `openBrowser(url)` | Optional function that returns `Promise<boolean>`. The default uses the OS browser opener. |
@@ -48,8 +48,8 @@ the authorization URL.
 | `now` | Optional `() => number` that returns epoch milliseconds. Defaults to `Date.now`. |
 
 Both origins must form a trusted pair. Production and staging are supported.
-Staging uses `https://staging.console.vendure.io` with
-`https://staging.api.vendure.io`. Development and tests can use HTTP or HTTPS
+Staging uses `https://example.com` with
+`https://example.com`. Development and tests can use HTTP or HTTPS
 origins on `localhost`, `127.0.0.1`, or `[::1]`, including explicit ports.
 Mixed deployments, untrusted remote hosts, credentials, paths, queries and
 fragments are rejected before a listener opens or a token is sent.

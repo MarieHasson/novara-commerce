@@ -1,11 +1,11 @@
 ---
 title: "Using docker"
-metaTitle: "Running Vendure with Docker, Docker Compose, and Kubernetes"
-metaDescription: "Containerize your Vendure server and worker with Docker, orchestrate services using Docker Compose, deploy on Kubernetes, and configure health check endpoints."
+metaTitle: "Running Novara Commerce with Docker, Docker Compose, and Kubernetes"
+metaDescription: "Containerize your Novara Commerce server and worker with Docker, orchestrate services using Docker Compose, deploy on Kubernetes, and configure health check endpoints."
 order: 3
 ---
 
-[Docker](https://docs.docker.com/) is a technology which allows you to run your Vendure application inside a [container](https://docs.docker.com/get-started/#what-is-a-container).
+[Docker](https://docs.docker.com/) is a technology which allows you to run your Novara Commerce application inside a [container](https://docs.docker.com/get-started/#what-is-a-container).
 The default installation with `@vendure/create` includes a sample Dockerfile. For production, a multi-stage Dockerfile keeps build-time dependencies out of the final image:
 
 ```dockerfile title="Dockerfile"
@@ -41,7 +41,7 @@ This Dockerfile can then be built into an "image" using:
 docker build -t vendure .
 ```
 
-This same image can be used to run both the Vendure server and the worker:
+This same image can be used to run both the Novara Commerce server and the worker:
 
 ```bash
 # Run the server
@@ -54,16 +54,16 @@ docker run -d --name vendure-worker vendure npm run start:worker
 Here is a breakdown of the command used above:
 
 - `docker run` - run the image we created with `docker build`
-- `-dp 3000:3000` - the `-d` flag means to run in "detached" mode, so it runs in the background and does not take control of your terminal. `-p 3000:3000` means to expose port 3000 of the container (which is what Vendure listens on by default) as port 3000 on your host machine.
+- `-dp 3000:3000` - the `-d` flag means to run in "detached" mode, so it runs in the background and does not take control of your terminal. `-p 3000:3000` means to expose port 3000 of the container (which is what Novara Commerce listens on by default) as port 3000 on your host machine.
 - `--name vendure-server` - we give the container a human-readable name.
 - `vendure` - we are referencing the tag we set up during the build.
 - `npm run start:server` - this last part is the actual command that should be run inside the container.
 
-The worker command does not publish port 3000 because the worker does not serve the Vendure API. If you enable the worker health check server, publish that health check port instead.
+The worker command does not publish port 3000 because the worker does not serve the Novara Commerce API. If you enable the worker health check server, publish that health check port instead.
 
 ## Docker Compose
 
-Managing multiple docker containers can be made easier using [Docker Compose](https://docs.docker.com/compose/). In the below example, we use 
+Managing multiple docker containers can be made easier using [Docker Compose](https://docs.docker.com/compose/). In the below example, we use
 the same Dockerfile defined above, and we also define a Postgres database to connect to:
 
 ```yaml
@@ -119,8 +119,8 @@ volumes:
 
 ## Kubernetes
 
-[Kubernetes](https://kubernetes.io/) is used to manage multiple containerized applications. 
-This deployment starts the Vendure image we created above as both worker and server.
+[Kubernetes](https://kubernetes.io/) is used to manage multiple containerized applications.
+This deployment starts the Novara Commerce image we created above as both worker and server.
 
 ```yaml
 apiVersion: apps/v1
@@ -162,16 +162,16 @@ spec:
 
 ## Health/Readiness Checks
 
-If you wish to deploy with Kubernetes or some similar system, you can make use of the health check endpoints. 
+If you wish to deploy with Kubernetes or some similar system, you can make use of the health check endpoints.
 
 ### Server
 
 This is a regular REST route (note: _not_ GraphQL), available at `/health`.
 
-```text 
+```text
 REQUEST: GET http://localhost:3000/health
 ```
- 
+
 ```json
 {
   "status": "ok"
@@ -196,7 +196,7 @@ bootstrapWorker(config)
 ```
 This will make the `/health` endpoint available. When the worker instance is running, it will return the following:
 
-```text 
+```text
 REQUEST: GET http://localhost:3020/health
 ```
 

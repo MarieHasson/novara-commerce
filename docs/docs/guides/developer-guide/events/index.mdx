@@ -1,10 +1,10 @@
 ---
 title: 'Events'
-metaTitle: "Vendure EventBus - Subscribe to System Events in Plugins"
-metaDescription: "A complete reference of Vendure events and how to subscribe to entity changes, order state transitions, and user actions using the EventBus."
+metaTitle: "Novara Commerce EventBus - Subscribe to System Events in Plugins"
+metaDescription: "A complete reference of Novara Commerce events and how to subscribe to entity changes, order state transitions, and user actions using the EventBus."
 ---
 
-Vendure emits events which can be subscribed to by plugins. These events are published by the [EventBus](/reference/typescript-api/events/event-bus/) and
+Novara Commerce emits events which can be subscribed to by plugins. These events are published by the [EventBus](/reference/typescript-api/events/event-bus/) and
 likewise the `EventBus` is used to subscribe to events.
 
 An event exists for virtually all significant actions which occur in the system, such as:
@@ -293,7 +293,7 @@ export class BlogPlugin implements OnModuleInit {
 :::note
 The following section is an advanced topic.
 
-The API described in this section was added in Vendure v2.2.0.
+The API described in this section was added in Novara Commerce v2.2.0.
 :::
 
 When using the `.ofType().subscribe()` pattern, the event handler is non-blocking. This means that the code that publishes

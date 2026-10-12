@@ -1,16 +1,16 @@
 ---
 title: "Permissions"
-metaTitle: "Permissions and Authorization in Vendure"
-metaDescription: "How Vendure permissions work: CRUD permissions per entity, special permissions, built-in permission groups, deny-by-default authorization, and custom permissions for plugins."
+metaTitle: "Permissions and Authorization in Novara Commerce"
+metaDescription: "How Novara Commerce permissions work: CRUD permissions per entity, special permissions, built-in permission groups, deny-by-default authorization, and custom permissions for plugins."
 ---
 
-Permissions are the **atomic units of authorization** in Vendure. Every API operation is guarded by
+Permissions are the **atomic units of authorization** in Novara Commerce. Every API operation is guarded by
 one or more permissions, and an administrator can only perform an operation if their assigned
 [Roles](/core-concepts/roles/) include the required permission.
 
 ## CRUD permissions
 
-Most entities in Vendure are protected by a standard set of four permissions following the
+Most entities in Novara Commerce are protected by a standard set of four permissions following the
 **Create / Read / Update / Delete** pattern. For example, the Product entity is guarded by:
 
 - `CreateCatalog`
@@ -24,7 +24,7 @@ domain covers Products, ProductVariants, Collections, Facets, and Assets — so 
 
 ## Built-in permission domains
 
-Vendure ships with permissions organized into the following domains:
+Novara Commerce ships with permissions organized into the following domains:
 
 - **Catalog** — Products, ProductVariants, Collections, Facets, FacetValues, Assets
 - **Customer** — Customers, CustomerGroups
@@ -38,7 +38,7 @@ role can access.
 
 ## Special permissions
 
-In addition to the CRUD permissions, Vendure defines several special permissions:
+In addition to the CRUD permissions, Novara Commerce defines several special permissions:
 
 - **SuperAdmin** — bypasses all permission checks. Only the built-in SuperAdmin role carries this
   permission and it cannot be assigned to custom roles.
@@ -49,7 +49,7 @@ In addition to the CRUD permissions, Vendure defines several special permissions
 
 ## Deny-by-default
 
-Vendure follows a **deny-by-default** authorization model. If an API operation does not have an
+Novara Commerce follows a **deny-by-default** authorization model. If an API operation does not have an
 explicit `@Allow()` decorator granting access via a specific permission, it is inaccessible. This
 ensures that new API operations are secure by default and permissions must be intentionally granted.
 

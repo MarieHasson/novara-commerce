@@ -1,16 +1,16 @@
 ---
 title: "Cart"
-metaTitle: "Cart and Active Order Concepts in Vendure"
-metaDescription: "Understand how Vendure handles the shopping cart as an Order in the AddingItems state, the active order pattern, order lines, and the transition to checkout."
+metaTitle: "Cart and Active Order Concepts in Novara Commerce"
+metaDescription: "Understand how Novara Commerce handles the shopping cart as an Order in the AddingItems state, the active order pattern, order lines, and the transition to checkout."
 ---
 
-Vendure does not have a separate "Cart" entity. Instead, a cart is simply an [`Order`](/reference/typescript-api/entities/order/) in the **AddingItems** state. This unified model means that the same entity, the same database table, and the same state machine govern an order from the moment a customer adds their first item all the way through to fulfillment.
+Novara Commerce does not have a separate "Cart" entity. Instead, a cart is simply an [`Order`](/reference/typescript-api/entities/order/) in the **AddingItems** state. This unified model means that the same entity, the same database table, and the same state machine govern an order from the moment a customer adds their first item all the way through to fulfillment.
 
 ## The active order
 
 Every customer session (whether authenticated or guest) can have at most one **active order** — the order in the `AddingItems` state. This is the order that the Shop API's cart-related mutations operate on.
 
-When a customer calls mutations like `addItemToOrder`, `adjustOrderLine`, or `removeOrderLine`, Vendure automatically finds (or creates) the active order for the current session. There is no need to pass an order ID; the active order is resolved from the session context.
+When a customer calls mutations like `addItemToOrder`, `adjustOrderLine`, or `removeOrderLine`, Novara Commerce automatically finds (or creates) the active order for the current session. There is no need to pass an order ID; the active order is resolved from the session context.
 
 :::info
 The active order resolution logic is handled by the [`ActiveOrderStrategy`](/reference/typescript-api/orders/active-order-strategy/). The default strategy uses the session to track the active order, but this can be customized for scenarios like named wishlists or saved carts.
@@ -25,7 +25,7 @@ Each item in the cart is represented by an [`OrderLine`](/reference/typescript-a
 - **linePrice / linePriceWithTax** — The total for this line (unit price multiplied by quantity, with adjustments applied).
 - **adjustments** — Any discounts from [promotions](/core-concepts/promotions/) that apply to this line.
 
-If a customer adds the same variant twice, Vendure increments the quantity on the existing OrderLine rather than creating a duplicate.
+If a customer adds the same variant twice, Novara Commerce increments the quantity on the existing OrderLine rather than creating a duplicate.
 
 ## Order Interceptors
 
@@ -38,7 +38,7 @@ Interceptors are registered at the server level and run during cart-modifying op
 - **Guest carts** are tied to an anonymous session. If the session expires, the cart is no longer accessible.
 - **Authenticated carts** are associated with a [`Customer`](/reference/typescript-api/entities/customer/) account. The customer can log out and return later to find their cart intact.
 
-When a guest customer logs in, Vendure can merge their anonymous cart with any existing cart on their account, ensuring no items are lost during the transition.
+When a guest customer logs in, Novara Commerce can merge their anonymous cart with any existing cart on their account, ensuring no items are lost during the transition.
 
 ## Custom fields on orders
 

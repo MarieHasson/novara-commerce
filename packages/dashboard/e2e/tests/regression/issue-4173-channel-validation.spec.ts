@@ -2,8 +2,8 @@ import { type Page, expect, test } from '@playwright/test';
 
 import { BaseDetailPage } from '../../page-objects/detail-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4173
-// Fix PR: https://github.com/vendurehq/vendure/pull/4198
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4173
+// Fix PR: https://github.com/MarieHasson/novara-commerce/pull/4198
 //
 // Creating a new channel with missing required fields shows a raw GraphQL error
 // toast instead of inline validation messages on the form fields.

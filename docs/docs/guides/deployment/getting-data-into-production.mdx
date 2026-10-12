@@ -1,7 +1,7 @@
 ---
 title: "Getting data into production"
-metaTitle: "Getting Product and Catalog Data into a Production Vendure Instance"
-metaDescription: "Create the database schema with an initial migration, import initial data and product catalogs, and run custom data-import scripts when deploying Vendure to production."
+metaTitle: "Getting Product and Catalog Data into a Production Novara Commerce Instance"
+metaDescription: "Create the database schema with an initial migration, import initial data and product catalogs, and run custom data-import scripts when deploying Novara Commerce to production."
 order: 4
 ---
 
@@ -16,11 +16,11 @@ The main tasks will be:
 
 ## Creating the initial database schema
 
-The recommended way to create the schema for a new production deployment is to generate an initial migration locally against an empty database. This migration will contain the full database schema for your current Vendure configuration, and can then be committed to source control and run in production in the same way as all later schema changes.
+The recommended way to create the schema for a new production deployment is to generate an initial migration locally against an empty database. This migration will contain the full database schema for your current Novara Commerce configuration, and can then be committed to source control and run in production in the same way as all later schema changes.
 
 To create the initial migration:
 
-1. Point your local Vendure config at an empty database of the same type as production.
+1. Point your local Novara Commerce config at an empty database of the same type as production.
 2. Keep `dbConnectionOptions.synchronize` set to `false`.
 3. Generate an initial migration:
 
@@ -69,8 +69,8 @@ For ongoing schema changes, always use [migrations](/developer-guide/migrations/
 
 ## Importing initial & catalog data
 
-Importing initial and catalog data can be handled by Vendure `populate()` helper function - see the [Importing Product Data guide](/developer-guide/importing-data/).
+Importing initial and catalog data can be handled by Novara Commerce `populate()` helper function - see the [Importing Product Data guide](/developer-guide/importing-data/).
 
 ## Importing other data
 
-Any kinds of data not covered by the `populate()` function can be imported using a custom script, which can use any Vendure service or service defined by your custom plugins to populate data in any way you like. See the [Stand-alone scripts guide](/developer-guide/stand-alone-scripts/).
+Any kinds of data not covered by the `populate()` function can be imported using a custom script, which can use any Novara Commerce service or service defined by your custom plugins to populate data in any way you like. See the [Stand-alone scripts guide](/developer-guide/stand-alone-scripts/).

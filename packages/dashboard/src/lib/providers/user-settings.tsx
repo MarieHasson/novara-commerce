@@ -351,7 +351,7 @@ function logSettingsStoreWarning() {
             ` - Saved views on list pages`,
             ` - Metrics on the Insights page`,
             ``,
-            `https://docs.vendure.io/reference/core-plugins/dashboard-plugin/`,
+            `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/reference/core-plugins/dashboard-plugin/`,
         ].join('\n'),
     );
 }

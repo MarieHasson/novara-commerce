@@ -1,11 +1,11 @@
 ---
 title: "Configuration"
-metaTitle: "Vendure Server Configuration - VendureConfig Reference"
-metaDescription: "Configure your Vendure server with VendureConfig, including API options, authentication, database connections, plugins, and asset storage settings."
+metaTitle: "Novara Commerce Server Configuration - VendureConfig Reference"
+metaDescription: "Configure your Novara Commerce server with VendureConfig, including API options, authentication, database connections, plugins, and asset storage settings."
 order: 3
 ---
 
-Every aspect of the Vendure server is configured via a single, central [`VendureConfig`](/reference/typescript-api/configuration/vendure-config/) object. This object is passed into the [`bootstrap`](/reference/typescript-api/common/bootstrap/) and [`bootstrapWorker`](/reference/typescript-api/worker/bootstrap-worker/) functions to start up the Vendure server and worker respectively.
+Every aspect of the Novara Commerce server is configured via a single, central [`VendureConfig`](/reference/typescript-api/configuration/vendure-config/) object. This object is passed into the [`bootstrap`](/reference/typescript-api/common/bootstrap/) and [`bootstrapWorker`](/reference/typescript-api/worker/bootstrap-worker/) functions to start up the Novara Commerce server and worker respectively.
 
 The `VendureConfig` object is organised into sections, grouping related settings together. For example, [`VendureConfig.apiOptions`](/reference/typescript-api/configuration/api-options/) contains all the config for the GraphQL APIs, whereas [`VendureConfig.authOptions`](/reference/typescript-api/auth/auth-options/) deals with authentication.
 
@@ -129,7 +129,7 @@ export const config: VendureConfig = {
 }
 ```
 
-When you create a Vendure project with `@vendure/create`, it comes with the [dotenv](https://www.npmjs.com/package/dotenv) package installed, which allows you to store environment variables in a `.env` file in the root of your project.
+When you create a Novara Commerce project with `@vendure/create`, it comes with the [dotenv](https://www.npmjs.com/package/dotenv) package installed, which allows you to store environment variables in a `.env` file in the root of your project.
 
 To define new environment variables, you can add them to the `.env` file. For instance, if you are using a plugin that requires
 an API key, you can

@@ -91,7 +91,7 @@ This makes order totals calculations much more "correct" as per most people's ex
 * **cli** Allow new entity features to be selected ([74c69dd](https://github.com/vendure-ecommerce/vendure/commit/74c69dd))
 * **cli** Implement migrations in CLI ([9860abd](https://github.com/vendure-ecommerce/vendure/commit/9860abd))
 * **core** Pass ctx to job queue strategy add (#2759) ([3909251](https://github.com/vendure-ecommerce/vendure/commit/3909251)), closes [#2759](https://github.com/vendure-ecommerce/vendure/issues/2759) [#2758](https://github.com/vendure-ecommerce/vendure/issues/2758)
-* **create** Ship Vendure CLI with new projects ([faf69a9](https://github.com/vendure-ecommerce/vendure/commit/faf69a9))
+* **create** Ship Novara Commerce CLI with new projects ([faf69a9](https://github.com/vendure-ecommerce/vendure/commit/faf69a9))
 
 ## 2.2.0-next.7 (2024-03-20)
 

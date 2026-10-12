@@ -1,10 +1,10 @@
-# Vendure CLI Command Structure
+# Novara Commerce CLI Command Structure
 
 This document describes the CLI command structure that supports both interactive and non-interactive modes, allowing for guided prompts during development and automated execution in CI/CD environments.
 
 ## Overview
 
-The Vendure CLI supports two modes of operation:
+The Novara Commerce CLI supports two modes of operation:
 
 - **Interactive Mode**: Provides guided prompts and menus for easy use during development
 - **Non-Interactive Mode**: Allows direct command execution with arguments and options, perfect for scripting, CI/CD, and AI agents
@@ -118,7 +118,7 @@ if (nonInteractive) {
 
 ### Dev Command
 
-The `dev` command starts the development processes for a Vendure project.
+The `dev` command starts the development processes for a Novara Commerce project.
 
 ```bash
 # Start the server, worker and Dashboard
@@ -152,7 +152,7 @@ handles Dashboard hot updates separately.
 
 ### Build Command
 
-The `build` command builds a Vendure project.
+The `build` command builds a Novara Commerce project.
 
 ```bash
 # Build the server, worker and Dashboard
@@ -214,7 +214,7 @@ npx vendure start all --server-entry ./build/server.js --worker-entry ./build/wo
 
 ### Add Command
 
-The `add` command supports both modes for adding features to your Vendure project.
+The `add` command supports both modes for adding features to your Novara Commerce project.
 
 **Interactive Mode:**
 
@@ -288,7 +288,7 @@ import { runCliCommand } from '../../shared/cli-command-exit';
 
 {
     name: 'add',
-    description: 'Add a feature to your Vendure project',
+    description: 'Add a feature to your Novara Commerce project',
     options: [
         {
             short: '-p',
@@ -444,7 +444,7 @@ External packages add commands, add to existing ones, or replace them by
 exporting a CLI plugin with `defineCliPlugin`.
 
 **The plugin API reference lives in the developer guide**, under
-[Extending the CLI](https://docs.vendure.io/guides/developer-guide/cli/#extending-the-cli): the
+[Extending the CLI](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/guides/developer-guide/cli/#extending-the-cli): the
 `extendCommands` composition model, shared options and their precedence, the
 collision rules, and discovery and activation. That page is the source of truth
 for plugin authors; this file covers what a contributor to the CLI itself needs.

@@ -1,10 +1,10 @@
 ---
 title: "Zones"
-metaTitle: "Zones for Tax and Shipping Configuration in Vendure"
-metaDescription: "Understand how Vendure uses Zones to group countries and regions for tax rate calculation, shipping eligibility, and channel default configuration."
+metaTitle: "Zones for Tax and Shipping Configuration in Novara Commerce"
+metaDescription: "Understand how Novara Commerce uses Zones to group countries and regions for tax rate calculation, shipping eligibility, and channel default configuration."
 ---
 
-A [`Zone`](/reference/typescript-api/entities/zone/) groups one or more countries or regions into a named set that can be referenced by other parts of the system. Zones are the geographic building blocks that Vendure uses to determine which tax rates apply and which shipping methods are available.
+A [`Zone`](/reference/typescript-api/entities/zone/) groups one or more countries or regions into a named set that can be referenced by other parts of the system. Zones are the geographic building blocks that Novara Commerce uses to determine which tax rates apply and which shipping methods are available.
 
 ## What is a Zone?
 
@@ -19,14 +19,14 @@ A country can belong to multiple zones. For example, Germany could be in both an
 
 ## Zones and tax rates
 
-Zones are a core part of [tax configuration](/core-concepts/taxes/). A tax rate in Vendure is defined as a combination of:
+Zones are a core part of [tax configuration](/core-concepts/taxes/). A tax rate in Novara Commerce is defined as a combination of:
 
 - A **tax category** (e.g., "Standard", "Reduced", "Zero-rated")
 - A **Zone** (e.g., "EU", "North America")
 
 This means you can define different tax rates for the same type of product depending on the customer's geographic zone. For example, "Standard" goods might be taxed at 20% in the "UK" zone but 19% in the "Germany" zone.
 
-The active zone for tax calculation is determined by the [`TaxZoneStrategy`](/reference/typescript-api/tax/tax-zone-strategy/). By default, Vendure uses the channel's default tax zone, but you can configure it to use the customer's shipping address instead with the [`AddressBasedTaxZoneStrategy`](/reference/typescript-api/tax/address-based-tax-zone-strategy).
+The active zone for tax calculation is determined by the [`TaxZoneStrategy`](/reference/typescript-api/tax/tax-zone-strategy/). By default, Novara Commerce uses the channel's default tax zone, but you can configure it to use the customer's shipping address instead with the [`AddressBasedTaxZoneStrategy`](/reference/typescript-api/tax/address-based-tax-zone-strategy).
 
 ## Zones and shipping
 
@@ -46,7 +46,7 @@ These defaults are especially important for storefronts that display tax-inclusi
 Zones are managed through the Admin API or the Admin UI. When you create or update a zone, you specify its name and assign country members. Changes to zone membership take effect immediately for new orders, but do not retroactively affect existing orders that were placed under the previous zone configuration.
 
 :::info
-Vendure ships with a set of commonly-used countries pre-defined. You can enable or disable countries and organize them into zones as needed for your business during initial setup or at any time afterwards.
+Novara Commerce ships with a set of commonly-used countries pre-defined. You can enable or disable countries and organize them into zones as needed for your business during initial setup or at any time afterwards.
 :::
 
 ## Common patterns

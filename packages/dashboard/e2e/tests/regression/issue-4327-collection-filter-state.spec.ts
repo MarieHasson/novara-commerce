@@ -2,7 +2,7 @@ import { type Page, expect, test } from '@playwright/test';
 
 import { BaseDetailPage } from '../../page-objects/detail-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/4327
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/4327
 //
 // When adding multiple collection filters of the same type (e.g. two "Filter by
 // product variant name"), the input fields are incorrectly synchronized. Changing

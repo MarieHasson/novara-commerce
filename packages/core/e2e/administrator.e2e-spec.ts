@@ -358,7 +358,7 @@ describe('Administrator resolver', () => {
         expect(login.identifier).toBe('NewAdmin');
     });
 
-    // https://github.com/vendurehq/vendure/issues/1116
+    // https://github.com/MarieHasson/novara-commerce/issues/1116
     describe('password reset', () => {
         const testAdminEmail = 'password-reset-test@test.com';
         const newPassword = 'new-password-123';

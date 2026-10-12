@@ -1191,7 +1191,7 @@ const manifestInput: DocsPackageManifestInput = {
         },
     ],
     github: {
-        repository: 'vendurehq/vendure',
+        repository: 'MarieHasson/novara-commerce',
         branch: 'master',
         docsPath: 'docs',
     },

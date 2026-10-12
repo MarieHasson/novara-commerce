@@ -1,7 +1,7 @@
 ---
 title: 'Localization'
-metaTitle: "Localizing Vendure Dashboard Extensions with Lingui"
-metaDescription: "Localize your Vendure Dashboard extensions with Lingui, and contribute UI translations of the Dashboard itself via a pull request."
+metaTitle: "Localizing Novara Commerce Dashboard Extensions with Lingui"
+metaDescription: "Localize your Novara Commerce Dashboard extensions with Lingui, and contribute UI translations of the Dashboard itself via a pull request."
 ---
 
 :::note
@@ -143,11 +143,11 @@ manager enforces strict dependency resolution (pnpm, or Yarn PnP), add it to you
 
 The sections above cover localizing **your own** extensions. If instead you want to translate the
 built-in Dashboard UI into a new language — or improve an existing translation — those catalogs live
-in the Vendure repository and the change is contributed via a pull request.
+in the Novara Commerce repository and the change is contributed via a pull request.
 
 :::note
 This is for the **React Dashboard** (`@vendure/dashboard`). The legacy Angular Admin UI has its own
-[separate translation workflow](https://github.com/vendurehq/vendure/blob/master/packages/admin-ui/README.md#localization).
+[separate translation workflow](https://github.com/MarieHasson/novara-commerce/blob/master/packages/admin-ui/README.md#localization).
 :::
 
 The Dashboard's own message catalogs live at `packages/dashboard/src/i18n/locales/{locale}.po`, one
@@ -163,7 +163,7 @@ back to English at runtime.
 ### Adding a new language
 
 1. Add the locale code to the `locales` array in `packages/dashboard/lingui.config.js`. It must be a
-   valid [`LanguageCode`](https://docs.vendure.io/reference/typescript-api/common/language-code/)
+   valid [`LanguageCode`](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/reference/typescript-api/common/language-code/)
    value, which uses underscores for region variants (`zh_Hans`, `pt_BR`).
 2. Add the same locale to `defaultAvailableLanguages` in `packages/dashboard/vite/constants.ts`. The
    **Display language** selector is built from this list, so a catalog missing from it can never be

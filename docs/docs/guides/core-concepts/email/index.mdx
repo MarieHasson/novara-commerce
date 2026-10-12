@@ -1,7 +1,7 @@
 ---
 title: "Email & Notifications"
-metaTitle: "Email and Notification System in Vendure"
-metaDescription: "Set up transactional emails with Vendure's EmailPlugin using event-driven handlers, Nodemailer transports, and template variables. Also covers SMS and push."
+metaTitle: "Email and Notification System in Novara Commerce"
+metaDescription: "Set up transactional emails with Novara Commerce's EmailPlugin using event-driven handlers, Nodemailer transports, and template variables. Also covers SMS and push."
 ---
 
 A typical ecommerce application needs to notify customers of certain events, such as when they place an order or
@@ -9,7 +9,7 @@ when their order has been shipped. This is usually done via email, but can also 
 
 ## Email
 
-Email is the most common way to notify customers of events, so a default Vendure installation includes our [EmailPlugin](/reference/core-plugins/email-plugin).
+Email is the most common way to notify customers of events, so a default Novara Commerce installation includes our [EmailPlugin](/reference/core-plugins/email-plugin).
 
 The EmailPlugin by default uses [Nodemailer](https://nodemailer.com/about/) to send emails via a variety of
 different transports, including SMTP, SendGrid, Mailgun, and more.
@@ -26,7 +26,7 @@ Here's an illustration of the flow of an email being sent:
 ![Email plugin flow](./email-plugin-flow.webp)
 
 All emails are triggered by a particular [Event](/developer-guide/events/) - in this case when the state of an
-Order changes. The EmailPlugin ships with a set of [default email handlers](https://github.com/vendurehq/vendure/blob/master/packages/email-plugin/src/handler/default-email-handlers.ts),
+Order changes. The EmailPlugin ships with a set of [default email handlers](https://github.com/MarieHasson/novara-commerce/blob/master/packages/email-plugin/src/handler/default-email-handlers.ts),
 one of which is responsible for sending "order confirmation" emails.
 
 ### EmailEventHandlers
@@ -118,8 +118,8 @@ The EmailPlugin is designed to be flexible enough to work with many different em
 configuration uses Nodemailer to send emails via SMTP, but you can easily configure it to use a different
 transport. For instance:
 
-- [AWS SES](https://www.vendure.io/marketplace/aws-ses)
-- [SendGrid](https://www.vendure.io/marketplace/sendgrid)
+- [AWS SES](https://github.com/MarieHasson/novara-commerce/marketplace/aws-ses)
+- [SendGrid](https://github.com/MarieHasson/novara-commerce/marketplace/sendgrid)
 
 ## Other notification methods
 

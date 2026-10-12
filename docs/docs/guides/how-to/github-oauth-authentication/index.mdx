@@ -1,22 +1,22 @@
 ---
 title: "GitHub OAuth Authentication"
-metaTitle: "Setting Up GitHub OAuth Authentication in Vendure"
-metaDescription: "Implement GitHub OAuth login for your Vendure storefront using a custom AuthenticationStrategy, including frontend callback handling and GraphQL integration."
+metaTitle: "Setting Up GitHub OAuth Authentication in Novara Commerce"
+metaDescription: "Implement GitHub OAuth login for your Novara Commerce storefront using a custom AuthenticationStrategy, including frontend callback handling and GraphQL integration."
 ---
 
 :::info
-The complete source of the following example plugin can be found here: [example-plugins/github-auth-plugin](https://github.com/vendurehq/examples/tree/publish/examples/shop-github-auth)
+The complete source of the following example plugin can be found here: [example-plugins/github-auth-plugin](https://github.com/MarieHasson/examples/tree/publish/examples/shop-github-auth)
 :::
 
 GitHub OAuth authentication allows customers to sign in using their GitHub accounts, eliminating the need for password-based registration.
 
 This is particularly valuable for developer-focused stores or B2B marketplaces.
 
-This guide shows you how to add GitHub OAuth support to your Vendure store using a custom [AuthenticationStrategy](/reference/typescript-api/auth/authentication-strategy/).
+This guide shows you how to add GitHub OAuth support to your Novara Commerce store using a custom [AuthenticationStrategy](/reference/typescript-api/auth/authentication-strategy/).
 
 ## Creating the Plugin
 
-First, use the Vendure CLI to create a new plugin for GitHub authentication:
+First, use the Novara Commerce CLI to create a new plugin for GitHub authentication:
 
 ```bash
 npx vendure add -p GitHubAuthPlugin
@@ -119,7 +119,7 @@ export class GitHubAuthenticationStrategy implements AuthenticationStrategy<GitH
       throw new Error('Unable to retrieve a primary email address from GitHub');
     }
 
-    // Step 4: Check if this GitHub user already has a Vendure account
+    // Step 4: Check if this GitHub user already has a Novara Commerce account
     const existingCustomer = await this.externalAuthenticationService.findCustomerUser(
       ctx,
       this.name,
@@ -150,7 +150,7 @@ export class GitHubAuthenticationStrategy implements AuthenticationStrategy<GitH
 }
 ```
 
-The strategy uses Vendure's [ExternalAuthenticationService](/reference/typescript-api/auth/external-authentication-service/) to handle customer creation.
+The strategy uses Novara Commerce's [ExternalAuthenticationService](/reference/typescript-api/auth/external-authentication-service/) to handle customer creation.
 
 It uses the GitHub account's primary email address and only marks the account as `verified` when GitHub reports that email as verified, and stores the GitHub username as the external identifier for future logins.
 
@@ -180,9 +180,9 @@ export class GitHubAuthPlugin {
 }
 ```
 
-## Adding to Vendure Config
+## Adding to Novara Commerce Config
 
-Add the plugin to your Vendure configuration:
+Add the plugin to your Novara Commerce configuration:
 
 ```ts title="src/vendure-config.ts"
 import { VendureConfig } from '@vendure/core';
@@ -208,7 +208,7 @@ Before you can test the integration, you need to create a GitHub OAuth App:
 1. Go to [GitHub Settings → Developer settings → OAuth Apps](https://github.com/settings/developers)
 2. Click "New OAuth App"
 3. Fill in the required fields:
-   - **Application name**: Your app name (e.g., "My Vendure Store")
+   - **Application name**: Your app name (e.g., "My Novara Commerce Store")
    - **Homepage URL**: `http://localhost:3001` (your storefront URL)
    - **Authorization callback URL**: `http://localhost:3001/auth/github/callback`
 4. Click "Register application"
@@ -247,7 +247,7 @@ export function createGitHubSignInUrl(): string {
 
 ### Handling the Callback
 
-Create a callback handler to process the GitHub response and authenticate with Vendure:
+Create a callback handler to process the GitHub response and authenticate with Novara Commerce:
 
 ```typescript title="pages/auth/github/callback.ts"
 import { gql } from 'graphql-request';
@@ -282,7 +282,7 @@ export async function handleGitHubCallback(code: string, state: string) {
 
   sessionStorage.removeItem('github_oauth_state');
 
-  // Authenticate with Vendure
+  // Authenticate with Novara Commerce
   const result = await vendureClient.request(AUTHENTICATE_MUTATION, {
     input: { code, state }
   });
@@ -301,7 +301,7 @@ The OAuth flow follows these steps:
 
 1. User clicks "Sign in with GitHub" → redirected to GitHub
 2. User authorizes your app → GitHub redirects back with code and state
-3. Your callback exchanges the code for user data → creates Vendure session
+3. Your callback exchanges the code for user data → creates Novara Commerce session
 
 ## Using the GraphQL API
 
@@ -362,21 +362,21 @@ mutation AuthenticateWithGitHub {
 
 ## Customer Data Management
 
-GitHub-authenticated customers are managed like any other Vendure [Customer](/reference/typescript-api/entities/customer/):
+GitHub-authenticated customers are managed like any other Novara Commerce [Customer](/reference/typescript-api/entities/customer/):
 
 - **Email**: The GitHub account's primary email address
 - **Verification**: Derived from GitHub's `verified` flag on the primary email — only verified emails mark the account as verified
 - **External ID**: GitHub username stored for future authentication
 - **Profile**: Name extracted from GitHub profile when available
 
-This means GitHub users work seamlessly with Vendure's [order management](/core-concepts/orders/), [promotions](/core-concepts/promotions/), and customer workflows.
+This means GitHub users work seamlessly with Novara Commerce's [order management](/core-concepts/orders/), [promotions](/core-concepts/promotions/), and customer workflows.
 
 ## Testing the Integration
 
 To test your GitHub OAuth integration:
 
-1. Start your Vendure server with the plugin configured
+1. Start your Novara Commerce server with the plugin configured
 2. Navigate to your storefront and click the GitHub sign-in link
 3. Authorize your GitHub app when prompted
-4. Verify that a new customer is created in the Vendure Dashboard
+4. Verify that a new customer is created in the Novara Commerce Dashboard
 5. Check that subsequent logins find the existing customer account

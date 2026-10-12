@@ -1,6 +1,6 @@
 # Dependency tracker
 
-Tooling for the Vendure dependency-audit effort. Records the supply-chain
+Tooling for the Novara Commerce dependency-audit effort. Records the supply-chain
 surface area of each published `@vendure/*` package and tracks how it shrinks
 as we land each stage of the audit.
 

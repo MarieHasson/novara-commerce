@@ -5,7 +5,7 @@ import { Order, Sale } from '../../../entity';
 import { mergeDeep } from './merge-deep';
 
 describe('mergeDeep()', () => {
-    // https://github.com/vendurehq/vendure/issues/2864
+    // https://github.com/MarieHasson/novara-commerce/issues/2864
     it('should sync the order of sub relations', () => {
         const prefetched = new Order({
             lines: [
@@ -43,7 +43,7 @@ describe('mergeDeep()', () => {
         expect(line2?.productVariant?.id).toBe('variant-of-line-2');
     });
 
-    // https://github.com/vendurehq/vendure/issues/4935
+    // https://github.com/MarieHasson/novara-commerce/issues/4935
     // A source object shared by multiple targets (e.g. two order lines referencing the
     // same ProductVariant instance) must be merged into every referencing target, not
     // just the first. Previously the persistent `visited` set treated the shared
@@ -69,7 +69,7 @@ describe('mergeDeep()', () => {
         expect(merged[1].productVariant.facetValues?.[0].facet.code).toBe('weight');
     });
 
-    // https://github.com/vendurehq/vendure/issues/4955 (OSS-642)
+    // https://github.com/MarieHasson/novara-commerce/issues/4955 (OSS-642)
     // A target relation array can contain undefined holes (e.g. surcharges / payments /
     // shippingLines after OrderPlacedEvent). The id-based reordering must not dereference
     // those holes — otherwise mergeDeep throws `Cannot read properties of undefined`,
@@ -103,7 +103,7 @@ describe('mergeDeep()', () => {
         expect(merged[2].id).toBe(3);
     });
 
-    // https://github.com/vendurehq/vendure/issues/5083
+    // https://github.com/MarieHasson/novara-commerce/issues/5083
     it('should merge each object once rather than once per path', () => {
         const depth = 22;
         // `depth + 2` distinct objects, 2 ^ (depth + 1) distinct paths to the leaf, no cycles.
@@ -171,7 +171,7 @@ describe('mergeDeep()', () => {
         expect(merged.direct.child.existing).toBe('yes');
     });
 
-    // https://github.com/vendurehq/vendure/issues/5428
+    // https://github.com/MarieHasson/novara-commerce/issues/5428
     // e.g. ShippingMethod.allCheckers: each entity gets its own hash, but the values are the
     // configured checker singletons, which reference the (cyclic) DI graph.
     it('should not walk an instance shared by target and source', () => {

@@ -1,6 +1,6 @@
-# Vendure GraphiQL Plugin
+# Novara Commerce GraphiQL Plugin
 
-This plugin adds separate GraphiQL playgrounds for the Admin API and Shop API to your Vendure server.
+This plugin adds separate GraphiQL playgrounds for the Admin API and Shop API to your Novara Commerce server.
 
 ## Installation
 
@@ -16,7 +16,7 @@ yarn add @vendure/graphiql-plugin
 
 ## Usage
 
-Add the plugin to your Vendure config:
+Add the plugin to your Novara Commerce config:
 
 ```typescript
 import { GraphiqlPlugin } from '@vendure/graphiql-plugin';
@@ -38,14 +38,14 @@ export const config: VendureConfig = {
 - Separate GraphiQL playground UIs at:
     - `/graphiql/admin` - Admin API playground
     - `/graphiql/shop` - Shop API playground
-- Automatic detection of API paths from your Vendure configuration
+- Automatic detection of API paths from your Novara Commerce configuration
 - Easy navigation between Admin and Shop APIs
 - Modern, responsive UI
 - Built with Vite and React
 
 ## Custom API paths
 
-By default, the plugin automatically reads the Admin API and Shop API paths from your Vendure configuration.
+By default, the plugin automatically reads the Admin API and Shop API paths from your Novara Commerce configuration.
 
 If you need to override these paths, you can specify them explicitly:
 

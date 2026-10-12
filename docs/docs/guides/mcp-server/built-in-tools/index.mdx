@@ -1,7 +1,7 @@
 ---
 title: 'Built-in Tool Reference'
-metaTitle: 'MCP Built-in Tool Reference | Vendure'
-metaDescription: 'The 42 tools the Vendure MCP plugin ships — 18 shop and 24 admin — grouped by area, with their safety classification, permissions, and how tool exposure and confirmation work.'
+metaTitle: 'MCP Built-in Tool Reference | Novara Commerce'
+metaDescription: 'The 42 tools the Novara Commerce MCP plugin ships — 18 shop and 24 admin — grouped by area, with their safety classification, permissions, and how tool exposure and confirmation work.'
 order: 9
 ---
 
@@ -148,7 +148,7 @@ These rules apply to many tools at once.
 ### How prices are returned
 
 Prices on products, variants, orders and shipping quotes appear twice. The plain field is a whole number in the
-currency's smallest unit, which is what Vendure stores and what you should use for any calculation. The field
+currency's smallest unit, which is what Novara Commerce stores and what you should use for any calculation. The field
 whose name ends in `Decimal` is the same amount written out with the decimal point in the right place. Show that
 one to a shopper, or hand it to a language model.
 
@@ -179,7 +179,7 @@ Order and cart responses contain:
   cart tools leave the field out altogether, because an open cart has no shipments to report.
 - `couponCodes` and `discounts` are always included, with discounts grouped by promotion. Discount amounts are
   negative and include both standard and `Decimal` values.
-- An order returned with a Vendure error, such as insufficient stock, has the same shape as a successful result.
+- An order returned with a Novara Commerce error, such as insufficient stock, has the same shape as a successful result.
 
 A valid coupon does not always reduce the cart price. It may appear in `couponCodes` without changing the total
 or `discounts`, so compare these fields with the previous cart before reporting a discount.
@@ -263,8 +263,8 @@ Notes on the tools whose behavior is not obvious from the tables. Tools not list
 - Refused: a call with none of `shippingAddress`, `billingAddress`, `billingSameAsShipping`, or `customer`, and
   a call with both `billingAddress` and `billingSameAsShipping`.
 
-A new shipping address can make the shipping method the shopper already chose ineligible. Vendure then swaps
-the cart's shipping line to the cheapest method that is still eligible, or drops the line when none is. Vendure
+A new shipping address can make the shipping method the shopper already chose ineligible. Novara Commerce then swaps
+the cart's shipping line to the cheapest method that is still eligible, or drops the line when none is. Novara Commerce
 does either without reporting it, so the tool reports it instead:
 
 - The response carries `shippingMethodChanged: true` and a `message` saying which of the two happened.
@@ -282,11 +282,11 @@ does either without reporting it, so the tool reports it instead:
 
 | Status | When |
 |---|---|
-| `placed` | Vendure placed the order |
+| `placed` | Novara Commerce placed the order |
 | `awaiting_payment` | Any other outcome, including partial payments and a provider redirect in the payment's `publicMetadata` |
 
 - An order in `ArrangingPayment` cannot be edited until paid in full.
-- Vendure's default order process requires a customer, so its refusal names `set_checkout_details`. Stores that
+- Novara Commerce's default order process requires a customer, so its refusal names `set_checkout_details`. Stores that
   change `arrangingPaymentRequiresCustomer` or replace the process get their process's answer.
 
 ### `search_products`

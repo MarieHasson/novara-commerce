@@ -1,7 +1,7 @@
 ---
 title: "Facets & Filters"
-metaTitle: "Facets and Facet Values for Catalog Filtering in Vendure"
-metaDescription: "Learn how Vendure uses Facets and FacetValues to organize, filter, and drive logic across your product catalog, collections, promotions, and shipping."
+metaTitle: "Facets and Facet Values for Catalog Filtering in Novara Commerce"
+metaDescription: "Learn how Novara Commerce uses Facets and FacetValues to organize, filter, and drive logic across your product catalog, collections, promotions, and shipping."
 ---
 
 Facets are the primary mechanism for attaching structured, queryable metadata to your catalog. A [`Facet`](/reference/typescript-api/entities/facet/) represents a label category — such as "Brand", "Material", or "Season" — and contains one or more [`FacetValues`](/reference/typescript-api/entities/facet-value/) representing specific entries within that category, like "Nike", "Cotton", or "Summer 2025".
@@ -17,7 +17,7 @@ FacetValues can be assigned to [`Products`](/reference/typescript-api/entities/p
 
 ## Three primary use cases
 
-Facets serve three distinct purposes in Vendure, all built on the same underlying data model:
+Facets serve three distinct purposes in Novara Commerce, all built on the same underlying data model:
 
 ### 1. Collection basis
 
@@ -45,7 +45,7 @@ This is useful for facets that drive internal logic — like a "Warehouse Locati
 
 ## Facet values and custom fields
 
-Like most Vendure entities, both Facets and FacetValues support [custom fields](/developer-guide/custom-fields/). This allows you to attach additional data to facet values — for example, a hex color code on "Color" facet values for rendering color swatches in your storefront, or an icon identifier for category facets.
+Like most Novara Commerce entities, both Facets and FacetValues support [custom fields](/developer-guide/custom-fields/). This allows you to attach additional data to facet values — for example, a hex color code on "Color" facet values for rendering color swatches in your storefront, or an icon identifier for category facets.
 
 ## Channel awareness
 

@@ -1,21 +1,21 @@
 ---
 title: "Cache"
-metaTitle: "Caching in Vendure - DefaultCachePlugin and Redis Setup"
-metaDescription: "Configure distributed caching in Vendure using the DefaultCachePlugin or Redis-based CachePlugin to boost performance in production deployments."
+metaTitle: "Caching in Novara Commerce - DefaultCachePlugin and Redis Setup"
+metaDescription: "Configure distributed caching in Novara Commerce using the DefaultCachePlugin or Redis-based CachePlugin to boost performance in production deployments."
 ---
 
 Caching is a technique to improve performance of a system by saving the results of expensive
 operations and reusing them when the same operation is requested again.
 
-Vendure uses caching in a number of places to improve performance, and the same caching
+Novara Commerce uses caching in a number of places to improve performance, and the same caching
 mechanism is available for use in custom plugins.
 
 ## Setting up the cache
 
-In order to take advantage of Vendure distributed caching, you need to enable a cache plugin.
+In order to take advantage of Novara Commerce distributed caching, you need to enable a cache plugin.
 
 :::note
-If no cache plugin is specified, Vendure uses an in-memory cache which is not shared between instances.
+If no cache plugin is specified, Novara Commerce uses an in-memory cache which is not shared between instances.
 This is suitable for development, but not recommended for production use.
 :::
 
@@ -45,7 +45,7 @@ tables to the database.
 
 ### RedisCachePlugin
 
-Vendure also provides a [RedisCachePlugin](/reference/typescript-api/cache/redis-cache-plugin) which uses a Redis
+Novara Commerce also provides a [RedisCachePlugin](/reference/typescript-api/cache/redis-cache-plugin) which uses a Redis
 server to store the cache data and can have better performance characteristics.
 
 ```ts title="vendure-config.ts"
@@ -76,7 +76,7 @@ the actual storage and retrieval of the data. The `CacheService` provides a cons
 regardless of the underlying cache strategy.
 
 :::info
-From Vendure v3.1, new projects are created with the [DefaultCachePlugin](/reference/typescript-api/cache/default-cache-plugin) enabled by default. This plugin
+From Novara Commerce v3.1, new projects are created with the [DefaultCachePlugin](/reference/typescript-api/cache/default-cache-plugin) enabled by default. This plugin
 uses the database to store the cache data. This is a simple and effective cache strategy which is suitable
 for most use-cases.
 
@@ -86,7 +86,7 @@ server to store the cache data and can have better performance characteristics.
 
 ### Multi-instance use
 
-It is common to run Vendure in a multi-instance setup, where multiple instances of the server and worker are
+It is common to run Novara Commerce in a multi-instance setup, where multiple instances of the server and worker are
 running in parallel.
 
 The `CacheService` is designed to work in this environment. Both the [DefaultCachePlugin](/reference/typescript-api/cache/default-cache-plugin)
@@ -232,7 +232,7 @@ for the duration of a single request, but not across multiple requests.
 This can be especially useful in resolvers, where you may want to cache the result of a specific resolved
 field which may be requested multiple times within the same request.
 
-For example, in Vendure core, when dealing with product lists, there's a particular very hot
+For example, in Novara Commerce core, when dealing with product lists, there's a particular very hot
 code path that is used to calculate the correct prices to return for each product. As part of this
 calculation, we need to know the active tax zone, which can be expensive to calculate newly
 for each product. We use the `RequestContextCacheService` to cache the active tax zone for the

@@ -3,8 +3,8 @@ import { type Page, expect, test } from '@playwright/test';
 import { BaseDetailPage } from '../../page-objects/detail-page.base.js';
 import { BaseListPage } from '../../page-objects/list-page.base.js';
 
-// Regression: https://github.com/vendurehq/vendure/issues/3941
-// Fix PR: https://github.com/vendurehq/vendure/pull/4346
+// Regression: https://github.com/MarieHasson/novara-commerce/issues/3941
+// Fix PR: https://github.com/MarieHasson/novara-commerce/pull/4346
 //
 // The customer group detail page had no bulk action to remove customers from a group.
 // Selecting customers and clicking "With selected" showed an empty action popup.

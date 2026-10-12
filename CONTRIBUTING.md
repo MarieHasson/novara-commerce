@@ -1,8 +1,8 @@
 # Contribution Guidelines
 
-Hi! Thank you for taking the time to contribute to Vendure!
+Hi! Thank you for taking the time to contribute to Novara Commerce!
 
-In order to make the best use of both your time and that of the Vendure maintainers, please follow the guidelines in this document.
+In order to make the best use of both your time and that of the Novara Commerce maintainers, please follow the guidelines in this document.
 
 ## Table of Contents
 
@@ -30,7 +30,7 @@ In order to make the best use of both your time and that of the Vendure maintain
 
 ### Creating a fork
 
-Start by creating a fork of the repository. This can be done by navigating to our [repository](https://github.com/vendurehq/vendure) and clicking on the fork button. This creates your own copy under your GitHub account. We recommend keeping "vendure" as the name of the fork.
+Start by creating a fork of the repository. This can be done by navigating to our [repository](https://github.com/MarieHasson/novara-commerce) and clicking on the fork button. This creates your own copy under your GitHub account. We recommend keeping "vendure" as the name of the fork.
 
 ### Cloning locally
 
@@ -41,10 +41,10 @@ git clone https://github.com/YOUR-USERNAME/vendure.git
 cd vendure
 ```
 
-Add the [Vendure repository](https://github.com/vendurehq/vendure) as the upstream remote to your clone:
+Add the [Novara Commerce repository](https://github.com/MarieHasson/novara-commerce) as the upstream remote to your clone:
 
 ```bash
-git remote add upstream https://github.com/vendurehq/vendure.git
+git remote add upstream https://github.com/MarieHasson/novara-commerce.git
 ```
 
 This lets you pull updates from the original repository directly to your local clone.
@@ -91,17 +91,17 @@ git push origin master
 ## Setting up the dev environment
 
 > [!IMPORTANT]
-> The following instructions are for those who want to develop the Vendure core framework or plugins (e.g. if you intend to make a pull request). For instructions on how to build a project _using_ Vendure, please see the [Getting Started guide](https://docs.vendure.io/guides/getting-started/installation/).
+> The following instructions are for those who want to develop the Novara Commerce core framework or plugins (e.g. if you intend to make a pull request). For instructions on how to build a project _using_ Novara Commerce, please see the [Getting Started guide](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/guides/getting-started/installation/).
 
 ### Prerequisites
 
 - Node.js `^20.19.0 || >=22.12.0`
 - [Bun](https://bun.sh/) — the canonical package manager for this repo. Install via `curl -fsSL https://bun.sh/install | bash` or one of the [other supported methods](https://bun.sh/docs/installation).
 
-We use Bun (not npm) for installing dependencies because it provides two security features that defend against supply-chain attacks: a configurable minimum-release-age check on dependencies and an explicit `trustedDependencies` allow-list for packages whose lifecycle scripts we permit to run. See [#4674](https://github.com/vendurehq/vendure/issues/4674) for the rationale.
+We use Bun (not npm) for installing dependencies because it provides two security features that defend against supply-chain attacks: a configurable minimum-release-age check on dependencies and an explicit `trustedDependencies` allow-list for packages whose lifecycle scripts we permit to run. See [#4674](https://github.com/MarieHasson/novara-commerce/issues/4674) for the rationale.
 
 > [!WARNING]
-> Always use `bun install` inside this repo. Running `npm install` will produce a `node_modules` that drifts from `bun.lock`, breaking CI parity. Vendure consumers (people installing `@vendure/core` and friends in their own projects) are unaffected — they can use whatever package manager they like.
+> Always use `bun install` inside this repo. Running `npm install` will produce a `node_modules` that drifts from `bun.lock`, breaking CI parity. Novara Commerce consumers (people installing `@vendure/core` and friends in their own projects) are unaffected — they can use whatever package manager they like.
 
 ### 1. Install top-level dependencies
 
@@ -140,7 +140,7 @@ docker compose up -d elasticsearch
 
 ### 4. Populate test data
 
-Vendure uses [TypeORM](http://typeorm.io) and officially supports **MySQL**, **MariaDB**, **PostgreSQL**, and **SQLite**.
+Novara Commerce uses [TypeORM](http://typeorm.io) and officially supports **MySQL**, **MariaDB**, **PostgreSQL**, and **SQLite**.
 
 The first step is to populate the dev server with some test data:
 
@@ -180,7 +180,7 @@ cd packages/dev-server
 bun run dev
 ```
 
-This will start the development server, and you should see output in your terminal indicating that the **Vendure development server** has successfully started.
+This will start the development server, and you should see output in your terminal indicating that the **Novara Commerce development server** has successfully started.
 
 The output lists the available endpoints for the Shop API, Admin API, GraphiQL interfaces, asset server, development mailbox, and the Admin UI, along with their respective URLs.
 
@@ -309,7 +309,7 @@ If you have the [GitHub CLI](https://cli.github.com/) installed, run:
 ```bash
 gh pr create
 ```
-and follow the prompts - this will automatically use our [pull request template](https://github.com/vendurehq/vendure/blob/master/.github/pull_request_template.md).
+and follow the prompts - this will automatically use our [pull request template](https://github.com/MarieHasson/novara-commerce/blob/master/.github/pull_request_template.md).
 
 **Option B: Using GitHub Web Interface**
 
@@ -438,7 +438,7 @@ If you're getting `Error: Bindings not found.`, please run `bun install --force`
 
 Certain packages have e2e tests, which are located at `/packages/<n>/e2e/`. All e2e tests can be run by running `bun run e2e` from the root directory, or individually by running it from the package directory.
 
-e2e tests use the `@vendure/testing` package. For details of how the setup works, see the [Testing docs](https://docs.vendure.io/guides/developer-guide/testing/).
+e2e tests use the `@vendure/testing` package. For details of how the setup works, see the [Testing docs](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/guides/developer-guide/testing/).
 
 When **debugging e2e tests**, set an environment variable `E2E_DEBUG=true` which will increase the global Jest timeout and allow you to step through the e2e tests without the tests automatically failing due to timeout.
 
@@ -467,7 +467,7 @@ Publishing itself happens in CI, not locally: it is triggered by creating the Gi
 Create a GitHub release based on the tag generated by Lerna. This triggers the "Publish to NPM" workflow, which builds and **stages** each package via `npm stage publish`. Packages are signed with provenance attestations, which [trusted publishing generates automatically](https://docs.npmjs.com/trusted-publishers/).
 
 > [!IMPORTANT]
-> Staged packages are **not yet live** on npm. They sit in npm's [staging area](https://www.npmjs.com/settings/~/staged-packages) awaiting manual approval. This is a deliberate supply-chain safeguard: a release only goes public after a maintainer approves it with 2FA, so a compromised CI run cannot publish to the `latest` tag on its own. See [#4772](https://github.com/vendurehq/vendure/issues/4772) for the rationale.
+> Staged packages are **not yet live** on npm. They sit in npm's [staging area](https://www.npmjs.com/settings/~/staged-packages) awaiting manual approval. This is a deliberate supply-chain safeguard: a release only goes public after a maintainer approves it with 2FA, so a compromised CI run cannot publish to the `latest` tag on its own. See [#4772](https://github.com/MarieHasson/novara-commerce/issues/4772) for the rationale.
 
 #### 4. Approve the staged packages
 
@@ -490,7 +490,7 @@ Note that releases are therefore no longer fire-and-forget: coordinate any annou
 
 ### Contributing to the documentation
 
-For our [documentation](https://docs.vendure.io/), we use [Docusaurus](https://docusaurus.io/).
+For our [documentation](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/), we use [Docusaurus](https://docusaurus.io/).
 
 After [setting up your development environment](#setting-up-the-dev-environment), navigate to the docs directory and start the docusaurus server:
 ```bash
@@ -500,7 +500,7 @@ bun run start
 
 this will output a URL where you can preview your changes.
 
-You can find all of our documentation built by docusaurus in these directories: 
+You can find all of our documentation built by docusaurus in these directories:
 
 ```
 docs/docs
@@ -510,23 +510,23 @@ docs/docs
 ```
 
 > [!NOTE]
-> Files in the [reference](https://docs.vendure.io/reference/) directory are auto-generated. To edit reference documentation, modify the [JSDoc](https://jsdoc.app/about-getting-started) comments in the source code and run `bun run docs:build` from the project root directory.
+> Files in the [reference](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/reference/) directory are auto-generated. To edit reference documentation, modify the [JSDoc](https://jsdoc.app/about-getting-started) comments in the source code and run `bun run docs:build` from the project root directory.
 
 ### Contributing to the Dashboard / Admin UI translations
 
 If you wish to contribute translations into another language (or improve an existing set of translations):
 
-- **React Dashboard** (`@vendure/dashboard`) — see [Contributing a translation of the Dashboard itself](https://docs.vendure.io/guides/extending-the-dashboard/localization/#contributing-a-translation-of-the-dashboard-itself) in the Localization guide.
-- **Legacy Angular Admin UI** (`@vendure/admin-ui`) — see the [Localization guide](https://github.com/vendurehq/vendure/blob/master/packages/admin-ui/README.md#localization) in the admin-ui package.
+- **React Dashboard** (`@vendure/dashboard`) — see [Contributing a translation of the Dashboard itself](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/guides/extending-the-dashboard/localization/#contributing-a-translation-of-the-dashboard-itself) in the Localization guide.
+- **Legacy Angular Admin UI** (`@vendure/admin-ui`) — see the [Localization guide](https://github.com/MarieHasson/novara-commerce/blob/master/packages/admin-ui/README.md#localization) in the admin-ui package.
 
 ## Help & Support
 
 ### Where to get help
 
 We have an active discord community, join us there and ask away!
-[Vendure Discord](https://www.vendure.io/community) 
+[Novara Commerce Discord](https://github.com/MarieHasson/novara-commerce/community)
 
-Read the documentation - Our comprehensive [documentation](https://docs.vendure.io/) covers everything you need to know about Vendure. It also includes guides and references for the tools that we use.
+Read the documentation - Our comprehensive [documentation](https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/) covers everything you need to know about Novara Commerce. It also includes guides and references for the tools that we use.
 
 In case your pull request doesn't meet our requirements, we're here to help! We'll provide thorough reviews with clear guidance on how to get your contribution merged.
 

@@ -1,12 +1,12 @@
 ---
 title: Introducing GraphQL
-metaTitle: "GraphQL Basics for Vendure Developers"
-metaDescription: "A developer-friendly introduction to GraphQL concepts used in Vendure: queries, mutations, types, fragments, variables, union types, and IDE tooling."
+metaTitle: "GraphQL Basics for Novara Commerce Developers"
+metaDescription: "A developer-friendly introduction to GraphQL concepts used in Novara Commerce: queries, mutations, types, fragments, variables, union types, and IDE tooling."
 ---
 
 :::info
 
-Vendure uses [GraphQL](https://graphql.org/) as its API layer.
+Novara Commerce uses [GraphQL](https://graphql.org/) as its API layer.
 
 This is an introduction to GraphQL for those who are new to it. If you are already familiar with GraphQL, you may choose
 to skip this section.
@@ -45,7 +45,7 @@ If you are familiar with REST-style APIs, you may be wondering how GraphQL diffe
 
 ## Why GraphQL?
 
-Both GraphQL and REST are valid approaches to building an API. These are some of the reasons we chose GraphQL when building Vendure:
+Both GraphQL and REST are valid approaches to building an API. These are some of the reasons we chose GraphQL when building Novara Commerce:
 
 - **No over-fetching**: With REST, you often end up fetching more data than you need. For example, if you want to fetch a list of products, you might end up fetching the product name, description, price, and other fields. With GraphQL, you can specify exactly which fields you want to fetch, so you only fetch the data you need. This
     can result in a significant reduction in the amount of data transferred over the network.
@@ -53,7 +53,7 @@ Both GraphQL and REST are valid approaches to building an API. These are some of
 - **Static typing**: GraphQL APIs are always defined by a statically typed schema. This means that you can be sure that the data you receive from the API will always be in the format you expect.
 - **Developer tooling**: The schema definition allows for powerful developer tooling. For example, the GraphQL Playground above with auto-complete and full documentation is generated automatically from the schema definition. You can also get auto-complete and type-checking directly in your IDE.
 - **Code generation**: TypeScript types can be generated automatically from the schema definition. This means that you can be sure that your frontend code is always in sync with the API. This end-to-end type safety is extremely valuable, especially when working on large projects or with teams. See the [GraphQL Code Generation guide](/storefront/codegen/)
-- **Extensible**: Vendure is designed with extensibility in mind, and GraphQL is a perfect fit. You can extend the GraphQL API with your own custom queries, mutations, and types. You can also extend the built-in types with your own custom fields, or supply you own custom logic to resolve existing fields. See the [Extend the GraphQL API guide](/developer-guide/extend-graphql-api/)
+- **Extensible**: Novara Commerce is designed with extensibility in mind, and GraphQL is a perfect fit. You can extend the GraphQL API with your own custom queries, mutations, and types. You can also extend the built-in types with your own custom fields, or supply you own custom logic to resolve existing fields. See the [Extend the GraphQL API guide](/developer-guide/extend-graphql-api/)
 
 ## GraphQL Terminology
 
@@ -76,7 +76,7 @@ type Customer {
 The `Customer` is an **object type**, and it has three **fields**: `id`, `name`, and `email`. Each field has a **type** (e.g. `ID!` or `String!`), which
 can refer to either a **scalar type** (a "primitive" type which does not have any fields, but represents a single value) or another object type.
 
-GraphQL has a number of built-in scalar types, including `ID`, `String`, `Int`, `Float`, `Boolean`. Vendure further defines a few custom scalar types: `DateTime`, `JSON`, `Upload` & `Money`.
+GraphQL has a number of built-in scalar types, including `ID`, `String`, `Int`, `Float`, `Boolean`. Novara Commerce further defines a few custom scalar types: `DateTime`, `JSON`, `Upload` & `Money`.
 It is also possible to define your own custom scalar types if required.
 
 The `!` symbol after the type name indicates that the field is **required** (it cannot be `null`). If a field does not have the `!` symbol, it is **optional** (it can be `null`).
@@ -104,7 +104,7 @@ Here the `Order` type has a field called `customer` which is of type `Customer`.
 In GraphQL, lists are denoted by square brackets (`[]`). The `!` symbol inside the square brackets indicates that the list cannot contain `null` values.
 
 :::note
-The types given here are not the actual types used in the Vendure GraphQL schema, but are used here for illustrative purposes.
+The types given here are not the actual types used in the Novara Commerce GraphQL schema, but are used here for illustrative purposes.
 :::
 
 ### Query & Mutation types
@@ -156,7 +156,7 @@ Input types look just like object types, but with the `input` keyword rather tha
 
 The schema is the complete definition of the GraphQL API. It defines the types, fields, queries and mutations which are available.
 
-In a GraphQL API like Vendure, you can only query data according to the fields which are defined in the schema.
+In a GraphQL API like Novara Commerce, you can only query data according to the fields which are defined in the schema.
 
 Here is a complete, minimal schema:
 
@@ -394,7 +394,7 @@ type EmailAddressInUseError {
 ```
 
 :::info
-In Vendure, we use this pattern for almost all mutations. You can read more about it in the [Error Handling guide](/developer-guide/error-handling/).
+In Novara Commerce, we use this pattern for almost all mutations. You can read more about it in the [Error Handling guide](/developer-guide/error-handling/).
 :::
 
 Now, when we perform this mutation, we need alter the way we select the fields in the response, since the response could be one of two types:
@@ -478,17 +478,17 @@ The schema defines the _shape_ of the data, but it does not define _how_ the dat
 A resolver is a function which is responsible for fetching the data for a particular field. For example, the `customers` field on the `Query` type
 would be resolved by a function which fetches the list of customers from the database.
 
-To get started with Vendure's APIs, you don't need to know much about resolvers beyond this basic understanding. However,
+To get started with Novara Commerce's APIs, you don't need to know much about resolvers beyond this basic understanding. However,
 later on you may want to write your own custom resolvers to extend the API. This is covered in the [Extending the GraphQL API guide](/developer-guide/extend-graphql-api/).
 
 ## Querying data
 
-Now that we have a basic understanding of the GraphQL type system, let's look at how we can use it to query data from the Vendure API.
+Now that we have a basic understanding of the GraphQL type system, let's look at how we can use it to query data from the Novara Commerce API.
 
 In REST terms, a GraphQL query is equivalent to a GET request. It is used to fetch data from the API. Queries should not change any
 data on the server.
 
-This is a GraphQL Playground running on a real Vendure server. You can run the query by clicking the "play" button in the
+This is a GraphQL Playground running on a real Novara Commerce server. You can run the query by clicking the "play" button in the
 middle of the two panes.
 
 <Playground api="shop" document={`
@@ -552,7 +552,7 @@ For more information see the [GraphQL Code Generation guide](/storefront/codegen
 
 ## Further reading
 
-This is just a very brief overview, intended to introduce you to the main concepts you'll need to build with Vendure.
+This is just a very brief overview, intended to introduce you to the main concepts you'll need to build with Novara Commerce.
 There are many more language features and best practices to learn about which we did not cover here.
 
 Here are some resources you can use to gain a deeper understanding of GraphQL:

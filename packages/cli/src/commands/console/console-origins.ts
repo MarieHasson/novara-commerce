@@ -15,16 +15,16 @@
 /** An official Console deployment. Anything else is not official. */
 export type ConsoleOriginEnvironment = 'production' | 'staging';
 
-export const DEFAULT_CONSOLE_URL = 'https://console.vendure.io';
-export const DEFAULT_CONSOLE_API_URL = 'https://api.vendure.io';
+export const DEFAULT_CONSOLE_URL = 'https://console.example.com';
+export const DEFAULT_CONSOLE_API_URL = 'https://api.example.com';
 
 export interface ConsoleOrigins {
     appOrigin: string;
     apiOrigin: string;
 }
 
-const STAGING_CONSOLE_URL = 'https://staging.console.vendure.io';
-const STAGING_CONSOLE_API_URL = 'https://staging.api.vendure.io';
+const STAGING_CONSOLE_URL = 'https://staging.console.example.com';
+const STAGING_CONSOLE_API_URL = 'https://staging.api.example.com';
 
 /**
  * Paired on purpose. A Console app origin from one environment with an API

@@ -1,11 +1,11 @@
 ---
 title: 'Production Hardening'
-metaTitle: 'MCP Server Production Hardening | Vendure'
-metaDescription: 'Harden the Vendure MCP server for production: token secrets, the issuer guard, DNS-rebinding protection, reverse proxy configuration, and rate limiting.'
+metaTitle: 'MCP Server Production Hardening | Novara Commerce'
+metaDescription: 'Harden the Novara Commerce MCP server for production: token secrets, the issuer guard, DNS-rebinding protection, reverse proxy configuration, and rate limiting.'
 order: 6
 ---
 
-Before deploying the Vendure MCP server to production, configure the following:
+Before deploying the Novara Commerce MCP server to production, configure the following:
 
 1. Token secret
 2. Issuer
@@ -72,19 +72,19 @@ this for any internet-facing deployment.
 
 ## Configure your reverse proxy
 
-Make sure your reverse proxy, CDN, or WAF forwards the browser's `Origin` header to Vendure instead of stripping
+Make sure your reverse proxy, CDN, or WAF forwards the browser's `Origin` header to Novara Commerce instead of stripping
 it.
 
-Vendure allows consent requests without an `Origin` because server-rendered consent pages can legitimately have
+Novara Commerce allows consent requests without an `Origin` because server-rendered consent pages can legitimately have
 no `Origin` header. If your proxy strips an `Origin` header that was sent by the browser, however, cross-site
 approval requests could bypass the origin check.
 
-Also enable Vendure's [`trustProxy`](/deployment/production-configuration/#trust-proxy). This allows
-Vendure to determine the real client IP from the proxy headers. Without it, all clients may appear to come from
+Also enable Novara Commerce's [`trustProxy`](/deployment/production-configuration/#trust-proxy). This allows
+Novara Commerce to determine the real client IP from the proxy headers. Without it, all clients may appear to come from
 the proxy's IP, causing them to share the same rate-limit bucket.
 
 Use HTTPS. MCP OAuth credentials and session-related requests must not be sent over an unencrypted connection.
-Terminate TLS at your reverse proxy or load balancer and ensure HTTPS is used for the public Vendure URL.
+Terminate TLS at your reverse proxy or load balancer and ensure HTTPS is used for the public Novara Commerce URL.
 
 ## Set rate limits
 
@@ -93,7 +93,7 @@ six scopes. The defaults are sensible. Override only what you need:
 
 | Scope | Default | Notes |
 |---|---|---|
-| `perSession` | 60 rpm | Per authenticated session, anonymous client IP, or in-process Vendure session |
+| `perSession` | 60 rpm | Per authenticated session, anonymous client IP, or in-process Novara Commerce session |
 | `perUser` | 120 rpm | Per signed-in user, across every session and OAuth client acting for them. Authorizing again does not reset it |
 | `perClient` | 3000 rpm | Per registered OAuth client, across every user of that client |
 | `anonymousIp` | 60 rpm | Per client IP for anonymous `/mcp/shop` calls. Set `false` to disable |
@@ -139,7 +139,7 @@ orders.
 
 ### Session lifetime and security
 
-Each OAuth grant creates a dedicated Vendure session. Vendure stores session tokens in plaintext, unlike OAuth
+Each OAuth grant creates a dedicated Novara Commerce session. Novara Commerce stores session tokens in plaintext, unlike OAuth
 tokens, which are stored as hashes. This means a session token can be used as a bearer credential for the regular
 Admin and Shop GraphQL APIs, without the grant's expiry check being applied.
 
@@ -175,7 +175,7 @@ count by client IP. Callers sharing one network (an office, a campus) share thos
 
 ### Where the rate-limit counters live
 
-The counters are stored in Vendure's `CacheService`. The default store is in-memory and holds at most 10,000
+The counters are stored in Novara Commerce's `CacheService`. The default store is in-memory and holds at most 10,000
 entries for the whole application. On a busy store, other cache activity pushes rate-limit counters out and the
 limits quietly stop working. The SQL and Redis cache plugins do not have this problem. With them, all instances
 share one set of counters instead of each counting separately. One caveat: counting is exact within a single
@@ -188,7 +188,7 @@ protection, not a precise quota. The session cache works the same way. See
 
 What a caller sees when it hits a limit depends on how far the request got.
 
-Most refusals happen before any tool runs. The anonymous-IP check runs before Vendure creates a session
+Most refusals happen before any tool runs. The anonymous-IP check runs before Novara Commerce creates a session
 for the request. Setup calls like `initialize` and `tools/list` are checked right after. These refusals
 are HTTP 429 responses with a `Retry-After` header giving the seconds to wait. The body is a JSON-RPC
 error with code `-31029`, and `error.data.retryAfterSeconds` carries the same wait time for
@@ -212,7 +212,7 @@ message:
 
 ### CORS and request body size
 
-The MCP endpoints are ordinary Vendure routes, so they inherit the app-wide settings. The plugin adds no
+The MCP endpoints are ordinary Novara Commerce routes, so they inherit the app-wide settings. The plugin adds no
 bespoke CORS or body parser. CORS follows `apiOptions.cors`. The request body follows the framework's default
 limit (100 KB). To raise the body limit for a tool that accepts large input, add a route-scoped middleware on
 `apiOptions.middleware` for `/mcp`. Set `beforeListen: true` on that middleware entry. A body parser registered
@@ -225,7 +225,7 @@ without it does not take effect.
 | The server refuses to boot with `NODE_ENV=production` | `oauth.issuer` is not public HTTPS, `oauth.storefrontConsentUrl` is not public HTTPS, or `oauth.allowLoopbackCimdDocuments` is enabled | Use public HTTPS URLs and turn off `allowLoopbackCimdDocuments` |
 | The DNS-rebinding guard rejects requests even though the host is in your allow-list | The entry is written as a URL or carries a port; the guard reduces the incoming header to its hostname before comparing, so such entries never match | Write bare hostnames in `allowedHosts` and `allowedOrigins` |
 | Rate limits never trigger on a busy store | The default in-memory cache holds at most 10,000 entries for the whole application, and other cache activity evicts the counters | Use the SQL or Redis cache plugin |
-| Anonymous callers get 429s at low traffic | Behind a proxy, `req.ip` is the proxy's address, so every anonymous caller shares one allowance | Enable Vendure's [`trustProxy`](/deployment/production-configuration/#trust-proxy) |
+| Anonymous callers get 429s at low traffic | Behind a proxy, `req.ip` is the proxy's address, so every anonymous caller shares one allowance | Enable Novara Commerce's [`trustProxy`](/deployment/production-configuration/#trust-proxy) |
 
 ## See also
 

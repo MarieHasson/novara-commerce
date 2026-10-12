@@ -13,7 +13,7 @@ import { SystemInfoCollector } from './collectors/system-info.collector';
 import { isTelemetryDisabled } from './helpers/is-telemetry-disabled.helper';
 import { SendReason, TelemetryPayload } from './telemetry.types';
 
-const TELEMETRY_ENDPOINT = 'https://telemetry.vendure.io/api/v1/collect';
+const TELEMETRY_ENDPOINT = 'https://telemetry.example.com/api/v1/collect';
 const TELEMETRY_TIMEOUT_MS = 5000;
 const TELEMETRY_SCHEMA_VERSION = 2;
 const STARTUP_DELAY_MS = 5000;

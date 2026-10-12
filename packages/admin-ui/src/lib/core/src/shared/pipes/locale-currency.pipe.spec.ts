@@ -28,7 +28,7 @@ describe('LocaleCurrencyPipe', () => {
         expect(pipe.transform(4200000, CurrencyCode.EUR, LanguageCode.de)).toBe('42.000,00 €');
     });
 
-    // https://github.com/vendurehq/vendure/issues/1768
+    // https://github.com/MarieHasson/novara-commerce/issues/1768
     it('Custom currency code in English', () => {
         const pipe = new LocaleCurrencyPipe(new MockCurrencyService());
         const customCurrencyCode = 'FLTH';

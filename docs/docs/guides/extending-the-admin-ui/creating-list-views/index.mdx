@@ -1,15 +1,15 @@
 ---
 title: 'Creating List Views'
-metaTitle: "Creating List Views in the Vendure Admin UI"
+metaTitle: "Creating List Views in the Novara Commerce Admin UI"
 metaDescription: "Build paginated list views using TypedBaseListComponent with DataTable2, filters, sorting, custom field columns, and route configuration."
 ---
 
 The two most common type of components you'll be creating in your UI extensions are list components and detail components.
 
-In Vendure, we have standardized the way you write these components so that your ui extensions can be made to fit seamlessly into the rest of the app.
+In Novara Commerce, we have standardized the way you write these components so that your ui extensions can be made to fit seamlessly into the rest of the app.
 
 :::note
-The specific pattern described here is for Angular-based components. It is also possible to create list views using React components, but 
+The specific pattern described here is for Angular-based components. It is also possible to create list views using React components, but
 in that case you won't be able to use the built-in data table & other Angular-specific components.
 :::
 
@@ -31,7 +31,7 @@ type ProductReview implements Node {
   text: String!
   authorName: String!
   product: Product!
-  productId: ID!  
+  productId: ID!
 }
 
 type ProductReviewList implements PaginatedList {
@@ -179,13 +179,13 @@ This is the standard layout for any list view. The main functionality is provide
             [hostComponent]="this"
             [selectionManager]="selectionManager"
     />
-    
+
     <!-- Adds a search bar -->
     <vdr-dt2-search
             [searchTermControl]="searchTermControl"
             searchTermPlaceholder="Filter by title"
     />
-    
+
     <!-- Here we define all the available columns -->
     <vdr-dt2-column id="id" [heading]="'common.id' | translate" [hiddenByDefault]="true">
         <ng-template let-review="item">
@@ -247,7 +247,7 @@ export default [
 
 ## Supporting custom fields
 
-From Vendure v2.2, it is possible for your [custom entities to support custom fields](/developer-guide/database-entity/#supporting-custom-fields).
+From Novara Commerce v2.2, it is possible for your [custom entities to support custom fields](/developer-guide/database-entity/#supporting-custom-fields).
 
 If you have set up your entity to support custom fields, and you want custom fields to be available in the Admin UI list view,
 you need to add the following to your list component:
@@ -298,7 +298,7 @@ export class ReviewListComponent extends TypedBaseListComponent<typeof getReview
         .addSort({name: 'authorName'})
         .addCustomFieldSorts(this.customFields) // [!code highlight]
         .connectToRoute(this.route);
-    
+
     // rest of class omitted for brevity
 }
 ```

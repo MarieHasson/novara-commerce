@@ -1,6 +1,6 @@
 ---
 title: 'Defining routes'
-metaTitle: "Defining Custom Routes in the Vendure Admin UI"
+metaTitle: "Defining Custom Routes in the Novara Commerce Admin UI"
 metaDescription: "Mount custom Angular or React components at specific URLs in the Admin UI, with route parameters, breadcrumbs, service injection, and page title control."
 ---
 
@@ -17,10 +17,10 @@ Routes can be defined natively using either **Angular** or **React**. It is also
 We will first quickly scaffold a new plugin to house our UI extensions:
 
 - Run `npx vendure add` from your project root
-- Select `Create a new Vendure plugin` and when prompted for a name, name it **"greeter"**
+- Select `Create a new Novara Commerce plugin` and when prompted for a name, name it **"greeter"**
 - After the plugin is created, you will be prompted to add features to the plugin. Select `[Plugin: UI] Set up Admin UI extensions`
 
-You should now have a new plugin scaffolded at `./src/plugins/greeter`, with some empty UI extension files in the `ui` 
+You should now have a new plugin scaffolded at `./src/plugins/greeter`, with some empty UI extension files in the `ui`
 directory. If you check your `vendure-config.ts` file you should also see that your `AdminUiPlugin.init()` call has been modified
 to compile the UI extensions:
 
@@ -167,8 +167,8 @@ Note that by specifying `route: 'greeter'`, we are "mounting" the routes at the 
 
 :::info
 
-The `/extensions/` prefix is used to avoid conflicts with built-in routes. From Vendure v2.2.0 it is possible to customize
-this prefix using the `prefix` property. See the section on [overriding built-in routes](#overriding-built-in-routes) for 
+The `/extensions/` prefix is used to avoid conflicts with built-in routes. From Novara Commerce v2.2.0 it is possible to customize
+this prefix using the `prefix` property. See the section on [overriding built-in routes](#overriding-built-in-routes) for
 more information.
 
 :::
@@ -335,7 +335,7 @@ import { Component } from '@angular/core';
 })
 export class TestComponent {
     constructor(private notificationService: NotificationService) {} // [!code highlight]
-    
+
     showNotification() {
         this.notificationService.success('Hello!'); // [!code highlight]
     }
@@ -354,7 +354,7 @@ import React from 'react';
 
 export function Test() {
     const notificationService = useInjector(NotificationService); // [!code highlight]
-    
+
     function showNotification() {
         notificationService.success('Hello!'); // [!code highlight]
     }
@@ -602,11 +602,11 @@ export function Test() {
 
 ## Overriding built-in routes
 
-From Vendure v2.2.0, it is possible to override any of the built-in Admin UI routes. This is useful if you want to completely
+From Novara Commerce v2.2.0, it is possible to override any of the built-in Admin UI routes. This is useful if you want to completely
 replace a built-in route with your own custom component.
 
 To do so, you'll need to specify the route `prefix` to be `''`, and then specify a `route` property which matches
-a built-in route. 
+a built-in route.
 
 For example, let's say we want to override the product detail page. The full path of that route is:
 
@@ -636,7 +636,7 @@ export const config: VendureConfig = {
                                 // Setting the prefix to '' means that we won't add the
                                 // default `/extensions/` prefix to the route
                                 prefix: '',
-                                // This part matches the built-in route path for the 
+                                // This part matches the built-in route path for the
                                 // "catalog" module
                                 route: 'catalog',
                                 filePath: 'routes.ts',

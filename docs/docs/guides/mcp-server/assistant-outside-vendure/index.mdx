@@ -1,23 +1,23 @@
 ---
-title: 'Assistant outside Vendure'
-metaTitle: 'Build an MCP Assistant outside Vendure | Vendure'
+title: 'Assistant outside Novara Commerce'
+metaTitle: 'Build an MCP Assistant outside Novara Commerce | Novara Commerce'
 metaDescription: 'Run your own shop assistant as a separate service: register once, run the OAuth round trip during a navigation the shopper is already making, and renew tokens without interrupting the chat.'
 order: 4
 ---
 
-An assistant that runs outside the Vendure process must obtain an OAuth token before it can act for a signed-in
+An assistant that runs outside the Novara Commerce process must obtain an OAuth token before it can act for a signed-in
 shopper. For a first-party assistant, you can handle the OAuth flow without showing a consent screen to the
 shopper. Start the flow during a navigation the shopper is already making, and your consent page can
 automatically approve your own client.
 
 ## When this is the right shape
 
-Use this approach when the assistant runs as a separate service from Vendure.
+Use this approach when the assistant runs as a separate service from Novara Commerce.
 
 Use a different approach when:
 
-- **The assistant is a Vendure plugin in the same process.** It can run the tools directly, with no token at all:
-  see [Assistant inside Vendure](/mcp-server/assistant-inside-vendure/).
+- **The assistant is a Novara Commerce plugin in the same process.** It can run the tools directly, with no token at all:
+  see [Assistant inside Novara Commerce](/mcp-server/assistant-inside-vendure/).
 - **The AI client belongs to the shopper**, such as Claude Desktop, ChatGPT, or Cursor. Those clients run this
   flow themselves. All you build is [the customer consent page](/mcp-server/oauth-consent/#before-you-start).
 
@@ -37,7 +37,7 @@ To integrate your assistant, you will:
 5. Renew silently and call tools.
 
 ```text
-Your assistant                     Vendure                        Your consent page
+Your assistant                     Novara Commerce                        Your consent page
      │
      │ 1. Register once ──────────────▶ client_id
      │
@@ -70,7 +70,7 @@ const REDIRECT_URI = 'https://assistant.example.com/mcp/callback';
 
 /**
  * Returns this assistant's client id, registering it the first time only. `db` here is your
- * own storage, not Vendure's.
+ * own storage, not Novara Commerce's.
  */
 export async function getClientId(): Promise<string> {
     const stored = await db.getSetting('mcpClientId');

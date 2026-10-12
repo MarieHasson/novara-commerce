@@ -1,16 +1,16 @@
 ---
 title: 'Custom Strategies in Plugins'
-metaTitle: "Implementing Custom Strategies in Vendure Plugins"
-metaDescription: "Build extensible Vendure plugins using the strategy pattern with injectable lifecycle methods, dependency injection, and configurable options."
+metaTitle: "Implementing Custom Strategies in Novara Commerce Plugins"
+metaDescription: "Build extensible Novara Commerce plugins using the strategy pattern with injectable lifecycle methods, dependency injection, and configurable options."
 ---
 
-When building Vendure plugins, you often need to provide extensible, pluggable implementations for specific features. The **strategy pattern** is the perfect tool for this, allowing plugin users to customize behavior by providing their own implementations.
+When building Novara Commerce plugins, you often need to provide extensible, pluggable implementations for specific features. The **strategy pattern** is the perfect tool for this, allowing plugin users to customize behavior by providing their own implementations.
 
-This guide shows you how to implement custom strategies in your plugins, following Vendure's established patterns and best practices.
+This guide shows you how to implement custom strategies in your plugins, following Novara Commerce's established patterns and best practices.
 
 ## Overview
 
-A strategy in Vendure is a way to provide a pluggable implementation of a particular feature. Custom strategies in plugins allow users to:
+A strategy in Novara Commerce is a way to provide a pluggable implementation of a particular feature. Custom strategies in plugins allow users to:
 
 - Override default behavior with their own implementations
 - Inject dependencies and services through the `init()` lifecycle method
@@ -128,7 +128,7 @@ import { SomeOtherService } from './services/some-other.service';
         },
     ],
     configuration: config => {
-        // You can also configure core Vendure strategies here if needed
+        // You can also configure core Novara Commerce strategies here if needed
         return config;
     },
     compatibility: '^3.0.0',
@@ -466,4 +466,4 @@ Custom strategies in plugins provide a powerful way to make your plugins extensi
 - Enable users to provide their own implementations
 - Support configuration options for strategies
 
-This approach ensures your plugins are flexible, maintainable, and follow Vendure's established conventions.
+This approach ensures your plugins are flexible, maintainable, and follow Novara Commerce's established conventions.

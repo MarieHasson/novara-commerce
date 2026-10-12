@@ -44,7 +44,7 @@ export interface LinguiBabelPluginOptions {
  * - Non-JS/TS files
  * - node_modules packages that are not discovered as Vendure plugins
  *
- * @see https://github.com/vendurehq/vendure/issues/3929
+ * @see https://github.com/MarieHasson/novara-commerce/issues/3929
  * @see https://github.com/lingui/swc-plugin/issues/179
  */
 export function linguiBabelPlugin(options?: LinguiBabelPluginOptions): Plugin {

@@ -9,7 +9,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/vendurehq/vendure.git",
+        "url": "git+https://github.com/MarieHasson/novara-commerce.git",
         "directory": "packages/graphiql-plugin"
     },
     "scripts": {
@@ -21,8 +21,8 @@
         "test": "vitest --config vitest.config.mts --run",
         "e2e": "cross-env PACKAGE=graphiql-plugin vitest --config ../../e2e-common/vitest.config.mts --run"
     },
-    "homepage": "https://www.vendure.io/",
-    "funding": "https://github.com/sponsors/michaelbromley",
+    "homepage": "https://github.com/MarieHasson/novara-commerce",
+    "funding": "https://github.com/sponsors/MarieHasson",
     "publishConfig": {
         "access": "public"
     },

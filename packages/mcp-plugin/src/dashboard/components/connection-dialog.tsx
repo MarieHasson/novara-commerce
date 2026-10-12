@@ -18,7 +18,7 @@ import { ExternalLinkIcon, PlugIcon } from 'lucide-react';
 
 import { mcpServerConfigQuery } from '../mcp.graphql';
 
-const SETUP_GUIDE_URL = 'https://docs.vendure.io/guides/mcp-server/quick-start/';
+const SETUP_GUIDE_URL = 'https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/guides/mcp-server/quick-start/';
 
 function CopyableField({ label, value }: { label: React.ReactNode; value: string }) {
     return (

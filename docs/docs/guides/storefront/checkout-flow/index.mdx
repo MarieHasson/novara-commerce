@@ -1,7 +1,7 @@
 ---
 title: "Checkout Flow"
-metaTitle: "Storefront Checkout Flow with the Vendure Shop API"
-metaDescription: "Walk through each checkout step in Vendure: setting customer details, shipping address, shipping method, payment, and order confirmation via GraphQL mutations."
+metaTitle: "Storefront Checkout Flow with the Novara Commerce Shop API"
+metaDescription: "Walk through each checkout step in Novara Commerce: setting customer details, shipping address, shipping method, payment, and order confirmation via GraphQL mutations."
 ---
 
 Once the customer has added the desired products to the active order, it's time to check out.
@@ -339,7 +339,7 @@ the exact sequence of API calls will depend on the payment integration.
 The [`addPaymentToOrder`](/reference/graphql-api/shop/mutations/#addpaymenttoorder) mutation is the general-purpose mutation for adding a payment to an order.
 It accepts a `method` argument which must corresponde to the `code` of the selected payment method, and a `metadata` argument which is a JSON object containing any additional information required by that particular integration.
 
-For example, the demo data populated in a new Vendure installation includes a "Standard Payment" method, which uses the [`dummyPaymentHandler`](/reference/typescript-api/payment/dummy-payment-handler) to simulate a payment provider. Here's how you would add a payment using this method:
+For example, the demo data populated in a new Novara Commerce installation includes a "Standard Payment" method, which uses the [`dummyPaymentHandler`](/reference/typescript-api/payment/dummy-payment-handler) to simulate a payment provider. Here's how you would add a payment using this method:
 
 
 <Tabs>
@@ -384,9 +384,9 @@ Other payment integrations have specific setup instructions you must follow:
 
 The following community plugins provide payment integrations:
 
-- [`@vendure-community/stripe-plugin`](https://github.com/vendurehq/community-plugins)
-- [`@vendure-community/braintree-plugin`](https://github.com/vendurehq/community-plugins)
-- [`@vendure-community/mollie-plugin`](https://github.com/vendurehq/community-plugins)
+- [`@vendure-community/stripe-plugin`](https://github.com/MarieHasson/community-plugins)
+- [`@vendure-community/braintree-plugin`](https://github.com/MarieHasson/community-plugins)
+- [`@vendure-community/mollie-plugin`](https://github.com/MarieHasson/community-plugins)
 
 ### Other payment providers
 
@@ -420,7 +420,7 @@ query GetOrderByCode($code: String!) {
 </Tabs>
 
 :::info
-By default Vendure will only allow access to the order by code for the first 2 hours after the order is placed if the customer is not logged in.
+By default Novara Commerce will only allow access to the order by code for the first 2 hours after the order is placed if the customer is not logged in.
 This is to prevent a malicious user from guessing order codes and viewing other customers' orders. This can be configured via the [`OrderByCodeAccessStrategy`](/reference/typescript-api/orders/order-by-code-access-strategy/).
 :::
 

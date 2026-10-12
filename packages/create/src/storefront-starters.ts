@@ -31,7 +31,7 @@ export const STOREFRONT_STARTERS = [
         description: 'Vite-powered routing with TanStack Router and Paraglide internationalization',
         frameworkName: 'TanStack Start',
         documentationUrl: 'https://tanstack.com/start/latest/docs/framework/react/overview',
-        repository: 'vendurehq/tanstack-starter-vendure',
+        repository: 'MarieHasson/tanstack-starter-vendure',
         ref: 'main',
         envFile: '.env',
         packageScripts: ({ storefrontPort }) => ({
@@ -52,7 +52,7 @@ export const STOREFRONT_STARTERS = [
         description: 'App Router storefront with next-intl internationalization',
         frameworkName: 'Next.js',
         documentationUrl: 'https://nextjs.org/docs',
-        repository: 'vendurehq/nextjs-starter-vendure',
+        repository: 'MarieHasson/nextjs-starter-vendure',
         ref: 'main',
         envFile: '.env.local',
         packageScripts: ({ storefrontPort }) => ({

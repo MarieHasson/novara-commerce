@@ -37,7 +37,7 @@ const schema = gql`
 `;
 
 /**
- * Test plugin for https://github.com/vendurehq/vendure/issues/1664
+ * Test plugin for https://github.com/MarieHasson/novara-commerce/issues/1664
  *
  * Test query:
  * ```graphql

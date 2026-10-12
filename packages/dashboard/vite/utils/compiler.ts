@@ -350,7 +350,7 @@ async function resolveSourceContext(
  * 2. Validates every emit lands inside outputPath before writing anything
  *
  * This avoids loading massive `.d.ts` files from packages like `openai`, `ai`, etc.
- * See: https://github.com/vendurehq/vendure/issues/4559
+ * See: https://github.com/MarieHasson/novara-commerce/issues/4559
  */
 async function compileTypeScript({
     outputPath,

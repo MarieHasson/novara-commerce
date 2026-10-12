@@ -82,7 +82,7 @@ export function NavUser() {
                                 <DropdownMenuItem
                                     render={
                                         <a
-                                            href="https://vendure.io/pricing"
+                                            href="https://github.com/MarieHasson/novara-commerce/pricing"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             aria-label="Explore Platform & Cloud"

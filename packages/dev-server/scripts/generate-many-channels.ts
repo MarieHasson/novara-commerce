@@ -17,7 +17,7 @@ generateManyChannels()
     .catch(() => process.exit(1));
 
 // Used for testing scenarios where there are many channels
-// such as https://github.com/vendurehq/vendure/issues/2233
+// such as https://github.com/MarieHasson/novara-commerce/issues/2233
 async function generateManyChannels() {
     const { app } = await bootstrapWorker(devConfig);
     const requestContextService = app.get(RequestContextService);

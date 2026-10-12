@@ -3,7 +3,7 @@ import { beforeAll, describe, expect, it } from 'vitest';
 
 import { I18nService } from './i18n.service';
 
-// https://github.com/vendurehq/vendure/issues/4823
+// https://github.com/MarieHasson/novara-commerce/issues/4823
 describe('I18nService', () => {
     let i18nService: I18nService;
 

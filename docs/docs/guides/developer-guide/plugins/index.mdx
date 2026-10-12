@@ -1,15 +1,15 @@
 ---
 title: 'Plugins'
-metaTitle: "Vendure Plugin System - Building and Configuring Plugins"
-metaDescription: "Everything you need to know about Vendure plugins: creating custom plugins, lifecycle hooks, defining providers, and extending the server with modular features."
+metaTitle: "Novara Commerce Plugin System - Building and Configuring Plugins"
+metaDescription: "Everything you need to know about Novara Commerce plugins: creating custom plugins, lifecycle hooks, defining providers, and extending the server with modular features."
 order: 6
 ---
 
-The heart of Vendure is its plugin system. Plugins not only allow you to instantly add new functionality to your
-Vendure server via third-party npm packages, they are also the means by which you build out the custom business
+The heart of Novara Commerce is its plugin system. Plugins not only allow you to instantly add new functionality to your
+Novara Commerce server via third-party npm packages, they are also the means by which you build out the custom business
 logic of your application.
 
-Plugins in Vendure allow one to:
+Plugins in Novara Commerce allow one to:
 
 - Modify the VendureConfig object, such as defining custom fields on existing entities.
 - Extend the GraphQL APIs, including modifying existing types and adding completely new queries and mutations.
@@ -20,7 +20,7 @@ Plugins in Vendure allow one to:
 
 … and more!
 
-In a typical Vendure application, custom logic and functionality is implemented as a set of plugins
+In a typical Novara Commerce application, custom logic and functionality is implemented as a set of plugins
 which are usually independent of one another. For example, there could be a plugin for each of the following:
 wishlists, product reviews, loyalty points, gift cards, etc.
 This allows for a clean separation of concerns and makes it easy to add or remove functionality as needed.
@@ -30,7 +30,7 @@ If you use AI coding agents when developing plugins, see the
 
 ## Core Plugins
 
-Vendure provides a set of core plugins covering common functionality such as assets handling,
+Novara Commerce provides a set of core plugins covering common functionality such as assets handling,
 email sending, and search. For documentation on these, see the [Core Plugins reference](/reference/core-plugins/).
 
 ## Plugin basics
@@ -69,7 +69,7 @@ export const config: VendureConfig = {
 };
 ```
 
-The key feature is the `@VendurePlugin()` decorator, which marks the class as a Vendure plugin and accepts a configuration
+The key feature is the `@VendurePlugin()` decorator, which marks the class as a Novara Commerce plugin and accepts a configuration
 object on the type [`VendurePluginMetadata`](/reference/typescript-api/plugin/vendure-plugin-metadata/).
 
 A VendurePlugin is actually an enhanced version of a [NestJS Module](https://docs.nestjs.com/modules), and supports
@@ -81,17 +81,17 @@ all the metadata properties that NestJS modules support:
 - `controllers`: Controllers allow the plugin to define REST-style endpoints.
 - `exports`: The providers which will be exported from this plugin and made available to other plugins.
 
-Additionally, the `VendurePlugin` decorator adds the following Vendure-specific properties:
+Additionally, the `VendurePlugin` decorator adds the following Novara Commerce-specific properties:
 
 - `configuration`: A function which can modify the `VendureConfig` object before the server bootstraps.
 - `shopApiExtensions`: Allows the plugin to extend the GraphQL Shop API with new queries, mutations, resolvers & scalars.
 - `adminApiExtensions`: Allows the plugin to extend the GraphQL Admin API with new queries, mutations, resolvers & scalars.
 - `entities`: Allows the plugin to define new database entities.
-- `compatibility`: Allows the plugin to declare which versions of Vendure it is compatible with.
+- `compatibility`: Allows the plugin to declare which versions of Novara Commerce it is compatible with.
 
 :::info
-Since a Vendure plugin is a superset of a NestJS module, this means that many NestJS modules are actually
-valid Vendure plugins!
+Since a Novara Commerce plugin is a superset of a NestJS module, this means that many NestJS modules are actually
+valid Novara Commerce plugins!
 :::
 
 ## Plugin lifecycle
@@ -134,7 +134,7 @@ export class MyPlugin implements OnApplicationBootstrap {
 }
 ```
 
-If that startup work needs to call Vendure's services, it will need a `RequestContext`, which
+If that startup work needs to call Novara Commerce's services, it will need a `RequestContext`, which
 outside of the request-response cycle you create yourself — see
 [Creating a RequestContext](/guides/developer-guide/stand-alone-scripts/#creating-a-requestcontext),
 including how to give it a user so that permission checks pass.
@@ -166,7 +166,7 @@ export class MyPlugin implements NestModule {
 ## Create a Plugin via CLI
 
 :::cli
-Run the `npx vendure add` command, and select "Create a new Vendure plugin".
+Run the `npx vendure add` command, and select "Create a new Novara Commerce plugin".
 
 This will guide you through the creation of a new plugin and automate all aspects of the process.
 
@@ -175,12 +175,12 @@ This is the recommended way of creating a new plugin.
 
 ## Writing a plugin from scratch
 
-Although the [Vendure CLI](/developer-guide/cli/) is the recommended way to create a new plugin, it can be useful to understand the process of creating
+Although the [Novara Commerce CLI](/developer-guide/cli/) is the recommended way to create a new plugin, it can be useful to understand the process of creating
 a plugin manually.
 
-Vendure **plugins** are used to extend the core functionality of the server. Plugins can be pre-made functionality that you can install via npm, or they can be custom plugins that you write yourself.
+Novara Commerce **plugins** are used to extend the core functionality of the server. Plugins can be pre-made functionality that you can install via npm, or they can be custom plugins that you write yourself.
 
-For any unit of functionality that you need to add to your project, you'll be creating a Vendure plugin. By convention, plugins are stored in the `plugins` directory of your project. However, this is not a requirement, and you are free to arrange your plugin files in any way you like.
+For any unit of functionality that you need to add to your project, you'll be creating a Novara Commerce plugin. By convention, plugins are stored in the `plugins` directory of your project. However, this is not a requirement, and you are free to arrange your plugin files in any way you like.
 
 ```txt
 ├──src
@@ -194,9 +194,9 @@ For any unit of functionality that you need to add to your project, you'll be cr
 ```
 
 :::info
-For a complete working example of a Vendure plugin, see the [real-world-vendure Reviews plugin](https://github.com/vendurehq/real-world-vendure/tree/master/src/plugins/reviews)
+For a complete working example of a Novara Commerce plugin, see the [real-world-vendure Reviews plugin](https://github.com/MarieHasson/real-world-vendure/tree/master/src/plugins/reviews)
 
-You can also use the [Vendure CLI](/developer-guide/cli) to quickly scaffold a new plugin.
+You can also use the [Novara Commerce CLI](/developer-guide/cli) to quickly scaffold a new plugin.
 :::
 
 In this guide, we will implement a simple but fully-functional **wishlist plugin** step-by-step. The goal of this plugin is to allow signed-in customers to add products to a wishlist, and to view and manage their wishlist.
@@ -223,11 +223,11 @@ import { PluginCommonModule, VendurePlugin } from '@vendure/core';
 export class WishlistPlugin {}
 ```
 
-The `PluginCommonModule` will be required in all plugins that you create. It contains the common services that are exposed by Vendure Core, allowing you to inject them into your plugin's services and resolvers.
+The `PluginCommonModule` will be required in all plugins that you create. It contains the common services that are exposed by Novara Commerce Core, allowing you to inject them into your plugin's services and resolvers.
 
 ### Step 2: Define an entity
 
-Next we will define a new database entity to store the wishlist items. Vendure uses [TypeORM](https://typeorm.io/) to manage the database schema, and an Entity corresponds to a database table.
+Next we will define a new database entity to store the wishlist items. Novara Commerce uses [TypeORM](https://typeorm.io/) to manage the database schema, and an Entity corresponds to a database table.
 
 First let's create the file to house the entity:
 
@@ -333,7 +333,7 @@ import './types'; // [!code highlight]
 ```
 
 :::note
-Custom fields are not solely restricted to Vendure's native entities though, it's also possible to add support for custom fields to your own custom entities. This way other plugins would be able to extend our example `WishlistItem`. See: [Supporting custom fields](/developer-guide/database-entity/#supporting-custom-fields)
+Custom fields are not solely restricted to Novara Commerce's native entities though, it's also possible to add support for custom fields to your own custom entities. This way other plugins would be able to extend our example `WishlistItem`. See: [Supporting custom fields](/developer-guide/database-entity/#supporting-custom-fields)
 :::
 
 ### Step 4: Create a service
@@ -447,7 +447,7 @@ export class WishlistService {
 Let's break down what's happening here:
 
 - The `WishlistService` class is decorated with the `@Injectable()` decorator. This is a standard NestJS decorator which tells the NestJS dependency injection (DI) system that this class can be injected into other classes. All your services should be decorated with this decorator.
-- The arguments passed to the constructor will be injected by the NestJS DI system. The `connection` argument is a [TransactionalConnection](/reference/typescript-api/data-access/transactional-connection/) instance, which is used to access and manipulate data in the database. The [`ProductVariantService`](/reference/typescript-api/services/product-variant-service/) argument is a built-in Vendure service which contains methods relating to ProductVariants.
+- The arguments passed to the constructor will be injected by the NestJS DI system. The `connection` argument is a [TransactionalConnection](/reference/typescript-api/data-access/transactional-connection/) instance, which is used to access and manipulate data in the database. The [`ProductVariantService`](/reference/typescript-api/services/product-variant-service/) argument is a built-in Novara Commerce service which contains methods relating to ProductVariants.
 - The [`RequestContext`](/reference/typescript-api/request/request-context/) object is usually the first argument to any service method, and contains information and context about the current request as well as any open database transactions. It should always be passed to the methods of the `TransactionalConnection`.
 
 The service is then registered with the plugin metadata as a provider:
@@ -505,7 +505,7 @@ export const shopApiExtensions = gql`
 
 :::note
 
-The `graphql-tag` package is a dependency of the Vendure core package. Depending on the package manager you are using, you may need to install it separately with `yarn add graphql-tag` or `npm install graphql-tag`.
+The `graphql-tag` package is a dependency of the Novara Commerce core package. Depending on the package manager you are using, you may need to install it separately with `yarn add graphql-tag` or `npm install graphql-tag`.
 
 :::
 
@@ -574,13 +574,13 @@ export class WishlistShopResolver {
 }
 ```
 
-Resolvers are usually "thin" functions that delegate the actual work to a service. Vendure, like NestJS itself, makes heavy use of decorators at the API layer to define various aspects of the resolver. Let's break down what's happening here:
+Resolvers are usually "thin" functions that delegate the actual work to a service. Novara Commerce, like NestJS itself, makes heavy use of decorators at the API layer to define various aspects of the resolver. Let's break down what's happening here:
 
 - The `@Resolver()` decorator tells the NestJS DI system that this class is a resolver. Since a Resolver is part of the NestJS DI system, we can also inject dependencies into its constructor. In this case we are injecting the `WishlistService` which we created in the previous step.
-- The `@Mutation()` decorator tells Vendure that this is a mutation resolver. Similarly, `@Query()` decorator defines a query resolver. The name of the method is the name of the query or mutation in the schema.
-- The `@Transaction()` decorator tells Vendure that this resolver method should be wrapped in a database transaction. This is important because we are performing multiple database operations in this method, and we want them to be atomic.
-- The `@Allow()` decorator tells Vendure that this mutation is only allowed for users with the `Owner` permission. The `Owner` permission is a special permission which indicates that the active user should be the owner of this operation.
-- The `@Ctx()` decorator tells Vendure that this method requires access to the `RequestContext` object. Every resolver should have this as the first argument, as it is required throughout the Vendure request lifecycle.
+- The `@Mutation()` decorator tells Novara Commerce that this is a mutation resolver. Similarly, `@Query()` decorator defines a query resolver. The name of the method is the name of the query or mutation in the schema.
+- The `@Transaction()` decorator tells Novara Commerce that this resolver method should be wrapped in a database transaction. This is important because we are performing multiple database operations in this method, and we want them to be atomic.
+- The `@Allow()` decorator tells Novara Commerce that this mutation is only allowed for users with the `Owner` permission. The `Owner` permission is a special permission which indicates that the active user should be the owner of this operation.
+- The `@Ctx()` decorator tells Novara Commerce that this method requires access to the `RequestContext` object. Every resolver should have this as the first argument, as it is required throughout the Novara Commerce request lifecycle.
 
 This resolver is then registered with the plugin metadata:
 
@@ -610,7 +610,7 @@ More information about resolvers can be found in the [NestJS docs](https://docs.
 
 ### Step 7: Specify compatibility
 
-Since Vendure v2.0.0, it is possible for a plugin to specify which versions of Vendure core it is compatible with. This is especially important if the plugin is intended to be made publicly available via npm or another package registry.
+Since Novara Commerce v2.0.0, it is possible for a plugin to specify which versions of Novara Commerce core it is compatible with. This is especially important if the plugin is intended to be made publicly available via npm or another package registry.
 
 The compatibility is specified via the `compatibility` property in the plugin metadata:
 
@@ -622,7 +622,7 @@ The compatibility is specified via the `compatibility` property in the plugin me
 export class WishlistPlugin {}
 ```
 
-The value of this property is a [semver range](https://docs.npmjs.com/about-semantic-versioning) which specifies the range of compatible versions. In this case, we are saying that this plugin is compatible with any version of Vendure core which is `>= 2.0.0 < 3.0.0`.
+The value of this property is a [semver range](https://docs.npmjs.com/about-semantic-versioning) which specifies the range of compatible versions. In this case, we are saying that this plugin is compatible with any version of Novara Commerce core which is `>= 2.0.0 < 3.0.0`.
 
 ### Step 8: Add the plugin to the VendureConfig
 
@@ -818,6 +818,6 @@ mutation RemoveFromWishlist {
 ## Publishing plugins
 
 If you have created a plugin that you would like to share with the community, you can publish it to npm, and even
-have it listed on the [Vendure Hub](https://vendure.io/hub).
+have it listed on the [Novara Commerce Hub](https://github.com/MarieHasson/novara-commerce/hub).
 
 For a full guide to publishing plugins, see the [Publishing a Plugin how-to guide](/how-to/publish-plugin/).

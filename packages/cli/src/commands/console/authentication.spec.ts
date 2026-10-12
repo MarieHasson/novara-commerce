@@ -40,7 +40,7 @@ describe('public Console browser login', () => {
         });
         expect(session).toEqual({ accessToken: 'access', refreshToken: 'rotated', expiresAt: 61_000 });
         const [tokenUrl, init] = tokenFetch.mock.calls[0];
-        expect(tokenUrl).toBe('https://api.vendure.io/v1/auth/cli/token');
+        expect(tokenUrl).toBe('https://api.example.com/v1/auth/cli/token');
         expect(init?.redirect).toBe('error');
         const grant = JSON.parse(init?.body as string);
         expect(grant.grant_type).toBe('authorization_code');
@@ -185,12 +185,12 @@ describe('public Console browser login', () => {
     });
 
     it.each([
-        ['https://console.vendure.io', 'https://staging.api.vendure.io'],
-        ['https://untrusted.example', 'https://api.vendure.io'],
-        ['https://user:password@console.vendure.io', 'https://api.vendure.io'],
-        ['https://console.vendure.io/path', 'https://api.vendure.io'],
-        ['https://console.vendure.io?query=x', 'https://api.vendure.io'],
-        ['https://console.vendure.io#fragment', 'https://api.vendure.io'],
+        ['https://console.example.com', 'https://staging.api.example.com'],
+        ['https://untrusted.example', 'https://api.example.com'],
+        ['https://user:password@console.example.com', 'https://api.example.com'],
+        ['https://console.example.com/path', 'https://api.example.com'],
+        ['https://console.example.com?query=x', 'https://api.example.com'],
+        ['https://console.example.com#fragment', 'https://api.example.com'],
     ])('rejects untrusted pair %s %s before browser use', async (appOrigin, apiOrigin) => {
         const openBrowser = vi.fn();
         await expect(
@@ -200,7 +200,7 @@ describe('public Console browser login', () => {
     });
 
     it.each([
-        ['https://staging.console.vendure.io', 'https://staging.api.vendure.io'],
+        ['https://staging.console.example.com', 'https://staging.api.example.com'],
         ['http://localhost:3000', 'http://127.0.0.1:3001'],
     ])('accepts the trusted pair %s %s', async (appOrigin, apiOrigin) => {
         tokenFetch.mockResolvedValue(Response.json(token));

@@ -292,7 +292,7 @@ describe('Product resolver', () => {
             expect(product.slug).toBe('curvy-monitor');
         });
 
-        // https://github.com/vendurehq/vendure/issues/820
+        // https://github.com/MarieHasson/novara-commerce/issues/820
         it('by slug with multiple assets', async () => {
             const { product: product1 } = await adminClient.query(getProductSimpleDocument, { id: 'T_1' });
             productQueryGuard.assertSuccess(product1);
@@ -309,7 +309,7 @@ describe('Product resolver', () => {
             expect(product.assets.map(a => a.id)).toEqual(['T_1', 'T_2', 'T_3']);
         });
 
-        // https://github.com/vendurehq/vendure/issues/538
+        // https://github.com/MarieHasson/novara-commerce/issues/538
         it('falls back to default language slug', async () => {
             const { product } = await adminClient.query(
                 getProductSimpleDocument,
@@ -1468,7 +1468,7 @@ describe('Product resolver', () => {
                 expect(updatedVariant.price).toBe(432);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1101
+            // https://github.com/MarieHasson/novara-commerce/issues/1101
             it('after update, the updatedAt should be modified', async () => {
                 // Pause for a second to ensure the updatedAt date is more than 1s
                 // later than the createdAt date, since sqlite does not seem to store
@@ -1743,7 +1743,7 @@ describe('Product resolver', () => {
                 deletedVariant = foundVariant;
             });
 
-            /** Testing https://github.com/vendurehq/vendure/issues/412 **/
+            /** Testing https://github.com/MarieHasson/novara-commerce/issues/412 **/
             it('createProductVariants ignores deleted variants when checking for existing combinations', async () => {
                 const { createProductVariants } = await adminClient.query(createProductVariantsDocument, {
                     input: [
@@ -1764,7 +1764,7 @@ describe('Product resolver', () => {
                 );
             });
 
-            // https://github.com/vendurehq/vendure/issues/980
+            // https://github.com/MarieHasson/novara-commerce/issues/980
             it('creating variants in a non-default language', async () => {
                 const { createProduct } = await adminClient.query(createProductDocument, {
                     input: {
@@ -1804,7 +1804,7 @@ describe('Product resolver', () => {
                 expect(product?.variants.length).toBe(1);
             });
 
-            // https://github.com/vendurehq/vendure/issues/1631
+            // https://github.com/MarieHasson/novara-commerce/issues/1631
             describe('changing the Channel default language', () => {
                 let productId: string;
 
@@ -1955,7 +1955,7 @@ describe('Product resolver', () => {
             expect(product).toBe(null);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1096
+        // https://github.com/MarieHasson/novara-commerce/issues/1096
         it('variants of deleted product are also deleted', async () => {
             for (const variant of productToDelete.variants) {
                 const { productVariant } = await adminClient.query(getProductVariantDocument, {
@@ -2011,7 +2011,7 @@ describe('Product resolver', () => {
             ),
         );
 
-        // https://github.com/vendurehq/vendure/issues/558
+        // https://github.com/MarieHasson/novara-commerce/issues/558
         it('slug of a deleted product can be re-used', async () => {
             const result = await adminClient.query(createProductDocument, {
                 input: {
@@ -2028,7 +2028,7 @@ describe('Product resolver', () => {
             expect(result.createProduct.slug).toBe(productToDelete.slug);
         });
 
-        // https://github.com/vendurehq/vendure/issues/1505
+        // https://github.com/MarieHasson/novara-commerce/issues/1505
         it('attempting to re-use deleted slug twice is not allowed', async () => {
             const result = await adminClient.query(createProductDocument, {
                 input: {
@@ -2047,7 +2047,7 @@ describe('Product resolver', () => {
             expect(result.createProduct.slug).toBe('laptop-2');
         });
 
-        // https://github.com/vendurehq/vendure/issues/800
+        // https://github.com/MarieHasson/novara-commerce/issues/800
         it('product can be fetched by slug of a deleted product', async () => {
             const { product } = await adminClient.query(getProductSimpleDocument, {
                 slug: productToDelete.slug,

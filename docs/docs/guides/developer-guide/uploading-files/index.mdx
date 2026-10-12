@@ -1,10 +1,10 @@
 ---
 title: "Uploading Files"
-metaTitle: "File Uploads in Vendure - GraphQL Multipart Requests"
-metaDescription: "Upload files to Vendure as assets using the GraphQL multipart request spec. Covers client setup, the createAssets mutation, and custom upload endpoints."
+metaTitle: "File Uploads in Novara Commerce - GraphQL Multipart Requests"
+metaDescription: "Upload files to Novara Commerce as assets using the GraphQL multipart request spec. Covers client setup, the createAssets mutation, and custom upload endpoints."
 ---
 
-Vendure handles file uploads with the [GraphQL multipart request specification](https://github.com/jaydenseric/graphql-multipart-request-spec). Internally, we use the [graphql-upload package](https://github.com/jaydenseric/graphql-upload). Once uploaded, a file is known as an [Asset](/core-concepts/images-assets/). Assets are typically used for images, but can represent any kind of binary data such as PDF files or videos.
+Novara Commerce handles file uploads with the [GraphQL multipart request specification](https://github.com/jaydenseric/graphql-multipart-request-spec). Internally, we use the [graphql-upload package](https://github.com/jaydenseric/graphql-upload). Once uploaded, a file is known as an [Asset](/core-concepts/images-assets/). Assets are typically used for images, but can represent any kind of binary data such as PDF files or videos.
 
 ## Upload clients
 
@@ -14,7 +14,7 @@ For testing, it is even possible to use a [plain curl request](https://github.co
 
 ## The `createAssets` mutation
 
-The [createAssets mutation](/reference/graphql-api/admin/mutations/#createassets) in the Admin API is the only means of uploading files by default. 
+The [createAssets mutation](/reference/graphql-api/admin/mutations/#createassets) in the Admin API is the only means of uploading files by default.
 
 Here's an example of how a file upload would look using the `apollo-upload-client` package:
 
@@ -202,12 +202,12 @@ function UploadAvatar() {
   const [mutate] = useMutation(MUTATION);
 
   function onChange(event) {
-    const { target } = event;  
+    const { target } = event;
     if (target.validity.valid && target.files.length === 1) {
-      mutate({ 
+      mutate({
         variables: {
           file: target.files[0],
-        }  
+        }
       });
     }
   }

@@ -1,6 +1,6 @@
 # Upgrade diagnosis (3.x to the next minor)
 
-Applies to: an upgrade inside Vendure 3.x, for example 3.6 to 3.7 or 3.7 to
+Applies to: an upgrade inside Novara Commerce 3.x, for example 3.6 to 3.7 or 3.7 to
 3.8. For a major upgrade, read the changelog and ask the docs MCP.
 
 ## What a minor version can change
@@ -28,7 +28,7 @@ Doc: `developer-guide/updating#versioning-policy--breaking-changes`
    `context.md` step 1. Ask the user which version they upgraded from. Read
    the changelog entries between the two versions, mainly the
    **BREAKING CHANGE** sections:
-   https://github.com/vendurehq/vendure/blob/master/CHANGELOG.md
+   https://github.com/MarieHasson/novara-commerce/blob/master/CHANGELOG.md
 2. **All packages moved.** All `@vendure/*` packages must have the new
    version. Do the checks in `version-mismatch.md`.
 3. **Node.js.** Check the version against the supported list.
@@ -74,4 +74,4 @@ upgrade crosses that version.
 | v3.8.0          | The admin password reset email is a default handler. Set `adminPasswordResetUrl` in `globalTemplateVars`.                                                                                   | `core-concepts/email#email-variables`                                         |
 | v3.8.0          | `rescaleOrderLinePromotionAdjustments` corrects promotion adjustments on partly cancelled order lines. It is a one-way data migration.                                                      | `reference/typescript-api/migration/rescale-order-line-promotion-adjustments` |
 
-All references are paths under `https://docs.vendure.io/current/core/`.
+All references are paths under `https://github.com/MarieHasson/novara-commerce/tree/master/docs/docs/current/core/`.

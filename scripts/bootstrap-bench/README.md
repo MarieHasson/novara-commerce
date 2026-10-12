@@ -1,6 +1,6 @@
 # Bootstrap benchmark harness
 
-Measures cold-start time of the Vendure server & worker using the built JS output
+Measures cold-start time of the Novara Commerce server & worker using the built JS output
 (`packages/core/dist`), the way production runs it.
 
 ## Setup (once)
